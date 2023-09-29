@@ -6,7 +6,8 @@ export interface CityProps {
 	shopOptions: Option;
 	healingOptions: Option;
 
-	goToCity: () => void;
+	goToCityCenter: () => void;
 	goToShop: () => void;
 	goToHealing: () => void;
+	goToGrasslands: () => void;
 }

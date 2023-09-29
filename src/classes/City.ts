@@ -9,10 +9,11 @@ export class City implements CityProps {
 		public name: CityProps["name"],
 		public cityOptions: CityProps["cityOptions"],
 		public shopOptions: CityProps["shopOptions"],
-		public healingOptions: CityProps["healingOptions"]
+		public healingOptions: CityProps["healingOptions"],
+		public goToGrasslands: CityProps["goToGrasslands"]
 	) {}
 
-	async goToCity() {
+	async goToCityCenter() {
 		console.log(`\nYou are in ${this.name}.`);
 
 		const answer = await createPrompt(
@@ -20,12 +21,15 @@ export class City implements CityProps {
 			this.cityOptions
 		);
 
-		if (answer.selectedOption === "city1") {
+		if (answer.selectedOption === "shop") {
 			await delayMessage(null);
 			this.goToShop();
-		} else if (answer.selectedOption === "city2") {
+		} else if (answer.selectedOption === "healingCenter") {
 			await delayMessage(null);
 			this.goToHealing();
+		} else if (answer.selectedOption === "grasslands") {
+			await delayMessage(null);
+			this.goToGrasslands();
 		}
 	}
 
@@ -39,7 +43,7 @@ export class City implements CityProps {
 
 		if (answer.selectedOption === "shopExit") {
 			await delayMessage("You left.");
-			this.goToCity();
+			this.goToCityCenter();
 		}
 	}
 
@@ -55,8 +59,8 @@ export class City implements CityProps {
 
 		if (answer.selectedOption === "healingExit") {
 			await delayMessage("You left.");
-			this.goToCity();
-		} else if (answer.selectedOption === "healing1") {
+			this.goToCityCenter();
+		} else if (answer.selectedOption === "heal") {
 			await delayMessage("You healed.");
 			this.goToHealing();
 		}
