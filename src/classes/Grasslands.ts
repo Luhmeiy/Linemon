@@ -20,7 +20,7 @@ export class Grasslands implements GrasslandsProps {
 	) {}
 
 	goToGrasslands = async () => {
-		console.log("\nYou are in the forest.");
+		console.log("\nYou are in the grasslands.");
 
 		const answer = await createPrompt(
 			"Where do you want to go?",

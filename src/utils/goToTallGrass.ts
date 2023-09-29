@@ -8,15 +8,15 @@ const tallGrassOptions = [
 
 export const goToTallGrass = (returnToOrigin: () => void) => {
 	const walk = async () => {
-		await delayMessage("\nYou found a Linemon!");
+		console.log("\nYou found a Linemon!");
 
 		const answer = await createPrompt(
 			"Where do you want to go?",
 			tallGrassOptions
 		);
 
+		await delayMessage(null);
 		if (answer.selectedOption === "exit") {
-			await delayMessage(null);
 			returnToOrigin();
 		} else if (answer.selectedOption === "walk") {
 			walk();
