@@ -2,6 +2,7 @@ import chalk from "chalk";
 
 import { GrasslandsProps } from "../interfaces/GrasslandsProps.js";
 import { createPrompt } from "../utils/createPrompt.js";
+import { delayMessage } from "../utils/delayMessage.js";
 import { goToTallGrass } from "../utils/goToTallGrass.js";
 
 const grasslandsOptions = [
@@ -26,6 +27,7 @@ export class Grasslands implements GrasslandsProps {
 			grasslandsOptions
 		);
 
+		await delayMessage(null);
 		if (answer.selectedOption === "tallGrass") {
 			goToTallGrass(this.goToGrasslands);
 		} else if (answer.selectedOption === "city") {

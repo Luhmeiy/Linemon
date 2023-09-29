@@ -1,8 +1,8 @@
 import chalk from "chalk";
 
 import { CityProps } from "../interfaces/CityProps.js";
-import { delayMessage } from "../utils/delayMessage.js";
 import { createPrompt } from "../utils/createPrompt.js";
+import { delayMessage } from "../utils/delayMessage.js";
 
 export class City implements CityProps {
 	constructor(
@@ -21,14 +21,12 @@ export class City implements CityProps {
 			this.cityOptions
 		);
 
+		await delayMessage(null);
 		if (answer.selectedOption === "shop") {
-			await delayMessage(null);
 			this.goToShop();
 		} else if (answer.selectedOption === "healingCenter") {
-			await delayMessage(null);
 			this.goToHealing();
 		} else if (answer.selectedOption === "grasslands") {
-			await delayMessage(null);
 			this.goToGrasslands();
 		}
 	}

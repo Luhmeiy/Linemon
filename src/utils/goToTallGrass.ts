@@ -16,6 +16,7 @@ export const goToTallGrass = (returnToOrigin: () => void) => {
 		);
 
 		if (answer.selectedOption === "exit") {
+			await delayMessage(null);
 			returnToOrigin();
 		} else if (answer.selectedOption === "walk") {
 			walk();
