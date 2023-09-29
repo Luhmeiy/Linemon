@@ -2,9 +2,11 @@ import chalk from "chalk";
 
 import { CityProps } from "../interfaces/CityProps.js";
 import { GrasslandsProps } from "../interfaces/GrasslandsProps.js";
+import { ForestProps } from "../interfaces/ForestProps.js";
 
 import { City } from "./City.js";
 import { Grasslands } from "./Grasslands.js";
+import { Forest } from "./Forest.js";
 
 const cityOptions = [
 	{ name: `Go to ${chalk.blue("shop")}`, value: "shop" },
@@ -22,6 +24,7 @@ const healingOptions = [
 export class Map {
 	private city: CityProps;
 	private grasslands: GrasslandsProps;
+	private forest: ForestProps;
 
 	constructor() {
 		this.city = new City(
@@ -38,12 +41,14 @@ export class Map {
 			this.goToLake
 		);
 
+		this.forest = new Forest(this.goToGrasslands, this.goToLake);
+
 		this.city.goToCityCenter();
 	}
 
 	// Directions
 	goToCity = () => this.city.goToCityCenter();
 	goToGrasslands = () => this.grasslands.goToGrasslands();
-	goToForest = () => console.log("You went to the forest");
+	goToForest = () => this.forest.goToForest();
 	goToLake = () => console.log("You went to the lake");
 }
