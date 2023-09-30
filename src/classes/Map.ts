@@ -1,28 +1,12 @@
-import chalk from "chalk";
-
-import { CityProps } from "../interfaces/CityProps.js";
-import { GrasslandsProps } from "../interfaces/GrasslandsProps.js";
-import { ForestProps } from "../interfaces/ForestProps.js";
-import { LakeProps } from "../interfaces/LakeProps.js";
-import { ShopItemsIds } from "../types/ShopItemsIds.js";
+import type { CityProps } from "../interfaces/CityProps.js";
+import type { GrasslandsProps } from "../interfaces/GrasslandsProps.js";
+import type { ForestProps } from "../interfaces/ForestProps.js";
+import type { LakeProps } from "../interfaces/LakeProps.js";
 
 import { City } from "./City.js";
 import { Grasslands } from "./Grasslands.js";
 import { Forest } from "./Forest.js";
 import { Lake } from "./Lake.js";
-
-const cityOptions = [
-	{ name: `Go to ${chalk.blue("shop")}`, value: "shop" },
-	{ name: `Go to ${chalk.red("healing center")}`, value: "healingCenter" },
-	{ name: `Go to ${chalk.green("grasslands")}`, value: "grasslands" },
-];
-
-const shopItems: ShopItemsIds[] = ["potion", "disk"];
-
-const healingOptions = [
-	{ name: "Heal", value: "heal" },
-	{ name: "Go back", value: "healingExit" },
-];
 
 export class Map {
 	private city: CityProps;
@@ -31,13 +15,7 @@ export class Map {
 	private lake: LakeProps;
 
 	constructor() {
-		this.city = new City(
-			"City",
-			cityOptions,
-			healingOptions,
-			shopItems,
-			this.goToGrasslands
-		);
+		this.city = new City("city", this.goToGrasslands);
 
 		this.grasslands = new Grasslands(
 			this.goToCity,

@@ -1,0 +1,18 @@
+[
+	{
+		"id": "city",
+		"name": "city",
+		"cityOptions": [
+			{ "name": "Go to ${chalk.blue('shop')}", "value": "shop" },
+			{
+				"name": "Go to ${chalk.red('healing center')}",
+				"value": "healingCenter"
+			},
+			{
+				"name": "Go to ${chalk.green('grasslands')}",
+				"value": "grasslands"
+			}
+		],
+		"shopItemsIds": ["potion", "disk"]
+	}
+]

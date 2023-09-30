@@ -1,24 +1,45 @@
+import jsonCities from "../data/cities.json" assert { type: "json" };
+
 import chalk from "chalk";
 
-import { CityProps } from "../interfaces/CityProps.js";
-import { ShopProps } from "../interfaces/ShopProps.js";
+import type { CityProps } from "../interfaces/CityProps.js";
+import type { ShopProps } from "../interfaces/ShopProps.js";
+import type { Option } from "../types/Option.js";
 
 import { createPrompt } from "../utils/createPrompt.js";
 import { delayMessage } from "../utils/delayMessage.js";
+import { getFromJson } from "../utils/getFromJson.js";
+import { stringToTemplateLiteral } from "../utils/stringToTemplateLiteral.js";
 
 import { Shop } from "./Shop.js";
 
+const healingOptions = [
+	{ name: "Heal", value: "heal" },
+	{ name: "Go back", value: "healingExit" },
+];
+
 export class City implements CityProps {
+	selectedCity: CityProps;
+	name: string;
+	cityOptions: Option;
 	shop: ShopProps;
 
 	constructor(
-		public name: CityProps["name"],
-		public cityOptions: CityProps["cityOptions"],
-		public healingOptions: CityProps["healingOptions"],
-		public shopItemsIds: CityProps["shopItemsIds"],
+		public id: CityProps["id"],
 		public goToGrasslands: CityProps["goToGrasslands"]
 	) {
-		this.shop = new Shop(this.name, this.shopItemsIds, this.goToCityCenter);
+		this.selectedCity = getFromJson(jsonCities, id);
+
+		this.name = this.selectedCity.name;
+		this.cityOptions = stringToTemplateLiteral(
+			this.selectedCity.cityOptions
+		);
+
+		this.shop = new Shop(
+			this.name,
+			this.selectedCity.shopItemsIds!,
+			this.goToCityCenter
+		);
 	}
 
 	goToCityCenter = async () => {
@@ -46,7 +67,7 @@ export class City implements CityProps {
 
 		const answer = await createPrompt(
 			"Do you want to heal?",
-			this.healingOptions
+			healingOptions
 		);
 
 		if (answer.selectedOption === "healingExit") {

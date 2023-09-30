@@ -1,11 +1,11 @@
-import { Option } from "../types/Option.js";
-import { ShopItemsIds } from "../types/ShopItemsIds.js";
+import type { Option } from "../types/Option.js";
+import type { ShopItemsIds } from "../types/ShopItemsIds.js";
 
 export interface CityProps {
+	id: string;
 	name: string;
 	cityOptions: Option;
-	healingOptions: Option;
-	shopItemsIds: ShopItemsIds[];
+	shopItemsIds?: ShopItemsIds[];
 
 	goToCityCenter: () => void;
 	goToHealing: () => void;
