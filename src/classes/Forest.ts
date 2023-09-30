@@ -1,6 +1,6 @@
 import chalk from "chalk";
 
-import { ForestProps } from "../interfaces/ForestProps.js";
+import type { ForestProps } from "../interfaces/ForestProps.js";
 import { createPrompt } from "../utils/createPrompt.js";
 import { delayMessage } from "../utils/delayMessage.js";
 import { goToTallGrass } from "../utils/goToTallGrass.js";

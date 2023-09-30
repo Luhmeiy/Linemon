@@ -1,6 +1,6 @@
-import { IShopItems } from "./IShopItems.js";
-import { Option } from "../types/Option.js";
-import { ShopItemsIds } from "../types/ShopItemsIds.js";
+import type { IShopItems } from "./IShopItems.js";
+import type { Option } from "../types/Option.js";
+import type { ShopItemsIds } from "../types/ShopItemsIds.js";
 
 export interface ShopProps {
 	cityName: string;

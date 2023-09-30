@@ -1,6 +1,6 @@
 import chalk from "chalk";
 
-import { GrasslandsProps } from "../interfaces/GrasslandsProps.js";
+import type { GrasslandsProps } from "../interfaces/GrasslandsProps.js";
 import { createPrompt } from "../utils/createPrompt.js";
 import { delayMessage } from "../utils/delayMessage.js";
 import { goToTallGrass } from "../utils/goToTallGrass.js";

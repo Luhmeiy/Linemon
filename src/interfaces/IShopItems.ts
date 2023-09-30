@@ -1,4 +1,4 @@
-import { ShopItemsIds } from "../types/ShopItemsIds.js";
+import type { ShopItemsIds } from "../types/ShopItemsIds.js";
 
 export interface IShopItems {
 	id: ShopItemsIds;

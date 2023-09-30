@@ -2,9 +2,9 @@ import jsonShopItems from "../data/shopItems.json" assert { type: "json" };
 
 import chalk from "chalk";
 
-import { IShopItems } from "../interfaces/IShopItems.js";
-import { ShopProps } from "../interfaces/ShopProps.js";
-import { Option } from "../types/Option.js";
+import type { IShopItems } from "../interfaces/IShopItems.js";
+import type { ShopProps } from "../interfaces/ShopProps.js";
+import type { Option } from "../types/Option.js";
 
 import { createPrompt } from "../utils/createPrompt.js";
 import { delayMessage } from "../utils/delayMessage.js";

@@ -1,6 +1,6 @@
 import chalk from "chalk";
 
-import { LakeProps } from "../interfaces/LakeProps.js";
+import type { LakeProps } from "../interfaces/LakeProps.js";
 import { createPrompt } from "../utils/createPrompt.js";
 import { delayMessage } from "../utils/delayMessage.js";
 import { goToTallGrass } from "../utils/goToTallGrass.js";
