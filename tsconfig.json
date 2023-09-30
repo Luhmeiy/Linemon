@@ -1,9 +1,10 @@
 {
 	"compilerOptions": {
-		"module": "ES6",
-		"moduleResolution": "Node",
+		"module": "NodeNext",
+		"moduleResolution": "NodeNext",
 		"esModuleInterop": true,
 		"forceConsistentCasingInFileNames": true,
+		"resolveJsonModule": true,
 		"strict": true,
 		"skipLibCheck": true
 	}

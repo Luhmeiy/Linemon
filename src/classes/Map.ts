@@ -4,6 +4,7 @@ import { CityProps } from "../interfaces/CityProps.js";
 import { GrasslandsProps } from "../interfaces/GrasslandsProps.js";
 import { ForestProps } from "../interfaces/ForestProps.js";
 import { LakeProps } from "../interfaces/LakeProps.js";
+import { ShopItemsIds } from "../types/ShopItemsIds.js";
 
 import { City } from "./City.js";
 import { Grasslands } from "./Grasslands.js";
@@ -16,7 +17,7 @@ const cityOptions = [
 	{ name: `Go to ${chalk.green("grasslands")}`, value: "grasslands" },
 ];
 
-const shopOptions = [{ name: "Go back", value: "shopExit" }];
+const shopItems: ShopItemsIds[] = ["potion", "disk"];
 
 const healingOptions = [
 	{ name: "Heal", value: "heal" },
@@ -33,8 +34,8 @@ export class Map {
 		this.city = new City(
 			"City",
 			cityOptions,
-			shopOptions,
 			healingOptions,
+			shopItems,
 			this.goToGrasslands
 		);
 

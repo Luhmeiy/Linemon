@@ -1,19 +1,27 @@
 import chalk from "chalk";
 
 import { CityProps } from "../interfaces/CityProps.js";
+import { ShopProps } from "../interfaces/ShopProps.js";
+
 import { createPrompt } from "../utils/createPrompt.js";
 import { delayMessage } from "../utils/delayMessage.js";
 
+import { Shop } from "./Shop.js";
+
 export class City implements CityProps {
+	shop: ShopProps;
+
 	constructor(
 		public name: CityProps["name"],
 		public cityOptions: CityProps["cityOptions"],
-		public shopOptions: CityProps["shopOptions"],
 		public healingOptions: CityProps["healingOptions"],
+		public shopItemsIds: CityProps["shopItemsIds"],
 		public goToGrasslands: CityProps["goToGrasslands"]
-	) {}
+	) {
+		this.shop = new Shop(this.name, this.shopItemsIds, this.goToCityCenter);
+	}
 
-	async goToCityCenter() {
+	goToCityCenter = async () => {
 		console.log(`\nYou are in ${this.name}.`);
 
 		const answer = await createPrompt(
@@ -23,29 +31,15 @@ export class City implements CityProps {
 
 		await delayMessage(null);
 		if (answer.selectedOption === "shop") {
-			this.goToShop();
+			this.shop.goToShop();
 		} else if (answer.selectedOption === "healingCenter") {
 			this.goToHealing();
 		} else if (answer.selectedOption === "grasslands") {
 			this.goToGrasslands();
 		}
-	}
+	};
 
-	async goToShop() {
-		console.log(`\nYou are in ${this.name}'s ${chalk.blue("shop")}.`);
-
-		const answer = await createPrompt(
-			"What do you want to buy?",
-			this.shopOptions
-		);
-
-		if (answer.selectedOption === "shopExit") {
-			await delayMessage("You left.");
-			this.goToCityCenter();
-		}
-	}
-
-	async goToHealing() {
+	goToHealing = async () => {
 		console.log(
 			`\nYou are in ${this.name}'s ${chalk.red("healing center")}.`
 		);
@@ -62,5 +56,5 @@ export class City implements CityProps {
 			await delayMessage("You healed.");
 			this.goToHealing();
 		}
-	}
+	};
 }
