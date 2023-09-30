@@ -5,7 +5,10 @@ import type { ShopItemsIds } from "../types/ShopItemsIds.js";
 export interface ShopProps {
 	cityName: string;
 
-	shopOptions: Option;
+	shopConsumableOptions: Option;
+	shopDiskOptions: Option;
+	shopSpecialOptions?: Option;
+
 	shopItemsIds: ShopItemsIds[];
 	shopItems: IShopItems[];
 
@@ -13,5 +16,6 @@ export interface ShopProps {
 	goToShop: () => void;
 	getFullShopItems: () => IShopItems[];
 	formatItem: (name: string, price: number) => string;
-	createShopOptions: () => Option;
+	filterByType: (type: IShopItems["type"]) => Option;
+	filterCategory: () => void;
 }

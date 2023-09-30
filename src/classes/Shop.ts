@@ -10,6 +10,13 @@ import { createPrompt } from "../utils/createPrompt.js";
 import { delayMessage } from "../utils/delayMessage.js";
 import { getFromJson } from "../utils/getFromJson.js";
 
+const categoryOptions = [
+	{ name: "Consumables", value: "consumable" },
+	{ name: "Floppy Disks", value: "disk" },
+	{ name: "Special Items", value: "special" },
+	{ name: "Go back", value: "shopExit" },
+];
+
 const itemOptions = [
 	{ name: "Buy", value: "buy" },
 	{ name: "Description", value: "description" },
@@ -17,7 +24,9 @@ const itemOptions = [
 ];
 
 export class Shop implements ShopProps {
-	shopOptions: Option;
+	shopConsumableOptions: Option;
+	shopDiskOptions: Option;
+	shopSpecialOptions: Option;
 	shopItems: IShopItems[];
 
 	constructor(
@@ -26,18 +35,45 @@ export class Shop implements ShopProps {
 		public goToCityCenter: ShopProps["goToCityCenter"]
 	) {
 		this.shopItems = this.getFullShopItems();
-		this.shopOptions = this.createShopOptions();
+
+		this.shopConsumableOptions = this.filterByType("consumable");
+		this.shopConsumableOptions.push({ name: "Go back", value: "back" });
+
+		this.shopDiskOptions = this.filterByType("disk");
+		this.shopDiskOptions.push({ name: "Go back", value: "back" });
+
+		this.shopSpecialOptions = this.filterByType("special");
+		this.shopSpecialOptions.push({ name: "Go back", value: "back" });
 	}
 
 	goToShop = async () => {
 		console.log(`\nYou are in ${this.cityName}'s ${chalk.blue("shop")}.`);
 
-		const answer = await createPrompt(
+		const filteredCategoryOptions = this.filterCategory();
+
+		const categoryAnswer = await createPrompt(
 			"What do you want to buy?",
-			this.shopOptions
+			filteredCategoryOptions
 		);
 
-		if (answer.selectedOption !== "shopExit") {
+		if (categoryAnswer.selectedOption !== "shopExit") {
+			let options: Option;
+
+			if (categoryAnswer.selectedOption === "consumable") {
+				options = this.shopConsumableOptions;
+			} else if (categoryAnswer.selectedOption === "disk") {
+				options = this.shopDiskOptions;
+			} else if (categoryAnswer.selectedOption === "special") {
+				options = this.shopSpecialOptions;
+			}
+
+			const answer = await createPrompt(
+				"What do you want to buy?",
+				options!
+			);
+
+			if (answer.selectedOption === "back") this.goToShop();
+
 			for (const item of this.shopItems) {
 				if (answer.selectedOption === item.id) {
 					const itemAnswer = await createPrompt(
@@ -74,16 +110,23 @@ export class Shop implements ShopProps {
 		return `${name}${spacing}${price}`;
 	};
 
-	createShopOptions = () => {
-		const shopOptions: Option = this.shopItems.map((item) => {
-			return {
-				name: this.formatItem(item.name, item.price),
-				value: item.id,
-			};
+	filterByType = (type: IShopItems["type"]): Option => {
+		//@ts-ignore
+		return this.shopItems
+			.filter((item) => item.type === type)
+			.map((item) => {
+				return {
+					name: this.formatItem(item.name, item.price),
+					value: item.id,
+				};
+			});
+	};
+
+	filterCategory = () => {
+		return categoryOptions.filter((category) => {
+			if (this.shopSpecialOptions.length === 1) {
+				return category.value !== "special";
+			} else true;
 		});
-
-		shopOptions.push({ name: "Go back", value: "shopExit" });
-
-		return shopOptions;
 	};
 }

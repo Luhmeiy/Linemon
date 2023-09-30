@@ -3,30 +3,35 @@
 		"id": "potion",
 		"name": "Potion",
 		"description": "Used for healing Linemons.",
-		"price": 150
+		"price": 150,
+		"type": "consumable"
 	},
 	{
 		"id": "disk",
 		"name": "Floppy Disk",
 		"description": "Used for catching Linemons.",
-		"price": 100
+		"price": 100,
+		"type": "disk"
 	},
 	{
 		"id": "silverDisk",
 		"name": "Silver Floppy Disk",
 		"description": "A little bit better at catching Linemons than the normal Floppy Disk.",
-		"price": 250
+		"price": 250,
+		"type": "disk"
 	},
 	{
 		"id": "goldenDisk",
 		"name": "Golden Floppy Disk",
 		"description": "A little bit better at catching Linemons than the Silver Floppy Disk.",
-		"price": 500
+		"price": 500,
+		"type": "disk"
 	},
 	{
 		"id": "fishingRod",
 		"name": "Fishing Rod",
 		"description": "Used for fishing water Linemons.",
-		"price": 500
+		"price": 500,
+		"type": "special"
 	}
 ]
