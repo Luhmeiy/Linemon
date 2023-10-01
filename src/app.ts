@@ -21,7 +21,7 @@ async function main() {
 			{
 				type: "input",
 				name: "name",
-				message: "What is your name: ",
+				message: "What is your name?",
 			},
 		]);
 

@@ -32,53 +32,6 @@ export class Inventory implements InventoryProps {
 			disk: [],
 			special: [],
 		};
-
-		this.addToInventory(
-			{
-				id: "potion",
-				name: "Potion",
-				description: "Used for healing Linemons.",
-				price: 150,
-				type: "consumable",
-			},
-			8
-		);
-
-		this.addToInventory(
-			{
-				id: "goldenDisk",
-				name: "Golden Floppy Disk",
-				description:
-					"A little bit better at catching Linemons than the Silver Floppy Disk.",
-				price: 500,
-				type: "disk",
-			},
-			7
-		);
-
-		this.addToInventory(
-			{
-				id: "goldenDisk",
-				name: "Golden Floppy Disk",
-				description:
-					"A little bit better at catching Linemons than the Silver Floppy Disk.",
-				price: 500,
-				type: "disk",
-			},
-			1
-		);
-
-		this.addToInventory(
-			{
-				id: "silverDisk",
-				name: "Silver Floppy Disk",
-				description:
-					"A little bit better at catching Linemons than the normal Floppy Disk.",
-				price: 250,
-				type: "disk",
-			},
-			1
-		);
 	}
 
 	getInventory = async (returnFunction: () => void) => {

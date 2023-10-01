@@ -43,7 +43,8 @@ export class City implements CityProps {
 		this.shop = new Shop(
 			this.name,
 			this.selectedCity.shopItemsIds!,
-			this.goToCityCenter
+			this.goToCityCenter,
+			this.player
 		);
 	}
 

@@ -1,8 +1,10 @@
 import jsonShopItems from "../data/shopItems.json" assert { type: "json" };
 
 import chalk from "chalk";
+import { createSpinner } from "nanospinner";
 
 import type { IShopItems } from "../interfaces/IShopItems.js";
+import type { PlayerProps } from "../interfaces/PlayerProps.js";
 import type { ShopProps } from "../interfaces/ShopProps.js";
 import type { Option } from "../types/Option.js";
 
@@ -32,7 +34,8 @@ export class Shop implements ShopProps {
 	constructor(
 		public cityName: ShopProps["cityName"],
 		public shopItemsIds: ShopProps["shopItemsIds"],
-		public goToCityCenter: ShopProps["goToCityCenter"]
+		public goToCityCenter: ShopProps["goToCityCenter"],
+		private player: PlayerProps
 	) {
 		this.shopItems = this.getFullShopItems();
 
@@ -76,13 +79,26 @@ export class Shop implements ShopProps {
 
 			for (const item of this.shopItems) {
 				if (answer.selectedOption === item.id) {
+					console.log(`You have ${this.player.getMoney()} coins.`);
+
 					const itemAnswer = await createPrompt(
 						item.name,
 						itemOptions
 					);
 
 					if (itemAnswer.selectedOption === "buy") {
-						await delayMessage(`You bought a ${item.name}.`);
+						const spinner = createSpinner("Run test").start();
+						if (this.player.getMoney() < item.price) {
+							spinner.error({ text: "Not enough money." });
+						} else {
+							this.player.addToInventory(item, 1);
+							this.player.setMoney(-item.price);
+							spinner.success({
+								text: `You bought a ${item.name}.`,
+							});
+						}
+
+						await delayMessage(null);
 					} else if (itemAnswer.selectedOption === "description") {
 						await delayMessage(`${item.name}: ${item.description}`);
 					}

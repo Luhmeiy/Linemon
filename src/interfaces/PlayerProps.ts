@@ -27,4 +27,7 @@ export interface InventoryProps extends InventoryMethods {
 export interface PlayerProps extends InventoryMethods {
 	name: string;
 	inventory: InventoryProps;
+
+	getMoney: () => number;
+	setMoney: (value: number) => void;
 }
