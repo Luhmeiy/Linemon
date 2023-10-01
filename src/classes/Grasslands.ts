@@ -1,22 +1,28 @@
 import chalk from "chalk";
 
 import type { GrasslandsProps } from "../interfaces/GrasslandsProps.js";
+
+import { addActionsToOptions } from "../utils/addActionsToOptions.js";
 import { createPrompt } from "../utils/createPrompt.js";
 import { delayMessage } from "../utils/delayMessage.js";
+import { getActionConditions } from "../utils/getActionConditions.js";
 import { goToTallGrass } from "../utils/goToTallGrass.js";
 
-const grasslandsOptions = [
+let grasslandsOptions = [
 	{ name: `Go to ${chalk.green("tall grass")}`, value: "tallGrass" },
 	{ name: "Go to city", value: "city" },
 	{ name: `Go to ${chalk.green("forest")}`, value: "forest" },
 	{ name: `Go to ${chalk.blue("lake")}`, value: "lake" },
 ];
 
+grasslandsOptions = addActionsToOptions(grasslandsOptions);
+
 export class Grasslands implements GrasslandsProps {
 	constructor(
 		public goToCity: GrasslandsProps["goToCity"],
 		public goToForest: GrasslandsProps["goToForest"],
-		public goToLake: GrasslandsProps["goToLake"]
+		public goToLake: GrasslandsProps["goToLake"],
+		public player: GrasslandsProps["player"]
 	) {}
 
 	goToGrasslands = async () => {
@@ -36,6 +42,8 @@ export class Grasslands implements GrasslandsProps {
 			this.goToForest();
 		} else if (answer.selectedOption === "lake") {
 			this.goToLake();
+		} else {
+			getActionConditions(answer, this.player, this.goToGrasslands);
 		}
 	};
 }

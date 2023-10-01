@@ -1,20 +1,25 @@
 import chalk from "chalk";
 
 import type { LakeProps } from "../interfaces/LakeProps.js";
+
+import { addActionsToOptions } from "../utils/addActionsToOptions.js";
 import { createPrompt } from "../utils/createPrompt.js";
 import { delayMessage } from "../utils/delayMessage.js";
+import { getActionConditions } from "../utils/getActionConditions.js";
 import { goToTallGrass } from "../utils/goToTallGrass.js";
 
-const lakeOptions = [
+let lakeOptions = [
 	{ name: `Go to ${chalk.green("tall grass")}`, value: "tallGrass" },
 	{ name: `Go to ${chalk.green("grasslands")}`, value: "grasslands" },
 	{ name: `Go to ${chalk.green("forest")}`, value: "forest" },
 ];
+lakeOptions = addActionsToOptions(lakeOptions);
 
 export class Lake implements LakeProps {
 	constructor(
 		public goToGrasslands: LakeProps["goToGrasslands"],
-		public goToForest: LakeProps["goToForest"]
+		public goToForest: LakeProps["goToForest"],
+		public player: LakeProps["player"]
 	) {}
 
 	goToLake = async () => {
@@ -32,6 +37,8 @@ export class Lake implements LakeProps {
 			this.goToGrasslands();
 		} else if (answer.selectedOption === "forest") {
 			this.goToForest();
+		} else {
+			getActionConditions(answer, this.player, this.goToLake);
 		}
 	};
 }

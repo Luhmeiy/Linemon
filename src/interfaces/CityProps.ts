@@ -1,5 +1,6 @@
 import type { Option } from "../types/Option.js";
 import type { ShopItemsIds } from "../types/ShopItemsIds.js";
+import type { PlayerProps } from "./PlayerProps.js";
 
 export interface CityProps {
 	id: string;
@@ -10,4 +11,5 @@ export interface CityProps {
 	goToCityCenter: () => void;
 	goToHealing: () => void;
 	goToGrasslands: () => void;
+	player: PlayerProps;
 }

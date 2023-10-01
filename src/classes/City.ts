@@ -6,8 +6,10 @@ import type { CityProps } from "../interfaces/CityProps.js";
 import type { ShopProps } from "../interfaces/ShopProps.js";
 import type { Option } from "../types/Option.js";
 
+import { addActionsToOptions } from "../utils/addActionsToOptions.js";
 import { createPrompt } from "../utils/createPrompt.js";
 import { delayMessage } from "../utils/delayMessage.js";
+import { getActionConditions } from "../utils/getActionConditions.js";
 import { getFromJson } from "../utils/getFromJson.js";
 import { stringToTemplateLiteral } from "../utils/stringToTemplateLiteral.js";
 
@@ -26,14 +28,17 @@ export class City implements CityProps {
 
 	constructor(
 		public id: CityProps["id"],
-		public goToGrasslands: CityProps["goToGrasslands"]
+		public goToGrasslands: CityProps["goToGrasslands"],
+		public player: CityProps["player"]
 	) {
 		this.selectedCity = getFromJson(jsonCities, id);
 
 		this.name = this.selectedCity.name;
+
 		this.cityOptions = stringToTemplateLiteral(
 			this.selectedCity.cityOptions
 		);
+		this.cityOptions = addActionsToOptions(this.cityOptions);
 
 		this.shop = new Shop(
 			this.name,
@@ -57,6 +62,8 @@ export class City implements CityProps {
 			this.goToHealing();
 		} else if (answer.selectedOption === "grasslands") {
 			this.goToGrasslands();
+		} else {
+			getActionConditions(answer, this.player, this.goToCityCenter);
 		}
 	};
 
