@@ -5,7 +5,9 @@ export const getActionConditions = (
 	player: PlayerProps,
 	returnFunction: () => void
 ) => {
-	if (answer.selectedOption === "inventory") {
+	if (answer.selectedOption === "player") {
+		player.getStatus(returnFunction);
+	} else if (answer.selectedOption === "inventory") {
 		player.getInventory(returnFunction);
 	}
 };

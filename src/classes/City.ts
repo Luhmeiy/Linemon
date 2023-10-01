@@ -38,7 +38,10 @@ export class City implements CityProps {
 		this.cityOptions = stringToTemplateLiteral(
 			this.selectedCity.cityOptions
 		);
-		this.cityOptions = addActionsToOptions(this.cityOptions);
+		this.cityOptions = addActionsToOptions(
+			this.cityOptions,
+			this.player.name
+		);
 
 		this.shop = new Shop(
 			this.name,

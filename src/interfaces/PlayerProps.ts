@@ -30,4 +30,5 @@ export interface PlayerProps extends InventoryMethods {
 
 	getMoney: () => number;
 	setMoney: (value: number) => void;
+	getStatus: (returnFunction: () => void) => void;
 }

@@ -13,14 +13,15 @@ let forestOptions = [
 	{ name: `Go to ${chalk.green("grasslands")}`, value: "grasslands" },
 	{ name: `Go to ${chalk.blue("lake")}`, value: "lake" },
 ];
-forestOptions = addActionsToOptions(forestOptions);
 
 export class Forest implements ForestProps {
 	constructor(
 		public goToGrasslands: ForestProps["goToGrasslands"],
 		public goToLake: ForestProps["goToLake"],
 		public player: ForestProps["player"]
-	) {}
+	) {
+		forestOptions = addActionsToOptions(forestOptions, this.player.name);
+	}
 
 	goToForest = async () => {
 		console.log("\nYou are in the forest.");

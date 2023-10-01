@@ -13,14 +13,15 @@ let lakeOptions = [
 	{ name: `Go to ${chalk.green("grasslands")}`, value: "grasslands" },
 	{ name: `Go to ${chalk.green("forest")}`, value: "forest" },
 ];
-lakeOptions = addActionsToOptions(lakeOptions);
 
 export class Lake implements LakeProps {
 	constructor(
 		public goToGrasslands: LakeProps["goToGrasslands"],
 		public goToForest: LakeProps["goToForest"],
 		public player: LakeProps["player"]
-	) {}
+	) {
+		lakeOptions = addActionsToOptions(lakeOptions, this.player.name);
+	}
 
 	goToLake = async () => {
 		console.log("\nYou are in the lake.");
