@@ -14,6 +14,8 @@ let forestOptions = [
 	{ name: `Go to ${chalk.blue("lake")}`, value: "lake" },
 ];
 
+const linemonOptions = ["linemonOne", "linemonTwo"];
+
 export class Forest implements ForestProps {
 	constructor(
 		public goToGrasslands: ForestProps["goToGrasslands"],
@@ -33,7 +35,7 @@ export class Forest implements ForestProps {
 
 		await delayMessage(null);
 		if (answer.selectedOption === "tallGrass") {
-			goToTallGrass(this.goToForest);
+			goToTallGrass(linemonOptions, this.goToForest);
 		} else if (answer.selectedOption === "grasslands") {
 			this.goToGrasslands();
 		} else if (answer.selectedOption === "lake") {

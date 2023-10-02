@@ -1,0 +1,42 @@
+[
+	{
+		"id": "linemonOne",
+		"info": {
+			"name": "LinemonOne",
+			"description": "",
+			"evolutionStage": 1,
+			"lvl": 1,
+			"type": "normal"
+		},
+		"minMaxStatus": {
+			"minHp": 10,
+			"maxHp": 100,
+			"minAtk": 10,
+			"maxAtk": 100,
+			"minDef": 10,
+			"maxDef": 100,
+			"minSpd": 10,
+			"maxSpd": 100
+		}
+	},
+	{
+		"id": "linemonTwo",
+		"info": {
+			"name": "LinemonTwo",
+			"description": "",
+			"evolutionStage": 1,
+			"lvl": 1,
+			"type": "ground"
+		},
+		"minMaxStatus": {
+			"minHp": 10,
+			"maxHp": 100,
+			"minAtk": 10,
+			"maxAtk": 100,
+			"minDef": 10,
+			"maxDef": 100,
+			"minSpd": 10,
+			"maxSpd": 100
+		}
+	}
+]
