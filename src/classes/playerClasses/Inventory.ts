@@ -60,7 +60,6 @@ export class Inventory implements InventoryProps {
 			inventoryOptions
 		);
 
-		await delayMessage(null);
 		switch (answer.selectedOption) {
 			case "consumable":
 				await this.createItemMenus(
@@ -84,6 +83,7 @@ export class Inventory implements InventoryProps {
 				);
 				break;
 			case "back":
+				console.log(" ");
 				returnFunction();
 				break;
 		}
@@ -219,7 +219,7 @@ export class Inventory implements InventoryProps {
 		returnFunction: () => void
 	) => {
 		if (items.length == 0) {
-			console.log("No items");
+			await delayMessage("No items\n");
 			this.getInventory(returnFunction);
 		} else {
 			const answer = await createPrompt("Choose an item: ", options);
@@ -242,6 +242,7 @@ export class Inventory implements InventoryProps {
 							);
 						}
 
+						console.log("\n");
 						this.getInventory(returnFunction);
 					}
 				}

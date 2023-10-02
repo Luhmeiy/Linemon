@@ -6,10 +6,10 @@ import type { CityProps } from "../interfaces/CityProps.js";
 import type { ShopProps } from "../interfaces/ShopProps.js";
 import type { Option } from "../types/Option.js";
 
-import { addActionsToOptions } from "../utils/addActionsToOptions.js";
+import { addMenuToOptions } from "../utils/addMenuToOptions.js";
 import { createPrompt } from "../utils/createPrompt.js";
 import { delayMessage } from "../utils/delayMessage.js";
-import { getActionConditions } from "../utils/getActionConditions.js";
+import { getMenu } from "../utils/getMenu.js";
 import { getFromJson } from "../utils/getFromJson.js";
 import { stringToTemplateLiteral } from "../utils/stringToTemplateLiteral.js";
 
@@ -38,10 +38,7 @@ export class City implements CityProps {
 		this.cityOptions = stringToTemplateLiteral(
 			this.selectedCity.cityOptions
 		);
-		this.cityOptions = addActionsToOptions(
-			this.cityOptions,
-			this.player.name
-		);
+		this.cityOptions = addMenuToOptions(this.cityOptions);
 
 		this.shop = new Shop(
 			this.name,
@@ -67,7 +64,7 @@ export class City implements CityProps {
 		} else if (answer.selectedOption === "grasslands") {
 			this.goToGrasslands();
 		} else {
-			getActionConditions(answer, this.player, this.goToCityCenter);
+			getMenu(this.player, this.goToCityCenter);
 		}
 	};
 

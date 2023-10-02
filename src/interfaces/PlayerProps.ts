@@ -35,8 +35,7 @@ export interface TeamMethods {
 }
 
 export interface PlayerProps extends InventoryMethods, TeamMethods {
-	name: string;
-
+	getName: () => string;
 	getMoney: () => number;
 	setMoney: (value: number) => void;
 	getStatus: (returnFunction: () => void) => void;

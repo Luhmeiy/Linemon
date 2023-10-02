@@ -19,30 +19,33 @@ export class Player implements PlayerProps {
 	private team: TeamMethods;
 	private inventory: InventoryProps;
 
-	constructor(public name: string) {
+	constructor(private name: string) {
 		this.money = 1000;
 
 		this.team = new Team();
 		this.inventory = new Inventory();
 	}
 
+	// Player
+	getName = () => this.name;
 	getMoney = () => this.money;
 	setMoney = (value: number) => (this.money += value);
 
 	getStatus = async (returnFunction: () => void) => {
-		await delayMessage(`${this.name}'s Status
-${chalk.bold("Money:")} ${this.money}`);
+		await delayMessage(`${chalk.underline.bold(`${this.name}'s Status`)}
+${chalk.bold("Money:")} ${this.money}\n`);
 
 		returnFunction();
 	};
 
+	// Team
 	getTeam = (returnFunction: () => void) => this.team.getTeam(returnFunction);
 
 	addToTeam = async (linemon: WildLinemonProps) => {
-		await this.team.addToTeam(linemon);
-		return true;
+		return await this.team.addToTeam(linemon);
 	};
 
+	// Inventory
 	getInventory = (returnFunction: () => void) => {
 		this.inventory.getInventory(returnFunction);
 	};

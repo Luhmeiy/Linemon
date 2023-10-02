@@ -2,10 +2,10 @@ import chalk from "chalk";
 
 import type { GrasslandsProps } from "../interfaces/GrasslandsProps.js";
 
-import { addActionsToOptions } from "../utils/addActionsToOptions.js";
+import { addMenuToOptions } from "../utils/addMenuToOptions.js";
 import { createPrompt } from "../utils/createPrompt.js";
 import { delayMessage } from "../utils/delayMessage.js";
-import { getActionConditions } from "../utils/getActionConditions.js";
+import { getMenu } from "../utils/getMenu.js";
 import { goToTallGrass } from "../utils/goToTallGrass.js";
 
 let grasslandsOptions = [
@@ -24,10 +24,7 @@ export class Grasslands implements GrasslandsProps {
 		public goToLake: GrasslandsProps["goToLake"],
 		public player: GrasslandsProps["player"]
 	) {
-		grasslandsOptions = addActionsToOptions(
-			grasslandsOptions,
-			this.player.name
-		);
+		grasslandsOptions = addMenuToOptions(grasslandsOptions);
 	}
 
 	goToGrasslands = async () => {
@@ -48,7 +45,7 @@ export class Grasslands implements GrasslandsProps {
 		} else if (answer.selectedOption === "lake") {
 			this.goToLake();
 		} else {
-			getActionConditions(answer, this.player, this.goToGrasslands);
+			getMenu(this.player, this.goToGrasslands);
 		}
 	};
 }

@@ -17,7 +17,7 @@ async function main() {
 	);
 
 	if (answer.selectedOption === "ts1") {
-		const name = await inquirer.prompt([
+		const inputName = await inquirer.prompt([
 			{
 				type: "input",
 				name: "name",
@@ -25,9 +25,11 @@ async function main() {
 			},
 		]);
 
-		await delayMessage(`Welcome, ${name.name}`);
+		const name = inputName.name !== "" ? inputName.name : "Player";
 
-		new Map(name.name);
+		await delayMessage(`Welcome, ${name}`);
+
+		new Map(name);
 	}
 }
 

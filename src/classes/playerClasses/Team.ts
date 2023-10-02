@@ -16,14 +16,15 @@ export class Team implements TeamMethods {
 
 	getTeam = async (returnFunction: () => void) => {
 		if (this.team.length === 0) {
-			console.log("No linemons caught yet.");
+			await delayMessage("No linemons caught yet.\n");
 		} else {
 			for (const linemon of this.team) {
 				console.log(linemon.info.name);
 			}
+
+			await delayMessage("\n");
 		}
 
-		await delayMessage(null);
 		returnFunction();
 	};
 

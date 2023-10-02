@@ -2,10 +2,10 @@ import chalk from "chalk";
 
 import type { LakeProps } from "../interfaces/LakeProps.js";
 
-import { addActionsToOptions } from "../utils/addActionsToOptions.js";
+import { addMenuToOptions } from "../utils/addMenuToOptions.js";
 import { createPrompt } from "../utils/createPrompt.js";
 import { delayMessage } from "../utils/delayMessage.js";
-import { getActionConditions } from "../utils/getActionConditions.js";
+import { getMenu } from "../utils/getMenu.js";
 import { goToTallGrass } from "../utils/goToTallGrass.js";
 
 let lakeOptions = [
@@ -22,7 +22,7 @@ export class Lake implements LakeProps {
 		public goToForest: LakeProps["goToForest"],
 		public player: LakeProps["player"]
 	) {
-		lakeOptions = addActionsToOptions(lakeOptions, this.player.name);
+		lakeOptions = addMenuToOptions(lakeOptions);
 	}
 
 	goToLake = async () => {
@@ -41,7 +41,7 @@ export class Lake implements LakeProps {
 		} else if (answer.selectedOption === "forest") {
 			this.goToForest();
 		} else {
-			getActionConditions(answer, this.player, this.goToLake);
+			getMenu(this.player, this.goToLake);
 		}
 	};
 }
