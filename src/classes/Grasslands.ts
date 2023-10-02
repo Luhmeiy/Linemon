@@ -1,6 +1,7 @@
 import chalk from "chalk";
 
-import type { GrasslandsProps } from "../interfaces/GrasslandsProps.js";
+import type { GrasslandsMethods } from "../types/GrasslandsMethods.js";
+import type { PlayerMethods } from "../interfaces/PlayerMethods.js";
 
 import { addMenuToOptions } from "../utils/addMenuToOptions.js";
 import { createPrompt } from "../utils/createPrompt.js";
@@ -17,12 +18,12 @@ let grasslandsOptions = [
 
 const linemonOptions = ["linemonOne", "linemonTwo"];
 
-export class Grasslands implements GrasslandsProps {
+export class Grasslands implements GrasslandsMethods {
 	constructor(
-		public goToCity: GrasslandsProps["goToCity"],
-		public goToForest: GrasslandsProps["goToForest"],
-		public goToLake: GrasslandsProps["goToLake"],
-		public player: GrasslandsProps["player"]
+		private goToCity: () => void,
+		private goToForest: () => void,
+		private goToLake: () => void,
+		private player: PlayerMethods
 	) {
 		grasslandsOptions = addMenuToOptions(grasslandsOptions);
 	}

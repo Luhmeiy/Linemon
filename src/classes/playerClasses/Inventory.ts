@@ -1,8 +1,9 @@
 import type { IShopItems } from "../../interfaces/IShopItems.js";
 import type {
 	InventoryItem,
-	InventoryProps,
-} from "../../interfaces/PlayerProps.js";
+	InventoryMethods,
+	InventoryType,
+} from "../../interfaces/PlayerMethods.js";
 import type { WildLinemonProps } from "../../interfaces/WildLinemonProps.js";
 import type { Option } from "../../types/Option.js";
 
@@ -30,8 +31,8 @@ extendedItemOptions.unshift({
 
 const defaultOption = { name: "Go back", value: "back" };
 
-export class Inventory implements InventoryProps {
-	inventory: InventoryProps["inventory"];
+export class Inventory implements InventoryMethods {
+	inventory: InventoryType;
 
 	constructor() {
 		this.inventory = {
@@ -156,7 +157,7 @@ export class Inventory implements InventoryProps {
 		];
 
 		if (this.inventory.disk.length == 0) {
-			console.log("No items");
+			console.log("No items.\n");
 
 			returnFunction(linemon, false);
 		} else {

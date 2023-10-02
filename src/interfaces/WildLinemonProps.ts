@@ -12,17 +12,6 @@ export interface WildLinemonProps {
 		catchRate: number;
 	};
 
-	minMaxStatus: {
-		minHp: number;
-		maxHp: number;
-		minAtk: number;
-		maxAtk: number;
-		minDef: number;
-		maxDef: number;
-		minSpd: number;
-		maxSpd: number;
-	};
-
 	status: {
 		maxHp: number;
 		currentHp: number;

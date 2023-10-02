@@ -3,10 +3,10 @@ import chalk from "chalk";
 import type { IShopItems } from "../interfaces/IShopItems.js";
 import type {
 	InventoryItem,
-	InventoryProps,
-	PlayerProps,
+	InventoryMethods,
+	PlayerMethods,
 	TeamMethods,
-} from "../interfaces/PlayerProps.js";
+} from "../interfaces/PlayerMethods.js";
 import type { WildLinemonProps } from "../interfaces/WildLinemonProps.js";
 
 import { delayMessage } from "../utils/delayMessage.js";
@@ -14,10 +14,10 @@ import { delayMessage } from "../utils/delayMessage.js";
 import { Inventory } from "./playerClasses/Inventory.js";
 import { Team } from "./playerClasses/Team.js";
 
-export class Player implements PlayerProps {
+export class Player implements PlayerMethods {
 	private money: number;
 	private team: TeamMethods;
-	private inventory: InventoryProps;
+	private inventory: InventoryMethods;
 
 	constructor(private name: string) {
 		this.money = 1000;

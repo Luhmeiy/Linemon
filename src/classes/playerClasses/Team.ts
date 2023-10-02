@@ -1,5 +1,5 @@
 import type { LinemonProps } from "../../interfaces/LinemonProps.js";
-import type { TeamMethods } from "../../interfaces/PlayerProps.js";
+import type { TeamMethods } from "../../interfaces/PlayerMethods.js";
 import type { WildLinemonProps } from "../../interfaces/WildLinemonProps.js";
 
 import { createPrompt } from "../../utils/createPrompt.js";
@@ -36,7 +36,7 @@ export class Team implements TeamMethods {
 		);
 
 		if (this.team.length < 6) {
-			await delayMessage(`${linemon.info.name} added to team\n`);
+			await delayMessage(`${linemon.info.name} added to team.\n`);
 			this.team.push(linemon);
 		} else {
 			const answer = await createPrompt(

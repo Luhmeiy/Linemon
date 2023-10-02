@@ -1,6 +1,16 @@
 import type { WildLinemonProps } from "../interfaces/WildLinemonProps.js";
-
 import { randomIntFromInterval } from "../utils/randomIntFromInterval.js";
+
+interface minMaxStatus {
+	minHp: number;
+	maxHp: number;
+	minAtk: number;
+	maxAtk: number;
+	minDef: number;
+	maxDef: number;
+	minSpd: number;
+	maxSpd: number;
+}
 
 export class WildLinemon implements WildLinemonProps {
 	status: {
@@ -15,7 +25,7 @@ export class WildLinemon implements WildLinemonProps {
 	constructor(
 		public id: WildLinemonProps["id"],
 		public info: WildLinemonProps["info"],
-		public minMaxStatus: WildLinemonProps["minMaxStatus"]
+		private minMaxStatus: minMaxStatus
 	) {
 		const hp = randomIntFromInterval(
 			this.minMaxStatus.minHp,

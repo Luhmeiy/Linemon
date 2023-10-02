@@ -2,8 +2,9 @@ import jsonCities from "../data/cities.json" assert { type: "json" };
 
 import chalk from "chalk";
 
-import type { CityProps } from "../interfaces/CityProps.js";
-import type { ShopProps } from "../interfaces/ShopProps.js";
+import type { CityMethods, CityProps } from "../interfaces/CityProps.js";
+import type { PlayerMethods } from "../interfaces/PlayerMethods.js";
+import type { ShopMethods } from "../types/ShopMethods.js";
 import type { Option } from "../types/Option.js";
 
 import { addMenuToOptions } from "../utils/addMenuToOptions.js";
@@ -20,18 +21,20 @@ const healingOptions = [
 	{ name: "Go back", value: "healingExit" },
 ];
 
-export class City implements CityProps {
-	selectedCity: CityProps;
-	name: string;
-	cityOptions: Option;
-	shop: ShopProps;
+export class City implements CityMethods {
+	private selectedCity: CityProps;
+
+	private name: string;
+	private cityOptions: Option;
+
+	private shop: ShopMethods;
 
 	constructor(
-		public id: CityProps["id"],
-		public goToGrasslands: CityProps["goToGrasslands"],
-		public player: CityProps["player"]
+		private id: string,
+		private goToGrasslands: () => void,
+		private player: PlayerMethods
 	) {
-		this.selectedCity = getFromJson(jsonCities, id);
+		this.selectedCity = getFromJson(jsonCities, this.id);
 
 		this.name = this.selectedCity.name;
 
@@ -42,7 +45,7 @@ export class City implements CityProps {
 
 		this.shop = new Shop(
 			this.name,
-			this.selectedCity.shopItemsIds!,
+			this.selectedCity.shopItemsIds,
 			this.goToCityCenter,
 			this.player
 		);
@@ -68,7 +71,7 @@ export class City implements CityProps {
 		}
 	};
 
-	goToHealing = async () => {
+	private goToHealing = async () => {
 		console.log(
 			`\nYou are in ${this.name}'s ${chalk.red("healing center")}.`
 		);

@@ -4,7 +4,7 @@ import chalk from "chalk";
 import gradient from "gradient-string";
 import { createSpinner } from "nanospinner";
 
-import type { PlayerProps } from "../interfaces/PlayerProps.js";
+import type { PlayerMethods } from "../interfaces/PlayerMethods.js";
 import type { WildLinemonProps } from "../interfaces/WildLinemonProps.js";
 
 import { WildLinemon } from "../classes/WildLinemon.js";
@@ -26,7 +26,7 @@ const linemonActions = [
 
 export const goToTallGrass = (
 	linemonOptions: string[],
-	player: PlayerProps,
+	player: PlayerMethods,
 	returnToOrigin: () => void
 ) => {
 	const formatType = (type: string) => {

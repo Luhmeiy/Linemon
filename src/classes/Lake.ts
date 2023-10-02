@@ -1,6 +1,7 @@
 import chalk from "chalk";
 
-import type { LakeProps } from "../interfaces/LakeProps.js";
+import type { LakeMethods } from "../types/LakeMethods.js";
+import type { PlayerMethods } from "../interfaces/PlayerMethods.js";
 
 import { addMenuToOptions } from "../utils/addMenuToOptions.js";
 import { createPrompt } from "../utils/createPrompt.js";
@@ -16,11 +17,11 @@ let lakeOptions = [
 
 const linemonOptions = ["linemonOne", "linemonTwo"];
 
-export class Lake implements LakeProps {
+export class Lake implements LakeMethods {
 	constructor(
-		public goToGrasslands: LakeProps["goToGrasslands"],
-		public goToForest: LakeProps["goToForest"],
-		public player: LakeProps["player"]
+		public goToGrasslands: () => void,
+		public goToForest: () => void,
+		public player: PlayerMethods
 	) {
 		lakeOptions = addMenuToOptions(lakeOptions);
 	}

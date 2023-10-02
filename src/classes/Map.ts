@@ -1,22 +1,22 @@
-import type { CityProps } from "../interfaces/CityProps.js";
-import type { GrasslandsProps } from "../interfaces/GrasslandsProps.js";
-import type { ForestProps } from "../interfaces/ForestProps.js";
-import type { LakeProps } from "../interfaces/LakeProps.js";
-import type { PlayerProps } from "../interfaces/PlayerProps.js";
+import type { CityMethods } from "../interfaces/CityProps.js";
+import type { ForestMethods } from "../types/ForestMethods.js";
+import type { GrasslandsMethods } from "../types/GrasslandsMethods.js";
+import type { LakeMethods } from "../types/LakeMethods.js";
+import type { PlayerMethods } from "../interfaces/PlayerMethods.js";
 
 import { City } from "./City.js";
-import { Grasslands } from "./Grasslands.js";
 import { Forest } from "./Forest.js";
+import { Grasslands } from "./Grasslands.js";
 import { Lake } from "./Lake.js";
 import { Player } from "./Player.js";
 
 export class Map {
-	private player: PlayerProps;
+	private player: PlayerMethods;
 
-	private city: CityProps;
-	private grasslands: GrasslandsProps;
-	private forest: ForestProps;
-	private lake: LakeProps;
+	private city: CityMethods;
+	private forest: ForestMethods;
+	private grasslands: GrasslandsMethods;
+	private lake: LakeMethods;
 
 	constructor(name: string) {
 		this.player = new Player(name);

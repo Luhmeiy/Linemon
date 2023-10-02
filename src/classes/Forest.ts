@@ -1,6 +1,7 @@
 import chalk from "chalk";
 
-import type { ForestProps } from "../interfaces/ForestProps.js";
+import type { ForestMethods } from "../types/ForestMethods.js";
+import type { PlayerMethods } from "../interfaces/PlayerMethods.js";
 
 import { addMenuToOptions } from "../utils/addMenuToOptions.js";
 import { createPrompt } from "../utils/createPrompt.js";
@@ -16,11 +17,11 @@ let forestOptions = [
 
 const linemonOptions = ["linemonOne", "linemonTwo"];
 
-export class Forest implements ForestProps {
+export class Forest implements ForestMethods {
 	constructor(
-		public goToGrasslands: ForestProps["goToGrasslands"],
-		public goToLake: ForestProps["goToLake"],
-		public player: ForestProps["player"]
+		private goToGrasslands: () => void,
+		private goToLake: () => void,
+		private player: PlayerMethods
 	) {
 		forestOptions = addMenuToOptions(forestOptions);
 	}

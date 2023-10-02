@@ -1,4 +1,4 @@
-import type { PlayerProps } from "../interfaces/PlayerProps.js";
+import type { PlayerMethods } from "../interfaces/PlayerMethods.js";
 import { createPrompt } from "./createPrompt.js";
 
 const actionsOptions = [
@@ -9,7 +9,7 @@ const actionsOptions = [
 ];
 
 export const getMenu = async (
-	player: PlayerProps,
+	player: PlayerMethods,
 	returnFunction: () => void
 ) => {
 	const startMenu = async () => {

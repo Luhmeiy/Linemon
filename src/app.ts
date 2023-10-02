@@ -1,9 +1,10 @@
 import figlet from "figlet";
 import gradient from "gradient-string";
+import inquirer from "inquirer";
 
 import { Map } from "./classes/Map.js";
+
 import { createPrompt } from "./utils/createPrompt.js";
-import inquirer from "inquirer";
 import { delayMessage } from "./utils/delayMessage.js";
 
 const titleScreenOptions = [{ name: "Start game", value: "ts1" }];

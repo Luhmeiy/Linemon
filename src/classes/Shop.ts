@@ -4,9 +4,10 @@ import chalk from "chalk";
 import { createSpinner } from "nanospinner";
 
 import type { IShopItems } from "../interfaces/IShopItems.js";
-import type { PlayerProps } from "../interfaces/PlayerProps.js";
-import type { ShopProps } from "../interfaces/ShopProps.js";
+import type { PlayerMethods } from "../interfaces/PlayerMethods.js";
 import type { Option } from "../types/Option.js";
+import type { ShopItemsIds } from "../types/ShopItemsIds.js";
+import type { ShopMethods } from "../types/ShopMethods.js";
 
 import { createPrompt } from "../utils/createPrompt.js";
 import { delayMessage } from "../utils/delayMessage.js";
@@ -25,17 +26,17 @@ const itemOptions = [
 	{ name: "Go back", value: "back" },
 ];
 
-export class Shop implements ShopProps {
-	shopConsumableOptions: Option;
-	shopDiskOptions: Option;
-	shopSpecialOptions: Option;
-	shopItems: IShopItems[];
+export class Shop implements ShopMethods {
+	private shopConsumableOptions: Option;
+	private shopDiskOptions: Option;
+	private shopSpecialOptions: Option;
+	private shopItems: IShopItems[];
 
 	constructor(
-		public cityName: ShopProps["cityName"],
-		public shopItemsIds: ShopProps["shopItemsIds"],
-		public goToCityCenter: ShopProps["goToCityCenter"],
-		private player: PlayerProps
+		private cityName: string,
+		private shopItemsIds: ShopItemsIds[],
+		private goToCityCenter: () => void,
+		private player: PlayerMethods
 	) {
 		this.shopItems = this.getFullShopItems();
 
@@ -112,7 +113,7 @@ export class Shop implements ShopProps {
 		}
 	};
 
-	getFullShopItems = () => {
+	private getFullShopItems = () => {
 		const shopItems: IShopItems[] = this.shopItemsIds.map((id) =>
 			getFromJson(jsonShopItems, id)
 		);
@@ -120,13 +121,13 @@ export class Shop implements ShopProps {
 		return shopItems;
 	};
 
-	formatItem = (name: string, price: number) => {
+	private formatItem = (name: string, price: number) => {
 		const spacing = ".".repeat(30 - name.length - price.toString().length);
 
 		return `${name}${spacing}${price}`;
 	};
 
-	filterByType = (type: IShopItems["type"]): Option => {
+	private filterByType = (type: IShopItems["type"]): Option => {
 		//@ts-ignore
 		return this.shopItems
 			.filter((item) => item.type === type)
@@ -138,7 +139,7 @@ export class Shop implements ShopProps {
 			});
 	};
 
-	filterCategory = () => {
+	private filterCategory = () => {
 		return categoryOptions.filter((category) => {
 			if (this.shopSpecialOptions.length === 1) {
 				return category.value !== "special";

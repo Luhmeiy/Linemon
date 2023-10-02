@@ -8,7 +8,13 @@ export interface InventoryItem {
 	quantity: number;
 }
 
-interface InventoryMethods {
+export type InventoryType = {
+	consumable: InventoryItem[];
+	disk: InventoryItem[];
+	special: InventoryItem[];
+};
+
+export interface InventoryMethods {
 	getInventory: (returnFunction: () => void) => void;
 	addToInventory: (item: IShopItems, quantity: number) => void;
 	removeFromInventory: (
@@ -21,20 +27,12 @@ interface InventoryMethods {
 	) => void;
 }
 
-export interface InventoryProps extends InventoryMethods {
-	inventory: {
-		consumable: InventoryItem[];
-		disk: InventoryItem[];
-		special: InventoryItem[];
-	};
-}
-
 export interface TeamMethods {
 	getTeam: (returnFunction: () => void) => void;
 	addToTeam: (linemon: WildLinemonProps) => Promise<boolean>;
 }
 
-export interface PlayerProps extends InventoryMethods, TeamMethods {
+export interface PlayerMethods extends InventoryMethods, TeamMethods {
 	getName: () => string;
 	getMoney: () => number;
 	setMoney: (value: number) => void;
