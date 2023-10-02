@@ -1,4 +1,5 @@
 import type { IShopItems } from "./IShopItems.js";
+import type { WildLinemonProps } from "./WildLinemonProps.js";
 
 export interface InventoryItem {
 	id: string;
@@ -14,6 +15,10 @@ interface InventoryMethods {
 		item: InventoryItem,
 		inventory: InventoryItem[]
 	) => void;
+	getDisks: (
+		returnFunction: (linemon: WildLinemonProps) => void,
+		linemon: WildLinemonProps
+	) => void;
 }
 
 export interface InventoryProps extends InventoryMethods {
@@ -24,9 +29,13 @@ export interface InventoryProps extends InventoryMethods {
 	};
 }
 
-export interface PlayerProps extends InventoryMethods {
+export interface TeamMethods {
+	getTeam: (returnFunction: () => void) => void;
+	addToTeam: (linemon: WildLinemonProps) => Promise<boolean>;
+}
+
+export interface PlayerProps extends InventoryMethods, TeamMethods {
 	name: string;
-	inventory: InventoryProps;
 
 	getMoney: () => number;
 	setMoney: (value: number) => void;

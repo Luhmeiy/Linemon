@@ -35,7 +35,7 @@ export class Forest implements ForestProps {
 
 		await delayMessage(null);
 		if (answer.selectedOption === "tallGrass") {
-			goToTallGrass(linemonOptions, this.goToForest);
+			goToTallGrass(linemonOptions, this.player, this.goToForest);
 		} else if (answer.selectedOption === "grasslands") {
 			this.goToGrasslands();
 		} else if (answer.selectedOption === "lake") {

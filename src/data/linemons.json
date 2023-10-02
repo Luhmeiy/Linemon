@@ -6,7 +6,8 @@
 			"description": "",
 			"evolutionStage": 1,
 			"lvl": 1,
-			"type": "normal"
+			"type": "normal",
+			"catchRate": 220
 		},
 		"minMaxStatus": {
 			"minHp": 10,
@@ -26,7 +27,8 @@
 			"description": "",
 			"evolutionStage": 1,
 			"lvl": 1,
-			"type": "ground"
+			"type": "ground",
+			"catchRate": 220
 		},
 		"minMaxStatus": {
 			"minHp": 10,

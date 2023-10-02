@@ -40,7 +40,7 @@ export class Grasslands implements GrasslandsProps {
 
 		await delayMessage(null);
 		if (answer.selectedOption === "tallGrass") {
-			goToTallGrass(linemonOptions, this.goToGrasslands);
+			goToTallGrass(linemonOptions, this.player, this.goToGrasslands);
 		} else if (answer.selectedOption === "city") {
 			this.goToCity();
 		} else if (answer.selectedOption === "forest") {

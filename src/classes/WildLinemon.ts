@@ -4,7 +4,8 @@ import { randomIntFromInterval } from "../utils/randomIntFromInterval.js";
 
 export class WildLinemon implements WildLinemonProps {
 	status: {
-		hp: number;
+		maxHp: number;
+		currentHp: number;
 		atk: number;
 		def: number;
 		spd: number;
@@ -16,11 +17,14 @@ export class WildLinemon implements WildLinemonProps {
 		public info: WildLinemonProps["info"],
 		public minMaxStatus: WildLinemonProps["minMaxStatus"]
 	) {
+		const hp = randomIntFromInterval(
+			this.minMaxStatus.minHp,
+			this.minMaxStatus.maxHp
+		);
+
 		this.status = {
-			hp: randomIntFromInterval(
-				this.minMaxStatus.minHp,
-				this.minMaxStatus.maxHp
-			),
+			maxHp: hp,
+			currentHp: hp,
 			atk: randomIntFromInterval(
 				this.minMaxStatus.minAtk,
 				this.minMaxStatus.maxAtk

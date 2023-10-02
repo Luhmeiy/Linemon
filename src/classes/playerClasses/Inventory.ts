@@ -3,6 +3,7 @@ import type {
 	InventoryItem,
 	InventoryProps,
 } from "../../interfaces/PlayerProps.js";
+import type { WildLinemonProps } from "../../interfaces/WildLinemonProps.js";
 import type { Option } from "../../types/Option.js";
 
 import { createPrompt } from "../../utils/createPrompt.js";
@@ -20,6 +21,12 @@ const itemOptions = [
 	{ name: "Description", value: "description" },
 	{ name: "Go back", value: "back" },
 ];
+
+const extendedItemOptions = itemOptions;
+extendedItemOptions.unshift({
+	name: "Use",
+	value: "use",
+});
 
 const defaultOption = { name: "Go back", value: "back" };
 
@@ -132,6 +139,68 @@ export class Inventory implements InventoryProps {
 		if (item.quantity <= 0) {
 			const index = inventory.findIndex((i) => i.id === item.id);
 			if (index !== -1) inventory.splice(index, 1);
+		}
+	};
+
+	getDisks = async (
+		returnFunction: (
+			linemon: WildLinemonProps,
+			catchLinemon: boolean,
+			diskBonus?: number
+		) => void,
+		linemon: WildLinemonProps
+	) => {
+		const diskOptions: Option = [
+			...this.createOptions(this.inventory.disk),
+			defaultOption,
+		];
+
+		if (this.inventory.disk.length == 0) {
+			console.log("No items");
+
+			returnFunction(linemon, false);
+		} else {
+			const answer = await createPrompt("Choose an disk: ", diskOptions);
+
+			if (answer.selectedOption !== "back") {
+				for (const item of this.inventory.disk) {
+					if (answer.selectedOption === item.id) {
+						const itemAnswer = await createPrompt(
+							item.name,
+							extendedItemOptions
+						);
+
+						if (itemAnswer.selectedOption === "use") {
+							const diskBonus = this.selectDiskBonus(item.id);
+							this.removeFromInventory(item, this.inventory.disk);
+							returnFunction(linemon, true, diskBonus);
+						} else if (itemAnswer.selectedOption === "quantity") {
+							await delayMessage(`Quantity: ${item.quantity}`);
+							this.getDisks(returnFunction, linemon);
+						} else if (
+							itemAnswer.selectedOption === "description"
+						) {
+							await delayMessage(
+								`${item.name}: ${item.description}`
+							);
+
+							this.getDisks(returnFunction, linemon);
+						}
+					}
+				}
+			} else {
+				returnFunction(linemon, false);
+			}
+		}
+	};
+
+	private selectDiskBonus = (id: string) => {
+		if (id === "disk") {
+			return 1;
+		} else if (id === "silverDisk") {
+			return 2;
+		} else if (id === "goldenDisk") {
+			return 3;
 		}
 	};
 

@@ -5,6 +5,7 @@ export const addActionsToOptions = (options: Option, name: string) => {
 	const actions = [
 		new inquirer.Separator(),
 		{ name: name, value: "player" },
+		{ name: "Team", value: "team" },
 		{ name: "Open inventory", value: "inventory" },
 	];
 

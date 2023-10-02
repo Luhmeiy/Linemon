@@ -7,6 +7,8 @@ export const getActionConditions = (
 ) => {
 	if (answer.selectedOption === "player") {
 		player.getStatus(returnFunction);
+	} else if (answer.selectedOption === "team") {
+		player.getTeam(returnFunction);
 	} else if (answer.selectedOption === "inventory") {
 		player.getInventory(returnFunction);
 	}

@@ -4,6 +4,9 @@ import chalk from "chalk";
 import gradient from "gradient-string";
 import { createSpinner } from "nanospinner";
 
+import type { PlayerProps } from "../interfaces/PlayerProps.js";
+import type { WildLinemonProps } from "../interfaces/WildLinemonProps.js";
+
 import { WildLinemon } from "../classes/WildLinemon.js";
 
 import { createPrompt } from "./createPrompt.js";
@@ -16,10 +19,14 @@ const tallGrassOptions = [
 	{ name: "Leave", value: "exit" },
 ];
 
-const linemonActions = [{ name: "Run", value: "run" }];
+const linemonActions = [
+	{ name: "Catch", value: "catch" },
+	{ name: "Run", value: "run" },
+];
 
 export const goToTallGrass = (
 	linemonOptions: string[],
+	player: PlayerProps,
 	returnToOrigin: () => void
 ) => {
 	const formatType = (type: string) => {
@@ -41,46 +48,92 @@ export const goToTallGrass = (
 		}
 	};
 
-	const findLinemon = async () => {
-		const linemonId = randomIntFromInterval(0, linemonOptions.length - 1);
-		const randomNumber = randomIntFromInterval(1, 1000);
+	const findLinemon = async (
+		linemon?: WildLinemonProps,
+		catchLinemon?: boolean,
+		diskBonus?: number
+	) => {
+		if (!linemon) {
+			const linemonId = randomIntFromInterval(
+				0,
+				linemonOptions.length - 1
+			);
+			const randomNumber = randomIntFromInterval(1, 1000);
 
-		let isShiny = false;
-		if (randomNumber === 1000) isShiny = true;
+			let isShiny = false;
+			if (randomNumber === 1000) isShiny = true;
 
-		const { id, info, minMaxStatus } = getFromJson(
-			jsonLinemons,
-			linemonOptions[linemonId]
-		);
-		const linemon = new WildLinemon(id, { ...info, isShiny }, minMaxStatus);
+			const { id, info, minMaxStatus } = getFromJson(
+				jsonLinemons,
+				linemonOptions[linemonId]
+			);
+			linemon = new WildLinemon(id, { ...info, isShiny }, minMaxStatus);
 
-		console.log("\n");
+			console.log("\n");
 
-		const spinner = createSpinner("Searching for Linemon...").start();
+			const spinner = createSpinner("Searching for Linemon...").start();
 
-		await delayMessage(null);
+			await delayMessage(null);
 
-		spinner.success({ text: `You found a ${linemon.info.name}!\n` });
-		await delayMessage(null);
+			spinner.success({ text: `You found a ${linemon.info.name}!\n` });
+			await delayMessage(null);
+		}
 
-		const type = formatType(linemon.info.type);
+		const type = formatType(linemon!.info.type);
 
-		let fightOn = true;
-		while (fightOn) {
-			console.log(`${linemon.info.name} - Lvl. ${linemon.info.lvl} ${
-				linemon.info.isShiny ? gradient.cristal("[Shiny]") : ""
+		if (catchLinemon) {
+			console.log("\n");
+
+			const spinner = createSpinner("Catching...").start();
+
+			const catchProbability =
+				((3 * linemon.status.maxHp - 2 * linemon.status.currentHp) *
+					linemon.info.catchRate *
+					diskBonus!) /
+				(3 * linemon.status.maxHp);
+
+			const randomNumber = randomIntFromInterval(0, 255);
+
+			await delayMessage(null);
+
+			if (catchProbability >= randomNumber) {
+				spinner.success({
+					text: `You caught a ${linemon.info.name}!\n`,
+				});
+
+				await player.addToTeam(linemon);
+				walk();
+			} else {
+				spinner.error({
+					text: `${linemon.info.name} broke free!\n`,
+				});
+
+				findLinemon(linemon, false);
 			}
+		} else {
+			let fightOn = true;
+			while (fightOn) {
+				console.log(`${linemon!.info.name} - Lvl. ${
+					linemon!.info.lvl
+				} ${linemon!.info.isShiny ? gradient.cristal("[Shiny]") : ""}
 Type: ${type}`);
 
-			const answer = await createPrompt(
-				"What do you want to do?",
-				linemonActions
-			);
+				const answer = await createPrompt(
+					"What do you want to do?",
+					linemonActions
+				);
 
-			if (answer.selectedOption === "run") {
-				fightOn = false;
-				await delayMessage("You ran away.\n");
-				walk();
+				if (!(answer.selectedOption === "run")) {
+					await delayMessage(null);
+					if (answer.selectedOption === "catch") {
+						fightOn = false;
+						player.getDisks(findLinemon, linemon!);
+					}
+				} else {
+					fightOn = false;
+					await delayMessage("You ran away.\n");
+					walk();
+				}
 			}
 		}
 	};

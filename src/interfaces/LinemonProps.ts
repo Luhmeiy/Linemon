@@ -1,4 +1,4 @@
-export interface WildLinemonProps {
+export interface LinemonProps {
 	id: string;
 
 	info: {
@@ -9,18 +9,6 @@ export interface WildLinemonProps {
 		evolutionStage: number;
 		type: string;
 		isShiny: boolean;
-		catchRate: number;
-	};
-
-	minMaxStatus: {
-		minHp: number;
-		maxHp: number;
-		minAtk: number;
-		maxAtk: number;
-		minDef: number;
-		maxDef: number;
-		minSpd: number;
-		maxSpd: number;
 	};
 
 	status: {

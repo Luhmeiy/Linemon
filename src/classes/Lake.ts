@@ -35,7 +35,7 @@ export class Lake implements LakeProps {
 
 		await delayMessage(null);
 		if (answer.selectedOption === "tallGrass") {
-			goToTallGrass(linemonOptions, this.goToLake);
+			goToTallGrass(linemonOptions, this.player, this.goToLake);
 		} else if (answer.selectedOption === "grasslands") {
 			this.goToGrasslands();
 		} else if (answer.selectedOption === "forest") {
