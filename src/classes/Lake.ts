@@ -11,6 +11,7 @@ import { goToTallGrass } from "../utils/goToTallGrass.js";
 
 let lakeOptions = [
 	{ name: `Go to ${chalk.green("tall grass")}`, value: "tallGrass" },
+	{ name: "Go to LakeCity", value: "lakeCity" },
 	{ name: `Go to ${chalk.green("grasslands")}`, value: "grasslands" },
 	{ name: `Go to ${chalk.green("forest")}`, value: "forest" },
 ];
@@ -19,9 +20,10 @@ const linemonOptions = ["linemonOne", "linemonTwo"];
 
 export class Lake implements LakeMethods {
 	constructor(
-		public goToGrasslands: () => void,
-		public goToForest: () => void,
-		public player: PlayerMethods
+		private goToGrasslands: () => void,
+		private goToLakeCity: () => void,
+		private goToForest: () => void,
+		private player: PlayerMethods
 	) {
 		lakeOptions = addMenuToOptions(lakeOptions);
 	}
@@ -35,14 +37,22 @@ export class Lake implements LakeMethods {
 		);
 
 		await delayMessage(null);
-		if (answer.selectedOption === "tallGrass") {
-			goToTallGrass(linemonOptions, this.player, this.goToLake);
-		} else if (answer.selectedOption === "grasslands") {
-			this.goToGrasslands();
-		} else if (answer.selectedOption === "forest") {
-			this.goToForest();
-		} else {
-			getMenu(this.player, this.goToLake);
+		switch (answer.selectedOption) {
+			case "tallGrass":
+				goToTallGrass(linemonOptions, this.player, this.goToLake);
+				break;
+			case "lakeCity":
+				this.goToLakeCity();
+				break;
+			case "grasslands":
+				this.goToGrasslands();
+				break;
+			case "forest":
+				this.goToForest();
+				break;
+			default:
+				getMenu(this.player, this.goToLake);
+				break;
 		}
 	};
 }

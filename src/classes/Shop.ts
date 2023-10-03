@@ -63,12 +63,16 @@ export class Shop implements ShopMethods {
 		if (categoryAnswer.selectedOption !== "shopExit") {
 			let options: Option;
 
-			if (categoryAnswer.selectedOption === "consumable") {
-				options = this.shopConsumableOptions;
-			} else if (categoryAnswer.selectedOption === "disk") {
-				options = this.shopDiskOptions;
-			} else if (categoryAnswer.selectedOption === "special") {
-				options = this.shopSpecialOptions;
+			switch (categoryAnswer.selectedOption) {
+				case "consumable":
+					options = this.shopConsumableOptions;
+					break;
+				case "disk":
+					options = this.shopDiskOptions;
+					break;
+				case "special":
+					options = this.shopSpecialOptions;
+					break;
 			}
 
 			const answer = await createPrompt(
@@ -140,10 +144,12 @@ export class Shop implements ShopMethods {
 	};
 
 	private filterCategory = () => {
-		return categoryOptions.filter((category) => {
-			if (this.shopSpecialOptions.length === 1) {
-				return category.value !== "special";
-			} else true;
-		});
+		let newCategoryOptions = [...categoryOptions];
+
+		if (this.shopSpecialOptions.length === 1) {
+			newCategoryOptions.splice(2, 1);
+		}
+
+		return newCategoryOptions;
 	};
 }

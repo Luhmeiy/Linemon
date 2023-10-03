@@ -31,8 +31,8 @@ export class City implements CityMethods {
 
 	constructor(
 		private id: string,
-		private goToGrasslands: () => void,
-		private player: PlayerMethods
+		private player: PlayerMethods,
+		private goToPlace: () => void
 	) {
 		this.selectedCity = getFromJson(jsonCities, this.id);
 
@@ -60,14 +60,22 @@ export class City implements CityMethods {
 		);
 
 		await delayMessage(null);
-		if (answer.selectedOption === "shop") {
-			this.shop.goToShop();
-		} else if (answer.selectedOption === "healingCenter") {
-			this.goToHealing();
-		} else if (answer.selectedOption === "grasslands") {
-			this.goToGrasslands();
-		} else {
-			getMenu(this.player, this.goToCityCenter);
+		switch (answer.selectedOption) {
+			case "shop":
+				this.shop.goToShop();
+				break;
+			case "healingCenter":
+				this.goToHealing();
+				break;
+			case "grasslands":
+				this.goToPlace();
+				break;
+			case "lake":
+				this.goToPlace();
+				break;
+			default:
+				getMenu(this.player, this.goToCityCenter);
+				break;
 		}
 	};
 

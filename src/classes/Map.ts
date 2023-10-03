@@ -14,6 +14,8 @@ export class Map {
 	private player: PlayerMethods;
 
 	private city: CityMethods;
+	private lakeCity: CityMethods;
+
 	private forest: ForestMethods;
 	private grasslands: GrasslandsMethods;
 	private lake: LakeMethods;
@@ -21,7 +23,8 @@ export class Map {
 	constructor(name: string) {
 		this.player = new Player(name);
 
-		this.city = new City("city", this.goToGrasslands, this.player);
+		this.city = new City("city", this.player, this.goToGrasslands);
+		this.lakeCity = new City("lakeCity", this.player, this.goToLake);
 
 		this.grasslands = new Grasslands(
 			this.goToCity,
@@ -35,13 +38,19 @@ export class Map {
 			this.goToLake,
 			this.player
 		);
-		this.lake = new Lake(this.goToGrasslands, this.goToForest, this.player);
+		this.lake = new Lake(
+			this.goToGrasslands,
+			this.goToLakeCity,
+			this.goToForest,
+			this.player
+		);
 
 		this.city.goToCityCenter();
 	}
 
 	// Directions
 	goToCity = () => this.city.goToCityCenter();
+	goToLakeCity = () => this.lakeCity.goToCityCenter();
 	goToGrasslands = () => this.grasslands.goToGrasslands();
 	goToForest = () => this.forest.goToForest();
 	goToLake = () => this.lake.goToLake();

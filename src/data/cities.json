@@ -1,7 +1,7 @@
 [
 	{
 		"id": "city",
-		"name": "city",
+		"name": "City",
 		"cityOptions": [
 			{ "name": "Go to ${chalk.blue('shop')}", "value": "shop" },
 			{
@@ -14,5 +14,21 @@
 			}
 		],
 		"shopItemsIds": ["potion", "disk"]
+	},
+	{
+		"id": "lakeCity",
+		"name": "LakeCity",
+		"cityOptions": [
+			{ "name": "Go to ${chalk.blue('shop')}", "value": "shop" },
+			{
+				"name": "Go to ${chalk.red('healing center')}",
+				"value": "healingCenter"
+			},
+			{
+				"name": "Go to ${chalk.blue('lake')}",
+				"value": "lake"
+			}
+		],
+		"shopItemsIds": ["potion", "disk", "silverDisk", "fishingRod"]
 	}
 ]
