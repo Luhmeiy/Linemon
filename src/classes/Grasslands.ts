@@ -7,7 +7,7 @@ import { addMenuToOptions } from "../utils/addMenuToOptions.js";
 import { createPrompt } from "../utils/createPrompt.js";
 import { delayMessage } from "../utils/delayMessage.js";
 import { getMenu } from "../utils/getMenu.js";
-import { goToTallGrass } from "../utils/goToTallGrass.js";
+import { searchForLinemon } from "../utils/searchForLinemon.js";
 
 let grasslandsOptions = [
 	{ name: `Go to ${chalk.green("tall grass")}`, value: "tallGrass" },
@@ -38,7 +38,13 @@ export class Grasslands implements GrasslandsMethods {
 
 		await delayMessage(null);
 		if (answer.selectedOption === "tallGrass") {
-			goToTallGrass(linemonOptions, this.player, this.goToGrasslands);
+			searchForLinemon(
+				linemonOptions,
+				100,
+				"tallGrass",
+				this.player,
+				this.goToGrasslands
+			);
 		} else if (answer.selectedOption === "city") {
 			this.goToCity();
 		} else if (answer.selectedOption === "forest") {

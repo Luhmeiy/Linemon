@@ -25,6 +25,7 @@ export interface InventoryMethods {
 		returnFunction: (linemon: WildLinemonProps) => void,
 		linemon: WildLinemonProps
 	) => void;
+	hasFishingRod: () => boolean;
 }
 
 export interface TeamMethods {

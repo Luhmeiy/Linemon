@@ -252,4 +252,10 @@ export class Inventory implements InventoryMethods {
 			}
 		}
 	};
+
+	hasFishingRod = () => {
+		return this.inventory.special.some((e) => e.id === "fishingRod")
+			? true
+			: false;
+	};
 }

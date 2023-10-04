@@ -7,7 +7,7 @@ import { addMenuToOptions } from "../utils/addMenuToOptions.js";
 import { createPrompt } from "../utils/createPrompt.js";
 import { delayMessage } from "../utils/delayMessage.js";
 import { getMenu } from "../utils/getMenu.js";
-import { goToTallGrass } from "../utils/goToTallGrass.js";
+import { searchForLinemon } from "../utils/searchForLinemon.js";
 
 let lakeOptions = [
 	{ name: `Go to ${chalk.green("tall grass")}`, value: "tallGrass" },
@@ -29,6 +29,13 @@ export class Lake implements LakeMethods {
 	}
 
 	goToLake = async () => {
+		if (this.player.hasFishingRod()) {
+			lakeOptions.unshift({
+				name: `${chalk.blue("Fish")}`,
+				value: "fish",
+			});
+		}
+
 		console.log("\nYou are in the lake.");
 
 		const answer = await createPrompt(
@@ -38,8 +45,23 @@ export class Lake implements LakeMethods {
 
 		await delayMessage(null);
 		switch (answer.selectedOption) {
+			case "fish":
+				searchForLinemon(
+					linemonOptions,
+					70,
+					"water",
+					this.player,
+					this.goToLake
+				);
+				break;
 			case "tallGrass":
-				goToTallGrass(linemonOptions, this.player, this.goToLake);
+				searchForLinemon(
+					linemonOptions,
+					100,
+					"tallGrass",
+					this.player,
+					this.goToLake
+				);
 				break;
 			case "lakeCity":
 				this.goToLakeCity();

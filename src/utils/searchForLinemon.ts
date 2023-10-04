@@ -14,21 +14,33 @@ import { delayMessage } from "./delayMessage.js";
 import { getFromJson } from "./getFromJson.js";
 import { randomIntFromInterval } from "./randomIntFromInterval.js";
 
-const tallGrassOptions = [
-	{ name: "Keep walking", value: "walk" },
-	{ name: "Leave", value: "exit" },
-];
-
 const linemonActions = [
 	{ name: "Catch", value: "catch" },
 	{ name: "Run", value: "run" },
 ];
 
-export const goToTallGrass = (
+const options = [{ name: "Leave", value: "exit" }];
+
+export const searchForLinemon = (
 	linemonOptions: string[],
+	findingChance: number,
+	location: "tallGrass" | "water",
 	player: PlayerMethods,
 	returnToOrigin: () => void
 ) => {
+	let searchText: string;
+
+	switch (location) {
+		case "tallGrass":
+			options.unshift({ name: "Keep walking", value: "continue" });
+			searchText = "Searching for Linemon...";
+			break;
+		case "water":
+			options.unshift({ name: "Keep fishing", value: "continue" });
+			searchText = "Fishing...";
+			break;
+	}
+
 	const formatType = (type: string) => {
 		switch (type) {
 			case "fire":
@@ -54,14 +66,16 @@ export const goToTallGrass = (
 		diskBonus?: number
 	) => {
 		if (!linemon) {
+			const randomNumber = randomIntFromInterval(1, 100);
+
 			const linemonId = randomIntFromInterval(
 				0,
 				linemonOptions.length - 1
 			);
-			const randomNumber = randomIntFromInterval(1, 1000);
+			const shinyNumber = randomIntFromInterval(1, 1000);
 
 			let isShiny = false;
-			if (randomNumber === 1000) isShiny = true;
+			if (shinyNumber === 1000) isShiny = true;
 
 			const { id, info, minMaxStatus } = getFromJson(
 				jsonLinemons,
@@ -71,11 +85,22 @@ export const goToTallGrass = (
 
 			console.log("\n");
 
-			const spinner = createSpinner("Searching for Linemon...").start();
+			const spinner = createSpinner(searchText).start();
 
 			await delayMessage(null);
 
-			spinner.success({ text: `You found a ${linemon.info.name}!\n` });
+			if (randomNumber <= findingChance) {
+				spinner.success({
+					text: `You found a ${linemon.info.name}!\n`,
+				});
+			} else {
+				spinner.error({
+					text: "You found nothing.\n",
+				});
+
+				return search();
+			}
+
 			await delayMessage(null);
 		}
 
@@ -102,7 +127,7 @@ export const goToTallGrass = (
 				});
 
 				await player.addToTeam(linemon);
-				walk();
+				search();
 			} else {
 				spinner.error({
 					text: `${linemon.info.name} broke free!\n`,
@@ -132,22 +157,19 @@ Type: ${type}`);
 				} else {
 					fightOn = false;
 					await delayMessage("You ran away.\n");
-					walk();
+					search();
 				}
 			}
 		}
 	};
 
-	const walk = async () => {
-		const answer = await createPrompt(
-			"Where do you want to go?",
-			tallGrassOptions
-		);
+	const search = async () => {
+		const answer = await createPrompt("What do you want to do?", options);
 
 		await delayMessage(null);
 		if (answer.selectedOption === "exit") {
 			returnToOrigin();
-		} else if (answer.selectedOption === "walk") {
+		} else if (answer.selectedOption === "continue") {
 			findLinemon();
 		}
 	};

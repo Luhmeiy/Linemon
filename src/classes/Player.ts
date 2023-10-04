@@ -30,6 +30,7 @@ export class Player implements PlayerMethods {
 	getName = () => this.name;
 	getMoney = () => this.money;
 	setMoney = (value: number) => (this.money += value);
+	hasFishingRod = () => this.inventory.hasFishingRod();
 
 	getStatus = async (returnFunction: () => void) => {
 		await delayMessage(`${chalk.underline.bold(`${this.name}'s Status`)}
