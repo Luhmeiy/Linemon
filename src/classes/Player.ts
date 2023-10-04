@@ -16,11 +16,16 @@ import { Team } from "./playerClasses/Team.js";
 
 export class Player implements PlayerMethods {
 	private money: number;
+	private linemonsSeen: string[];
+	private linemonsCaught: string[];
+
 	private team: TeamMethods;
 	private inventory: InventoryMethods;
 
 	constructor(private name: string) {
 		this.money = 1000;
+		this.linemonsSeen = [];
+		this.linemonsCaught = [];
 
 		this.team = new Team();
 		this.inventory = new Inventory();
@@ -30,11 +35,25 @@ export class Player implements PlayerMethods {
 	getName = () => this.name;
 	getMoney = () => this.money;
 	setMoney = (value: number) => (this.money += value);
+
+	setLinemonsSeen = (id: string) => {
+		if (!this.linemonsSeen.some((linemonId) => linemonId === id)) {
+			this.linemonsSeen.push(id);
+		}
+	};
+	setLinemonsCaught = (id: string) => {
+		if (!this.linemonsCaught.some((linemonId) => linemonId === id)) {
+			this.linemonsCaught.push(id);
+		}
+	};
+
 	hasFishingRod = () => this.inventory.hasFishingRod();
 
 	getStatus = async (returnFunction: () => void) => {
 		await delayMessage(`${chalk.underline.bold(`${this.name}'s Status`)}
-${chalk.bold("Money:")} ${this.money}\n`);
+${chalk.bold("Money:")} ${this.money}
+${chalk.bold("Linemon seen:")} ${this.linemonsSeen.length}
+${chalk.bold("Linemon caught:")} ${this.linemonsCaught.length}\n`);
 
 		returnFunction();
 	};

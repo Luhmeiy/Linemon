@@ -37,5 +37,9 @@ export interface PlayerMethods extends InventoryMethods, TeamMethods {
 	getName: () => string;
 	getMoney: () => number;
 	setMoney: (value: number) => void;
+
+	setLinemonsSeen: (id: string) => void;
+	setLinemonsCaught: (id: string) => void;
+
 	getStatus: (returnFunction: () => void) => void;
 }

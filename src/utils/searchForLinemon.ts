@@ -19,8 +19,6 @@ const linemonActions = [
 	{ name: "Run", value: "run" },
 ];
 
-const options = [{ name: "Leave", value: "exit" }];
-
 export const searchForLinemon = (
 	linemonOptions: string[],
 	findingChance: number,
@@ -28,6 +26,7 @@ export const searchForLinemon = (
 	player: PlayerMethods,
 	returnToOrigin: () => void
 ) => {
+	const options = [{ name: "Leave", value: "exit" }];
 	let searchText: string;
 
 	switch (location) {
@@ -93,6 +92,8 @@ export const searchForLinemon = (
 				spinner.success({
 					text: `You found a ${linemon.info.name}!\n`,
 				});
+
+				player.setLinemonsSeen(linemon.id);
 			} else {
 				spinner.error({
 					text: "You found nothing.\n",
@@ -125,6 +126,8 @@ export const searchForLinemon = (
 				spinner.success({
 					text: `You caught a ${linemon.info.name}!\n`,
 				});
+
+				player.setLinemonsCaught(linemon.id);
 
 				await player.addToTeam(linemon);
 				search();
