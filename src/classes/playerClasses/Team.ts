@@ -35,6 +35,8 @@ export class Team implements TeamMethods {
 			wildLinemon.status
 		);
 
+		let linemonForPC;
+
 		if (this.team.length < 6) {
 			await delayMessage(`${linemon.info.name} added to team.\n`);
 			this.team.push(linemon);
@@ -58,17 +60,18 @@ export class Team implements TeamMethods {
 				const linemonAnswer: { selectedOption: string } =
 					await createPrompt("Select Linemon to release: ", options);
 
-				this.switchLinemon(
-					linemon,
-					Number(linemonAnswer.selectedOption)
-				);
+				const linemonId = Number(linemonAnswer.selectedOption);
+
+				linemonForPC = this.team[linemonId];
+				this.switchLinemon(linemon, linemonId);
+
 				await delayMessage(`${linemon.info.name} added to team.\n`);
 			} else {
-				await delayMessage(`${linemon.info.name} released.`);
+				linemonForPC = linemon;
 			}
 		}
 
-		return true;
+		return linemonForPC;
 	};
 
 	removeFromTeam = (linemon: LinemonProps) => {

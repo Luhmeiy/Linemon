@@ -4,14 +4,17 @@ import type { IShopItems } from "../interfaces/IShopItems.js";
 import type {
 	InventoryItem,
 	InventoryMethods,
+	PCMethods,
 	PlayerMethods,
 	TeamMethods,
 } from "../interfaces/PlayerMethods.js";
 import type { WildLinemonProps } from "../interfaces/WildLinemonProps.js";
+import type { LinemonProps } from "../interfaces/LinemonProps.js";
 
 import { delayMessage } from "../utils/delayMessage.js";
 
 import { Inventory } from "./playerClasses/Inventory.js";
+import { PC } from "./playerClasses/PC.js";
 import { Team } from "./playerClasses/Team.js";
 
 export class Player implements PlayerMethods {
@@ -20,6 +23,7 @@ export class Player implements PlayerMethods {
 	private linemonsCaught: string[];
 
 	private team: TeamMethods;
+	private pc: PCMethods;
 	private inventory: InventoryMethods;
 
 	constructor(private name: string) {
@@ -28,6 +32,7 @@ export class Player implements PlayerMethods {
 		this.linemonsCaught = [];
 
 		this.team = new Team();
+		this.pc = new PC();
 		this.inventory = new Inventory();
 	}
 
@@ -62,8 +67,15 @@ ${chalk.bold("Linemon caught:")} ${this.linemonsCaught.length}\n`);
 	getTeam = (returnFunction: () => void) => this.team.getTeam(returnFunction);
 
 	addToTeam = async (linemon: WildLinemonProps) => {
-		return await this.team.addToTeam(linemon);
+		const linemonForPC = await this.team.addToTeam(linemon);
+
+		if (linemonForPC) await this.addToPC(linemonForPC);
+		return undefined;
 	};
+
+	// PC
+	getPC = (returnFunction: () => void) => this.pc.getPC(returnFunction);
+	addToPC = async (linemon: LinemonProps) => await this.pc.addToPC(linemon);
 
 	// Inventory
 	getInventory = (returnFunction: () => void) => {

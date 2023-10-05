@@ -40,6 +40,18 @@ export class Inventory implements InventoryMethods {
 			disk: [],
 			special: [],
 		};
+
+		this.addToInventory(
+			{
+				id: "goldenDisk",
+				name: "Golden Floppy Disk",
+				description:
+					"A little bit better at catching Linemons than the Silver Floppy Disk.",
+				price: 500,
+				type: "disk",
+			},
+			10
+		);
 	}
 
 	getInventory = async (returnFunction: () => void) => {

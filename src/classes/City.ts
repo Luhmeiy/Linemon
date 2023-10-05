@@ -18,6 +18,7 @@ import { Shop } from "./Shop.js";
 
 const healingOptions = [
 	{ name: "Heal", value: "heal" },
+	{ name: "PC", value: "pc" },
 	{ name: "Go back", value: "healingExit" },
 ];
 
@@ -89,12 +90,18 @@ export class City implements CityMethods {
 			healingOptions
 		);
 
-		if (answer.selectedOption === "healingExit") {
-			await delayMessage("You left.");
-			this.goToCityCenter();
-		} else if (answer.selectedOption === "heal") {
-			await delayMessage("You healed.");
-			this.goToHealing();
+		switch (answer.selectedOption) {
+			case "heal":
+				await delayMessage("You healed.");
+				this.goToHealing();
+				break;
+			case "pc":
+				this.player.getPC(this.goToHealing);
+				break;
+			default:
+				await delayMessage("You left.");
+				this.goToCityCenter();
+				break;
 		}
 	};
 }

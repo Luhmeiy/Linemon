@@ -1,4 +1,5 @@
 import type { IShopItems } from "./IShopItems.js";
+import type { LinemonProps } from "./LinemonProps.js";
 import type { WildLinemonProps } from "./WildLinemonProps.js";
 
 export interface InventoryItem {
@@ -28,12 +29,20 @@ export interface InventoryMethods {
 	hasFishingRod: () => boolean;
 }
 
-export interface TeamMethods {
-	getTeam: (returnFunction: () => void) => void;
-	addToTeam: (linemon: WildLinemonProps) => Promise<boolean>;
+export interface PCMethods {
+	getPC: (returnFunction: () => void) => void;
+	addToPC: (linemon: LinemonProps) => void;
 }
 
-export interface PlayerMethods extends InventoryMethods, TeamMethods {
+export interface TeamMethods {
+	getTeam: (returnFunction: () => void) => void;
+	addToTeam: (linemon: WildLinemonProps) => Promise<LinemonProps | undefined>;
+}
+
+export interface PlayerMethods
+	extends InventoryMethods,
+		TeamMethods,
+		PCMethods {
 	getName: () => string;
 	getMoney: () => number;
 	setMoney: (value: number) => void;
