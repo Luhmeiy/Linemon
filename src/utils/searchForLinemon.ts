@@ -7,6 +7,7 @@ import { createSpinner } from "nanospinner";
 import type { PlayerMethods } from "../interfaces/PlayerMethods.js";
 import type { WildLinemonProps } from "../interfaces/WildLinemonProps.js";
 
+import { Linemon } from "../classes/Linemon.js";
 import { WildLinemon } from "../classes/WildLinemon.js";
 
 import { createPrompt } from "./createPrompt.js";
@@ -129,7 +130,13 @@ export const searchForLinemon = (
 
 				player.setLinemonsCaught(linemon.id);
 
-				await player.addToTeam(linemon);
+				const caughtLinemon = new Linemon(
+					linemon.id,
+					linemon.info,
+					linemon.status
+				);
+
+				await player.addToTeam(caughtLinemon);
 				search();
 			} else {
 				spinner.error({

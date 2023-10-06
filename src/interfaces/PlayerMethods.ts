@@ -36,7 +36,7 @@ export interface PCMethods {
 
 export interface TeamMethods {
 	getTeam: (returnFunction: () => void) => void;
-	addToTeam: (linemon: WildLinemonProps) => Promise<LinemonProps | undefined>;
+	addToTeam: (linemon: LinemonProps) => Promise<LinemonProps | undefined>;
 }
 
 export interface PlayerMethods

@@ -86,7 +86,7 @@ export class City implements CityMethods {
 		);
 
 		const answer = await createPrompt(
-			"Do you want to heal?",
+			"What do you want to do?",
 			healingOptions
 		);
 

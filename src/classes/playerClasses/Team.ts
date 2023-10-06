@@ -1,11 +1,8 @@
 import type { LinemonProps } from "../../interfaces/LinemonProps.js";
 import type { TeamMethods } from "../../interfaces/PlayerMethods.js";
-import type { WildLinemonProps } from "../../interfaces/WildLinemonProps.js";
 
 import { createPrompt } from "../../utils/createPrompt.js";
 import { delayMessage } from "../../utils/delayMessage.js";
-
-import { Linemon } from "../Linemon.js";
 
 export class Team implements TeamMethods {
 	private team: LinemonProps[];
@@ -28,13 +25,7 @@ export class Team implements TeamMethods {
 		returnFunction();
 	};
 
-	addToTeam = async (wildLinemon: WildLinemonProps) => {
-		const linemon = new Linemon(
-			wildLinemon.id,
-			wildLinemon.info,
-			wildLinemon.status
-		);
-
+	addToTeam = async (linemon: LinemonProps) => {
 		let linemonForPC;
 
 		if (this.team.length < 6) {
