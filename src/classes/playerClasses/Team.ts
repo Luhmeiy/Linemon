@@ -1,28 +1,25 @@
 import type { LinemonProps } from "../../interfaces/LinemonProps.js";
 import type { TeamMethods } from "../../interfaces/PlayerMethods.js";
 
+import { createLinemonsMenu } from "../../utils/createLinemonsMenu.js";
 import { createPrompt } from "../../utils/createPrompt.js";
 import { delayMessage } from "../../utils/delayMessage.js";
 
 export class Team implements TeamMethods {
 	private team: LinemonProps[];
 
-	constructor() {
+	constructor(private addToPC: (linemon: LinemonProps) => void) {
 		this.team = [];
 	}
 
 	getTeam = async (returnFunction: () => void) => {
-		if (this.team.length === 0) {
-			await delayMessage("No linemons caught yet.\n");
-		} else {
-			for (const linemon of this.team) {
-				console.log(linemon.info.name);
-			}
-
-			await delayMessage("\n");
-		}
-
-		returnFunction();
+		await createLinemonsMenu(
+			"team",
+			this.team,
+			this.addToPC,
+			this.removeFromTeam,
+			returnFunction
+		);
 	};
 
 	addToTeam = async (linemon: LinemonProps) => {
@@ -65,10 +62,7 @@ export class Team implements TeamMethods {
 		return linemonForPC;
 	};
 
-	removeFromTeam = (linemon: LinemonProps) => {
-		const index = this.team.findIndex((i) => i.id === linemon.id);
-		if (index !== -1) this.team.splice(index, 1);
-	};
+	removeFromTeam = (linemonId: number) => this.team.splice(linemonId, 1);
 
 	switchLinemon = (linemon: LinemonProps, id: number) => {
 		this.team[id] = linemon;

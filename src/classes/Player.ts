@@ -31,7 +31,7 @@ export class Player implements PlayerMethods {
 		this.linemonsSeen = [];
 		this.linemonsCaught = [];
 
-		this.team = new Team();
+		this.team = new Team(this.addToPC);
 		this.pc = new PC(this.addToTeam);
 		this.inventory = new Inventory();
 	}
