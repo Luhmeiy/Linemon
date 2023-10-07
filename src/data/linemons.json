@@ -1,44 +1,1251 @@
 [
 	{
-		"id": "linemonOne",
+		"id": "normfang",
 		"info": {
-			"name": "LinemonOne",
-			"description": "",
+			"name": "Normfang",
+			"description": "Normfang is a fierce and robust creature known for its sharp fangs and formidable strength.",
 			"evolutionStage": 1,
 			"lvl": 1,
 			"type": "normal",
-			"catchRate": 220
+			"catchRate": 130
 		},
 		"minMaxStatus": {
-			"minHp": 10,
-			"maxHp": 100,
-			"minAtk": 10,
-			"maxAtk": 100,
-			"minDef": 10,
+			"minHp": 60,
+			"maxHp": 80,
+			"minAtk": 65,
+			"maxAtk": 85,
+			"minDef": 60,
+			"maxDef": 75,
+			"minSpd": 55,
+			"maxSpd": 70
+		}
+	},
+	{
+		"id": "groundling",
+		"info": {
+			"name": "Groundling",
+			"description": "Groundling is a small creature covered in earthy brown scales, blending into the ground.",
+			"evolutionStage": 1,
+			"evolutionFamily": "groundling",
+			"evolvesAt": 22,
+			"lvl": 1,
+			"type": "ground",
+			"catchRate": 180
+		},
+		"minMaxStatus": {
+			"minHp": 50,
+			"maxHp": 70,
+			"minAtk": 45,
+			"maxAtk": 65,
+			"minDef": 40,
+			"maxDef": 60,
+			"minSpd": 30,
+			"maxSpd": 50
+		}
+	},
+	{
+		"id": "terraclysm",
+		"info": {
+			"name": "Terraclysm",
+			"description": "Terraclysm is a large and powerful creature with formidable rocky armor.",
+			"evolutionStage": 2,
+			"evolutionFamily": "groundling",
+			"evolvesAt": 38,
+			"lvl": 1,
+			"type": "ground",
+			"catchRate": 140
+		},
+		"minMaxStatus": {
+			"minHp": 70,
+			"maxHp": 90,
+			"minAtk": 60,
+			"maxAtk": 80,
+			"minDef": 55,
+			"maxDef": 75,
+			"minSpd": 35,
+			"maxSpd": 55
+		}
+	},
+	{
+		"id": "terraquake",
+		"info": {
+			"name": "Terraquake",
+			"description": "Terraquake is a colossal creature that can create earthquakes with a stomp of its feet.",
+			"evolutionStage": 3,
+			"evolutionFamily": "groundling",
+			"lvl": 1,
+			"type": "ground",
+			"catchRate": 110
+		},
+		"minMaxStatus": {
+			"minHp": 90,
+			"maxHp": 120,
+			"minAtk": 80,
+			"maxAtk": 110,
+			"minDef": 70,
 			"maxDef": 100,
-			"minSpd": 10,
+			"minSpd": 40,
+			"maxSpd": 70
+		}
+	},
+	{
+		"id": "firebeast",
+		"info": {
+			"name": "Firebeast",
+			"description": "Firebeast is a fiery creature with blazing red fur and an intimidating presence.",
+			"evolutionStage": 1,
+			"lvl": 1,
+			"type": "fire",
+			"catchRate": 160
+		},
+		"minMaxStatus": {
+			"minHp": 45,
+			"maxHp": 65,
+			"minAtk": 50,
+			"maxAtk": 70,
+			"minDef": 30,
+			"maxDef": 50,
+			"minSpd": 60,
+			"maxSpd": 80
+		}
+	},
+	{
+		"id": "firepup",
+		"info": {
+			"name": "Firepup",
+			"description": "Firepup is a small, adorable puppy with flames flickering on its tail and ears.",
+			"evolutionStage": 1,
+			"evolutionFamily": "firepup",
+			"evolvesAt": 28,
+			"lvl": 1,
+			"type": "fire",
+			"catchRate": 180
+		},
+		"minMaxStatus": {
+			"minHp": 40,
+			"maxHp": 60,
+			"minAtk": 35,
+			"maxAtk": 50,
+			"minDef": 30,
+			"maxDef": 45,
+			"minSpd": 55,
+			"maxSpd": 75
+		}
+	},
+	{
+		"id": "firelion",
+		"info": {
+			"name": "Firelion",
+			"description": "Firelion is a majestic lion with a mane made of flames, radiating intense heat.",
+			"evolutionStage": 2,
+			"evolutionFamily": "firepup",
+			"lvl": 1,
+			"type": "fire",
+			"catchRate": 130
+		},
+		"minMaxStatus": {
+			"minHp": 70,
+			"maxHp": 90,
+			"minAtk": 75,
+			"maxAtk": 100,
+			"minDef": 60,
+			"maxDef": 80,
+			"minSpd": 65,
+			"maxSpd": 90
+		}
+	},
+	{
+		"id": "normalcub",
+		"info": {
+			"name": "Normalcub",
+			"description": "Normalcub is a cute, fluffy bear-like creature that enjoys exploring its surroundings.",
+			"evolutionStage": 1,
+			"evolutionFamily": "normalcub",
+			"evolvesAt": 30,
+			"lvl": 1,
+			"type": "normal",
+			"catchRate": 180
+		},
+		"minMaxStatus": {
+			"minHp": 50,
+			"maxHp": 70,
+			"minAtk": 40,
+			"maxAtk": 55,
+			"minDef": 35,
+			"maxDef": 50,
+			"minSpd": 45,
+			"maxSpd": 60
+		}
+	},
+	{
+		"id": "normalsage",
+		"info": {
+			"name": "Normalsage",
+			"description": "Normalsage is a wise and noble creature with a regal presence, revered by other monsters.",
+			"evolutionStage": 2,
+			"evolutionFamily": "normalcub",
+			"lvl": 1,
+			"type": "normal",
+			"catchRate": 140
+		},
+		"minMaxStatus": {
+			"minHp": 70,
+			"maxHp": 90,
+			"minAtk": 60,
+			"maxAtk": 75,
+			"minDef": 55,
+			"maxDef": 70,
+			"minSpd": 50,
+			"maxSpd": 65
+		}
+	},
+	{
+		"id": "aquablob",
+		"info": {
+			"name": "Aquablob",
+			"description": "Aquablob is a gelatinous creature that shimmers with watery colors and has a soothing presence.",
+			"evolutionStage": 1,
+			"lvl": 1,
+			"type": "water",
+			"catchRate": 170
+		},
+		"minMaxStatus": {
+			"minHp": 55,
+			"maxHp": 75,
+			"minAtk": 30,
+			"maxAtk": 45,
+			"minDef": 40,
+			"maxDef": 60,
+			"minSpd": 40,
+			"maxSpd": 60
+		}
+	},
+	{
+		"id": "fireling",
+		"info": {
+			"name": "Fireling",
+			"description": "Fireling is a small, energetic creature that resembles an amalgam of sparks.",
+			"evolutionStage": 1,
+			"evolutionFamily": "fireling",
+			"evolvesAt": 25,
+			"lvl": 1,
+			"type": "fire",
+			"catchRate": 190
+		},
+		"minMaxStatus": {
+			"minHp": 40,
+			"maxHp": 60,
+			"minAtk": 50,
+			"maxAtk": 70,
+			"minDef": 30,
+			"maxDef": 45,
+			"minSpd": 60,
+			"maxSpd": 80
+		}
+	},
+	{
+		"id": "fireball",
+		"info": {
+			"name": "Fireball",
+			"description": "Fireball is a blazing orb of fire with a fierce and determined demeanor.",
+			"evolutionStage": 2,
+			"evolutionFamily": "fireling",
+			"evolvesAt": 34,
+			"lvl": 1,
+			"type": "fire",
+			"catchRate": 150
+		},
+		"minMaxStatus": {
+			"minHp": 65,
+			"maxHp": 85,
+			"minAtk": 70,
+			"maxAtk": 90,
+			"minDef": 40,
+			"maxDef": 60,
+			"minSpd": 75,
+			"maxSpd": 95
+		}
+	},
+	{
+		"id": "firestorm",
+		"info": {
+			"name": "Firestorm",
+			"description": "Firestorm is a majestic phoenix-like creature wreathed in flames, exuding immense heat.",
+			"evolutionStage": 3,
+			"evolutionFamily": "fireling",
+			"lvl": 1,
+			"type": "fire",
+			"catchRate": 120
+		},
+		"minMaxStatus": {
+			"minHp": 80,
+			"maxHp": 110,
+			"minAtk": 85,
+			"maxAtk": 120,
+			"minDef": 60,
+			"maxDef": 80,
+			"minSpd": 90,
+			"maxSpd": 120
+		}
+	},
+	{
+		"id": "watersplash",
+		"info": {
+			"name": "Watersplash",
+			"description": "Watersplash is a small and playful aquatic creature that enjoys splashing around.",
+			"evolutionStage": 1,
+			"evolutionFamily": "watersplash",
+			"evolvesAt": 22,
+			"lvl": 1,
+			"type": "water",
+			"catchRate": 190
+		},
+		"minMaxStatus": {
+			"minHp": 40,
+			"maxHp": 60,
+			"minAtk": 35,
+			"maxAtk": 50,
+			"minDef": 40,
+			"maxDef": 55,
+			"minSpd": 60,
+			"maxSpd": 80
+		}
+	},
+	{
+		"id": "aqualine",
+		"info": {
+			"name": "Aqualine",
+			"description": "Aqualine is a sleek and swift creature with streamlined fins and a calm demeanor.",
+			"evolutionStage": 2,
+			"evolutionFamily": "watersplash",
+			"evolvesAt": 35,
+			"lvl": 1,
+			"type": "water",
+			"catchRate": 150
+		},
+		"minMaxStatus": {
+			"minHp": 70,
+			"maxHp": 90,
+			"minAtk": 60,
+			"maxAtk": 80,
+			"minDef": 50,
+			"maxDef": 70,
+			"minSpd": 75,
+			"maxSpd": 95
+		}
+	},
+	{
+		"id": "hydrodragon",
+		"info": {
+			"name": "Hydrodragon",
+			"description": "Hydrodragon is a colossal dragon known for hiding in deep-sea caves.",
+			"evolutionStage": 3,
+			"evolutionFamily": "watersplash",
+			"lvl": 1,
+			"type": "water",
+			"catchRate": 120
+		},
+		"minMaxStatus": {
+			"minHp": 90,
+			"maxHp": 120,
+			"minAtk": 80,
+			"maxAtk": 110,
+			"minDef": 70,
+			"maxDef": 100,
+			"minSpd": 80,
+			"maxSpd": 110
+		}
+	},
+	{
+		"id": "earthlet",
+		"info": {
+			"name": "Earthlet",
+			"description": "Earthlet is a small, earthy creature that can blend into the soil and rocks with ease.",
+			"evolutionStage": 1,
+			"lvl": 1,
+			"type": "ground",
+			"catchRate": 170
+		},
+		"minMaxStatus": {
+			"minHp": 50,
+			"maxHp": 70,
+			"minAtk": 45,
+			"maxAtk": 60,
+			"minDef": 55,
+			"maxDef": 70,
+			"minSpd": 30,
+			"maxSpd": 45
+		}
+	},
+	{
+		"id": "sparkling",
+		"info": {
+			"name": "Sparkling",
+			"description": "Sparkling is a tiny, energetic creature that emits sparks and lightning from its tail.",
+			"evolutionStage": 1,
+			"evolutionFamily": "sparkling",
+			"evolvesAt": 23,
+			"lvl": 1,
+			"type": "electric",
+			"catchRate": 190
+		},
+		"minMaxStatus": {
+			"minHp": 40,
+			"maxHp": 60,
+			"minAtk": 35,
+			"maxAtk": 50,
+			"minDef": 30,
+			"maxDef": 45,
+			"minSpd": 60,
+			"maxSpd": 80
+		}
+	},
+	{
+		"id": "thunderpaw",
+		"info": {
+			"name": "Thunderpaw",
+			"description": "Thunderpaw is a fierce creature with electrified fur known for being able to paralyze other Linemon when touched.",
+			"evolutionStage": 2,
+			"evolutionFamily": "sparkling",
+			"evolvesAt": 34,
+			"lvl": 1,
+			"type": "electric",
+			"catchRate": 150
+		},
+		"minMaxStatus": {
+			"minHp": 70,
+			"maxHp": 90,
+			"minAtk": 60,
+			"maxAtk": 80,
+			"minDef": 50,
+			"maxDef": 70,
+			"minSpd": 75,
+			"maxSpd": 95
+		}
+	},
+	{
+		"id": "voltagon",
+		"info": {
+			"name": "Voltagon",
+			"description": "Voltagon is a majestic creature that is often heard soaring through the skies, bringing great storms with it.",
+			"evolutionStage": 3,
+			"evolutionFamily": "sparkling",
+			"lvl": 1,
+			"type": "electric",
+			"catchRate": 120
+		},
+		"minMaxStatus": {
+			"minHp": 90,
+			"maxHp": 120,
+			"minAtk": 80,
+			"maxAtk": 110,
+			"minDef": 70,
+			"maxDef": 100,
+			"minSpd": 80,
+			"maxSpd": 110
+		}
+	},
+	{
+		"id": "firesprite",
+		"info": {
+			"name": "Firesprite",
+			"description": "Firesprite is a small, fiery creature that is often mistaken as a small flame.",
+			"evolutionStage": 1,
+			"lvl": 1,
+			"type": "fire",
+			"catchRate": 160
+		},
+		"minMaxStatus": {
+			"minHp": 45,
+			"maxHp": 65,
+			"minAtk": 50,
+			"maxAtk": 70,
+			"minDef": 30,
+			"maxDef": 45,
+			"minSpd": 60,
+			"maxSpd": 80
+		}
+	},
+	{
+		"id": "leaflet",
+		"info": {
+			"name": "Leaflet",
+			"description": "Leaflet is a small, leafy creature with a gentle presence, often seen playing in the meadows.",
+			"evolutionStage": 1,
+			"evolutionFamily": "leaflet",
+			"evolvesAt": 23,
+			"lvl": 1,
+			"type": "grass",
+			"catchRate": 180
+		},
+		"minMaxStatus": {
+			"minHp": 40,
+			"maxHp": 60,
+			"minAtk": 35,
+			"maxAtk": 50,
+			"minDef": 40,
+			"maxDef": 55,
+			"minSpd": 45,
+			"maxSpd": 60
+		}
+	},
+	{
+		"id": "floramajestic",
+		"info": {
+			"name": "Floramajestic",
+			"description": "Floramajestic is a regal and majestic creature, adorned with colorful blossoms and vines.",
+			"evolutionStage": 2,
+			"evolutionFamily": "leaflet",
+			"lvl": 1,
+			"type": "grass",
+			"catchRate": 140
+		},
+		"minMaxStatus": {
+			"minHp": 70,
+			"maxHp": 90,
+			"minAtk": 60,
+			"maxAtk": 80,
+			"minDef": 55,
+			"maxDef": 70,
+			"minSpd": 50,
+			"maxSpd": 65
+		}
+	},
+	{
+		"id": "zephyrwing",
+		"info": {
+			"name": "Zephyrwing",
+			"description": "Zephyrwing is an agile creature with feathered wings that can create gentle breezes.",
+			"evolutionStage": 1,
+			"evolutionFamily": "zephyrwing",
+			"evolvesAt": 28,
+			"lvl": 1,
+			"type": "wind",
+			"catchRate": 180
+		},
+		"minMaxStatus": {
+			"minHp": 40,
+			"maxHp": 60,
+			"minAtk": 35,
+			"maxAtk": 50,
+			"minDef": 40,
+			"maxDef": 55,
+			"minSpd": 65,
+			"maxSpd": 85
+		}
+	},
+	{
+		"id": "aeromaster",
+		"info": {
+			"name": "Aeromaster",
+			"description": "Aeromaster is a powerful and majestic creature that commands the very winds themselves.",
+			"evolutionStage": 2,
+			"evolutionFamily": "zephyrwing",
+			"lvl": 1,
+			"type": "wind",
+			"catchRate": 140
+		},
+		"minMaxStatus": {
+			"minHp": 70,
+			"maxHp": 90,
+			"minAtk": 60,
+			"maxAtk": 80,
+			"minDef": 55,
+			"maxDef": 70,
+			"minSpd": 80,
 			"maxSpd": 100
 		}
 	},
 	{
-		"id": "linemonTwo",
+		"id": "normalite",
 		"info": {
-			"name": "LinemonTwo",
-			"description": "",
+			"name": "Normalite",
+			"description": "Normalite is a friendly and easygoing creature that enjoys the simple pleasures of life.",
+			"evolutionStage": 1,
+			"lvl": 1,
+			"type": "normal",
+			"catchRate": 160
+		},
+		"minMaxStatus": {
+			"minHp": 45,
+			"maxHp": 65,
+			"minAtk": 50,
+			"maxAtk": 70,
+			"minDef": 35,
+			"maxDef": 55,
+			"minSpd": 45,
+			"maxSpd": 60
+		}
+	},
+	{
+		"id": "greenling",
+		"info": {
+			"name": "Greenling",
+			"description": "Greenling is a young and vibrant plant-like creature that thrives in sunny meadows.",
+			"evolutionStage": 1,
+			"evolutionFamily": "greenling",
+			"evolvesAt": 30,
+			"lvl": 1,
+			"type": "grass",
+			"catchRate": 180
+		},
+		"minMaxStatus": {
+			"minHp": 45,
+			"maxHp": 65,
+			"minAtk": 40,
+			"maxAtk": 55,
+			"minDef": 35,
+			"maxDef": 50,
+			"minSpd": 50,
+			"maxSpd": 70
+		}
+	},
+	{
+		"id": "floralisk",
+		"info": {
+			"name": "Floralisk",
+			"description": "Floralisk is a majestic and powerful creature, covered in vibrant floral patterns.",
+			"evolutionStage": 2,
+			"evolutionFamily": "greenling",
+			"lvl": 1,
+			"type": "grass",
+			"catchRate": 140
+		},
+		"minMaxStatus": {
+			"minHp": 75,
+			"maxHp": 95,
+			"minAtk": 65,
+			"maxAtk": 85,
+			"minDef": 60,
+			"maxDef": 80,
+			"minSpd": 60,
+			"maxSpd": 80
+		}
+	},
+	{
+		"id": "aquabubble",
+		"info": {
+			"name": "Aquabubble",
+			"description": "Aquabubble is a small and playful aquatic creature that enjoys creating bubbles underwater.",
+			"evolutionStage": 1,
+			"evolutionFamily": "aquabubble",
+			"evolvesAt": 30,
+			"lvl": 1,
+			"type": "water",
+			"catchRate": 180
+		},
+		"minMaxStatus": {
+			"minHp": 40,
+			"maxHp": 60,
+			"minAtk": 35,
+			"maxAtk": 50,
+			"minDef": 40,
+			"maxDef": 55,
+			"minSpd": 60,
+			"maxSpd": 80
+		}
+	},
+	{
+		"id": "oceanlance",
+		"info": {
+			"name": "Oceanlance",
+			"description": "Oceanlance is a powerful creature with a lance-like appendage and the ability to control water.",
+			"evolutionStage": 2,
+			"evolutionFamily": "aquabubble",
+			"lvl": 1,
+			"type": "water",
+			"catchRate": 140
+		},
+		"minMaxStatus": {
+			"minHp": 70,
+			"maxHp": 90,
+			"minAtk": 60,
+			"maxAtk": 80,
+			"minDef": 55,
+			"maxDef": 70,
+			"minSpd": 75,
+			"maxSpd": 95
+		}
+	},
+	{
+		"id": "shockling",
+		"info": {
+			"name": "Shockling",
+			"description": "Shockling is a small and energetic creature that crackles with electrical energy.",
+			"evolutionStage": 1,
+			"lvl": 1,
+			"type": "electric",
+			"catchRate": 170
+		},
+		"minMaxStatus": {
+			"minHp": 45,
+			"maxHp": 65,
+			"minAtk": 50,
+			"maxAtk": 70,
+			"minDef": 35,
+			"maxDef": 55,
+			"minSpd": 60,
+			"maxSpd": 80
+		}
+	},
+	{
+		"id": "aquadrop",
+		"info": {
+			"name": "Aquadrop",
+			"description": "Aquadrop is a tiny, water droplet-like creature that sparkles and splashes playfully.",
+			"evolutionStage": 1,
+			"evolutionFamily": "aquadrop",
+			"evolvesAt": 21,
+			"lvl": 1,
+			"type": "water",
+			"catchRate": 180
+		},
+		"minMaxStatus": {
+			"minHp": 40,
+			"maxHp": 60,
+			"minAtk": 35,
+			"maxAtk": 50,
+			"minDef": 40,
+			"maxDef": 55,
+			"minSpd": 60,
+			"maxSpd": 80
+		}
+	},
+	{
+		"id": "oceanflow",
+		"info": {
+			"name": "Oceanflow",
+			"description": "Oceanflow is a graceful creature that moves like a gentle river current.",
+			"evolutionStage": 2,
+			"evolutionFamily": "aquadrop",
+			"evolvesAt": 35,
+			"lvl": 1,
+			"type": "water",
+			"catchRate": 150
+		},
+		"minMaxStatus": {
+			"minHp": 70,
+			"maxHp": 90,
+			"minAtk": 60,
+			"maxAtk": 80,
+			"minDef": 50,
+			"maxDef": 70,
+			"minSpd": 75,
+			"maxSpd": 95
+		}
+	},
+	{
+		"id": "tidalwave",
+		"info": {
+			"name": "Tidalwave",
+			"description": "Tidalwave is a colossal creature that can create massive waves and control the tides.",
+			"evolutionStage": 3,
+			"evolutionFamily": "aquadrop",
+			"lvl": 1,
+			"type": "water",
+			"catchRate": 120
+		},
+		"minMaxStatus": {
+			"minHp": 90,
+			"maxHp": 120,
+			"minAtk": 80,
+			"maxAtk": 110,
+			"minDef": 70,
+			"maxDef": 100,
+			"minSpd": 80,
+			"maxSpd": 110
+		}
+	},
+	{
+		"id": "gustlet",
+		"info": {
+			"name": "Gustlet",
+			"description": "Gustlet is a small and airy creature that floats gracefully with the wind.",
+			"evolutionStage": 1,
+			"evolutionFamily": "gustlet",
+			"evolvesAt": 35,
+			"lvl": 1,
+			"type": "wind",
+			"catchRate": 180
+		},
+		"minMaxStatus": {
+			"minHp": 40,
+			"maxHp": 60,
+			"minAtk": 35,
+			"maxAtk": 50,
+			"minDef": 40,
+			"maxDef": 55,
+			"minSpd": 65,
+			"maxSpd": 85
+		}
+	},
+	{
+		"id": "cyclorise",
+		"info": {
+			"name": "Cyclorise",
+			"description": "Cyclorise is a majestic creature with the power to create cyclones and soar above the clouds.",
+			"evolutionStage": 2,
+			"evolutionFamily": "gustlet",
+			"lvl": 1,
+			"type": "wind",
+			"catchRate": 140
+		},
+		"minMaxStatus": {
+			"minHp": 70,
+			"maxHp": 90,
+			"minAtk": 60,
+			"maxAtk": 80,
+			"minDef": 55,
+			"maxDef": 70,
+			"minSpd": 80,
+			"maxSpd": 100
+		}
+	},
+	{
+		"id": "seedling",
+		"info": {
+			"name": "Seedling",
+			"description": "Seedling is a small, sprout-like creature that enjoys basking in the sunlight.",
+			"evolutionStage": 1,
+			"evolutionFamily": "seedling",
+			"evolvesAt": 32,
+			"lvl": 1,
+			"type": "grass",
+			"catchRate": 180
+		},
+		"minMaxStatus": {
+			"minHp": 40,
+			"maxHp": 60,
+			"minAtk": 35,
+			"maxAtk": 50,
+			"minDef": 40,
+			"maxDef": 55,
+			"minSpd": 45,
+			"maxSpd": 60
+		}
+	},
+	{
+		"id": "florabloom",
+		"info": {
+			"name": "Florabloom",
+			"description": "Florabloom is a vibrant and majestic creature adorned with blooming flowers.",
+			"evolutionStage": 2,
+			"evolutionFamily": "seedling",
+			"lvl": 1,
+			"type": "grass",
+			"catchRate": 140
+		},
+		"minMaxStatus": {
+			"minHp": 70,
+			"maxHp": 90,
+			"minAtk": 60,
+			"maxAtk": 80,
+			"minDef": 55,
+			"maxDef": 70,
+			"minSpd": 50,
+			"maxSpd": 65
+		}
+	},
+	{
+		"id": "terramite",
+		"info": {
+			"name": "Terramite",
+			"description": "Terramite is a small, burrowing creature with sturdy claws for digging through the earth.",
 			"evolutionStage": 1,
 			"lvl": 1,
 			"type": "ground",
-			"catchRate": 220
+			"catchRate": 170
 		},
 		"minMaxStatus": {
-			"minHp": 10,
-			"maxHp": 100,
-			"minAtk": 10,
-			"maxAtk": 100,
-			"minDef": 10,
-			"maxDef": 100,
-			"minSpd": 10,
+			"minHp": 45,
+			"maxHp": 65,
+			"minAtk": 50,
+			"maxAtk": 70,
+			"minDef": 40,
+			"maxDef": 55,
+			"minSpd": 35,
+			"maxSpd": 50
+		}
+	},
+	{
+		"id": "breezlet",
+		"info": {
+			"name": "Breezlet",
+			"description": "Breezlet is a small and airy creature that loves to play in the gentle winds.",
+			"evolutionStage": 1,
+			"lvl": 1,
+			"type": "wind",
+			"catchRate": 170
+		},
+		"minMaxStatus": {
+			"minHp": 45,
+			"maxHp": 65,
+			"minAtk": 50,
+			"maxAtk": 70,
+			"minDef": 35,
+			"maxDef": 55,
+			"minSpd": 60,
+			"maxSpd": 80
+		}
+	},
+	{
+		"id": "sandshifter",
+		"info": {
+			"name": "Sandshifter",
+			"description": "Sandshifter is a sandy creature known for being able to bury itself in the blink of an eye.",
+			"evolutionStage": 1,
+			"evolutionFamily": "sandshifter",
+			"evolvesAt": 22,
+			"lvl": 1,
+			"type": "ground",
+			"catchRate": 170
+		},
+		"minMaxStatus": {
+			"minHp": 45,
+			"maxHp": 65,
+			"minAtk": 50,
+			"maxAtk": 70,
+			"minDef": 40,
+			"maxDef": 55,
+			"minSpd": 35,
+			"maxSpd": 50
+		}
+	},
+	{
+		"id": "rockguard",
+		"info": {
+			"name": "Rockguard",
+			"description": "Rockguard is a tough creature covered in rock-like armor, capable of withstanding powerful blows.",
+			"evolutionStage": 2,
+			"evolutionFamily": "sandshifter",
+			"evolvesAt": 33,
+			"lvl": 1,
+			"type": "ground",
+			"catchRate": 150
+		},
+		"minMaxStatus": {
+			"minHp": 70,
+			"maxHp": 90,
+			"minAtk": 60,
+			"maxAtk": 80,
+			"minDef": 70,
+			"maxDef": 85,
+			"minSpd": 40,
+			"maxSpd": 55
+		}
+	},
+	{
+		"id": "quakemaster",
+		"info": {
+			"name": "Quakemaster",
+			"description": "Quakemaster is a colossal creature that can cause earthquakes and shape the land itself.",
+			"evolutionStage": 3,
+			"evolutionFamily": "sandshifter",
+			"lvl": 1,
+			"type": "ground",
+			"catchRate": 140
+		},
+		"minMaxStatus": {
+			"minHp": 90,
+			"maxHp": 120,
+			"minAtk": 80,
+			"maxAtk": 110,
+			"minDef": 90,
+			"maxDef": 120,
+			"minSpd": 45,
+			"maxSpd": 60
+		}
+	},
+	{
+		"id": "seedlet",
+		"info": {
+			"name": "Seedlet",
+			"description": "Seedlet is a tiny, seed-like creature that sprouts delicate vines and leaves as it grows.",
+			"evolutionStage": 1,
+			"evolutionFamily": "seedlet",
+			"evolvesAt": 19,
+			"lvl": 1,
+			"type": "grass",
+			"catchRate": 180
+		},
+		"minMaxStatus": {
+			"minHp": 40,
+			"maxHp": 60,
+			"minAtk": 35,
+			"maxAtk": 50,
+			"minDef": 40,
+			"maxDef": 55,
+			"minSpd": 45,
+			"maxSpd": 60
+		}
+	},
+	{
+		"id": "rosebud",
+		"info": {
+			"name": "Rosebud",
+			"description": "Rosebud is a young and blossoming creature with vibrant flowers.",
+			"evolutionStage": 2,
+			"evolutionFamily": "seedlet",
+			"evolvesAt": 31,
+			"lvl": 1,
+			"type": "grass",
+			"catchRate": 150
+		},
+		"minMaxStatus": {
+			"minHp": 65,
+			"maxHp": 85,
+			"minAtk": 55,
+			"maxAtk": 75,
+			"minDef": 50,
+			"maxDef": 65,
+			"minSpd": 60,
+			"maxSpd": 75
+		}
+	},
+	{
+		"id": "verdantaur",
+		"info": {
+			"name": "Verdantaur",
+			"description": "Verdantaur is a majestic and ancient creature with the power to rejuvenate nature itself.",
+			"evolutionStage": 3,
+			"evolutionFamily": "seedlet",
+			"lvl": 1,
+			"type": "grass",
+			"catchRate": 140
+		},
+		"minMaxStatus": {
+			"minHp": 85,
+			"maxHp": 105,
+			"minAtk": 75,
+			"maxAtk": 95,
+			"minDef": 70,
+			"maxDef": 90,
+			"minSpd": 75,
 			"maxSpd": 100
+		}
+	},
+	{
+		"id": "zephyrete",
+		"info": {
+			"name": "Zephyrete",
+			"description": "Zephyrete is a small and agile creature with feathered wings that glide gracefully on the breeze.",
+			"evolutionStage": 1,
+			"evolutionFamily": "zephyrete",
+			"evolvesAt": 23,
+			"lvl": 1,
+			"type": "wind",
+			"catchRate": 180
+		},
+		"minMaxStatus": {
+			"minHp": 40,
+			"maxHp": 60,
+			"minAtk": 35,
+			"maxAtk": 50,
+			"minDef": 40,
+			"maxDef": 55,
+			"minSpd": 65,
+			"maxSpd": 85
+		}
+	},
+	{
+		"id": "aerowind",
+		"info": {
+			"name": "Aerowind",
+			"description": "Aerowind is a graceful creature that moves like a gentle breeze, capable of creating whirlwinds.",
+			"evolutionStage": 2,
+			"evolutionFamily": "zephyrete",
+			"evolvesAt": 31,
+			"lvl": 1,
+			"type": "wind",
+			"catchRate": 150
+		},
+		"minMaxStatus": {
+			"minHp": 70,
+			"maxHp": 90,
+			"minAtk": 60,
+			"maxAtk": 80,
+			"minDef": 55,
+			"maxDef": 70,
+			"minSpd": 80,
+			"maxSpd": 100
+		}
+	},
+	{
+		"id": "tempestlord",
+		"info": {
+			"name": "Tempestlord",
+			"description": "Tempestlord is a formidable creature that commands the tempestuous winds and storms.",
+			"evolutionStage": 3,
+			"evolutionFamily": "zephyrete",
+			"lvl": 1,
+			"type": "wind",
+			"catchRate": 140
+		},
+		"minMaxStatus": {
+			"minHp": 80,
+			"maxHp": 100,
+			"minAtk": 70,
+			"maxAtk": 90,
+			"minDef": 65,
+			"maxDef": 80,
+			"minSpd": 90,
+			"maxSpd": 110
+		}
+	},
+	{
+		"id": "voltling",
+		"info": {
+			"name": "Voltling",
+			"description": "Voltling is a small and energetic creature that generates electrical sparks, illuminating its surroundings.",
+			"evolutionStage": 1,
+			"lvl": 1,
+			"type": "electric",
+			"catchRate": 170
+		},
+		"minMaxStatus": {
+			"minHp": 45,
+			"maxHp": 65,
+			"minAtk": 50,
+			"maxAtk": 70,
+			"minDef": 35,
+			"maxDef": 55,
+			"minSpd": 60,
+			"maxSpd": 80
+		}
+	},
+	{
+		"id": "normlet",
+		"info": {
+			"name": "Normlet",
+			"description": "Normlet is a small and curious creature that adapts easily to various environments.",
+			"evolutionStage": 1,
+			"evolutionFamily": "normlet",
+			"evolvesAt": 18,
+			"lvl": 1,
+			"type": "normal",
+			"catchRate": 180
+		},
+		"minMaxStatus": {
+			"minHp": 40,
+			"maxHp": 60,
+			"minAtk": 35,
+			"maxAtk": 50,
+			"minDef": 40,
+			"maxDef": 55,
+			"minSpd": 45,
+			"maxSpd": 60
+		}
+	},
+	{
+		"id": "normcozy",
+		"info": {
+			"name": "Normcozy",
+			"description": "Normcozy is a friendly creature that enjoys companionship and simple pleasures.",
+			"evolutionStage": 2,
+			"evolutionFamily": "normlet",
+			"evolvesAt": 35,
+			"lvl": 1,
+			"type": "normal",
+			"catchRate": 150
+		},
+		"minMaxStatus": {
+			"minHp": 65,
+			"maxHp": 85,
+			"minAtk": 55,
+			"maxAtk": 75,
+			"minDef": 50,
+			"maxDef": 65,
+			"minSpd": 60,
+			"maxSpd": 75
+		}
+	},
+	{
+		"id": "normking",
+		"info": {
+			"name": "Normking",
+			"description": "Normking is a majestic creature that is often seeing leading small groups of Normcozys and Normlets.",
+			"evolutionStage": 3,
+			"lvl": 1,
+			"type": "normal",
+			"catchRate": 140
+		},
+		"minMaxStatus": {
+			"minHp": 80,
+			"maxHp": 100,
+			"minAtk": 70,
+			"maxAtk": 90,
+			"minDef": 75,
+			"maxDef": 90,
+			"minSpd": 70,
+			"maxSpd": 85
+		}
+	},
+	{
+		"id": "sparklet",
+		"info": {
+			"name": "Sparklet",
+			"description": "Sparklet is a small and lively creature that emits sparks of energy when it moves.",
+			"evolutionStage": 1,
+			"evolutionFamily": "sparklet",
+			"evolvesAt": 19,
+			"lvl": 1,
+			"type": "electric",
+			"catchRate": 170
+		},
+		"minMaxStatus": {
+			"minHp": 45,
+			"maxHp": 65,
+			"minAtk": 50,
+			"maxAtk": 70,
+			"minDef": 35,
+			"maxDef": 55,
+			"minSpd": 60,
+			"maxSpd": 80
+		}
+	},
+	{
+		"id": "thundertail",
+		"info": {
+			"name": "Thundertail",
+			"description": "Thundertail is a swift and electrically charged creature with a long, sparking tail.",
+			"evolutionStage": 2,
+			"evolutionFamily": "sparklet",
+			"evolvesAt": 28,
+			"lvl": 1,
+			"type": "electric",
+			"catchRate": 150
+		},
+		"minMaxStatus": {
+			"minHp": 65,
+			"maxHp": 85,
+			"minAtk": 55,
+			"maxAtk": 75,
+			"minDef": 50,
+			"maxDef": 65,
+			"minSpd": 70,
+			"maxSpd": 90
+		}
+	},
+	{
+		"id": "voltarion",
+		"info": {
+			"name": "Voltarion",
+			"description": "Voltarion is a powerful and electrifying creature that can summon lightning and control storms.",
+			"evolutionStage": 3,
+			"evolutionFamily": "sparklet",
+			"lvl": 1,
+			"type": "electric",
+			"catchRate": 140
+		},
+		"minMaxStatus": {
+			"minHp": 80,
+			"maxHp": 100,
+			"minAtk": 70,
+			"maxAtk": 90,
+			"minDef": 65,
+			"maxDef": 80,
+			"minSpd": 85,
+			"maxSpd": 110
 		}
 	}
 ]

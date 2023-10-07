@@ -16,7 +16,23 @@ let lakeOptions = [
 	{ name: `Go to ${chalk.green("forest")}`, value: "forest" },
 ];
 
-const linemonOptions = ["linemonOne", "linemonTwo"];
+const tallGrassOptions = [
+	"aquablob",
+	"earthlet",
+	"groundling",
+	"normalite",
+	"normlet",
+	"seedlet",
+];
+
+const waterOptions = [
+	"aquablob",
+	"watersplash",
+	"aquabubble",
+	"aquadrop",
+	"oceanlance",
+	"zephyrwing",
+];
 
 export class Lake implements LakeMethods {
 	constructor(
@@ -47,8 +63,9 @@ export class Lake implements LakeMethods {
 		switch (answer.selectedOption) {
 			case "fish":
 				searchForLinemon(
-					linemonOptions,
+					waterOptions,
 					70,
+					{ min: 12, max: 20 },
 					"water",
 					this.player,
 					this.goToLake
@@ -56,8 +73,9 @@ export class Lake implements LakeMethods {
 				break;
 			case "tallGrass":
 				searchForLinemon(
-					linemonOptions,
+					tallGrassOptions,
 					100,
+					{ min: 10, max: 16 },
 					"tallGrass",
 					this.player,
 					this.goToLake

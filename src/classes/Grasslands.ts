@@ -16,7 +16,14 @@ let grasslandsOptions = [
 	{ name: `Go to ${chalk.blue("lake")}`, value: "lake" },
 ];
 
-const linemonOptions = ["linemonOne", "linemonTwo"];
+const linemonOptions = [
+	"groundling",
+	"earthlet",
+	"normfang",
+	"normalite",
+	"normlet",
+	"greenling",
+];
 
 export class Grasslands implements GrasslandsMethods {
 	constructor(
@@ -41,6 +48,7 @@ export class Grasslands implements GrasslandsMethods {
 			searchForLinemon(
 				linemonOptions,
 				100,
+				{ min: 8, max: 15 },
 				"tallGrass",
 				this.player,
 				this.goToGrasslands

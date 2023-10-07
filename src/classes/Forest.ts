@@ -15,7 +15,14 @@ let forestOptions = [
 	{ name: `Go to ${chalk.blue("lake")}`, value: "lake" },
 ];
 
-const linemonOptions = ["linemonOne", "linemonTwo"];
+const linemonOptions = [
+	"leaflet",
+	"greenling",
+	"seedling",
+	"seedlet",
+	"normalcub",
+	"breezlet",
+];
 
 export class Forest implements ForestMethods {
 	constructor(
@@ -39,6 +46,7 @@ export class Forest implements ForestMethods {
 			searchForLinemon(
 				linemonOptions,
 				100,
+				{ min: 10, max: 16 },
 				"tallGrass",
 				this.player,
 				this.goToForest

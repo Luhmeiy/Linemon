@@ -23,6 +23,7 @@ const linemonActions = [
 export const searchForLinemon = (
 	linemonOptions: string[],
 	findingChance: number,
+	level: { min: number; max: number },
 	location: "tallGrass" | "water",
 	player: PlayerMethods,
 	returnToOrigin: () => void
@@ -48,7 +49,7 @@ export const searchForLinemon = (
 			case "ground":
 				return chalk.bgHex("#954535").bold(" Ground ");
 			case "grass":
-				return chalk.bgGreen.bold(" Grass ");
+				return chalk.bgGreen.black.bold(" Grass ");
 			case "water":
 				return chalk.bgBlue.bold(" Water ");
 			case "air":
@@ -81,6 +82,8 @@ export const searchForLinemon = (
 				jsonLinemons,
 				linemonOptions[linemonId]
 			);
+			info.lvl = randomIntFromInterval(level.min, level.max);
+
 			linemon = new WildLinemon(id, { ...info, isShiny }, minMaxStatus);
 
 			console.log("\n");
