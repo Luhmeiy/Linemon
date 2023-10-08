@@ -1,6 +1,7 @@
 import jsonShopItems from "../data/shopItems.json" assert { type: "json" };
 
 import chalk from "chalk";
+import inquirer from "inquirer";
 import { createSpinner } from "nanospinner";
 
 import type { IShopItems } from "../interfaces/IShopItems.js";
@@ -92,15 +93,47 @@ export class Shop implements ShopMethods {
 					);
 
 					if (itemAnswer.selectedOption === "buy") {
-						const spinner = createSpinner("Run test").start();
 						if (this.player.getMoney() < item.price) {
+							const spinner = createSpinner("").start();
 							spinner.error({ text: "Not enough money." });
 						} else {
-							this.player.addToInventory(item, 1);
-							this.player.setMoney(-item.price);
-							spinner.success({
-								text: `You bought a ${item.name}.`,
-							});
+							const numberAnswer = await inquirer.prompt([
+								{
+									type: "number",
+									name: "numberOfItems",
+									message: `How many ${item.name} you want to buy?`,
+								},
+							]);
+
+							if (!(numberAnswer.numberOfItems === 0)) {
+								const spinner = createSpinner("").start();
+
+								if (
+									this.player.getMoney() <
+									item.price * numberAnswer.numberOfItems
+								) {
+									spinner.error({
+										text: "Not enough money.",
+									});
+								} else {
+									this.player.addToInventory(
+										item,
+										numberAnswer.numberOfItems
+									);
+									this.player.setMoney(
+										-item.price * numberAnswer.numberOfItems
+									);
+
+									spinner.success({
+										text: `You bought ${
+											numberAnswer.numberOfItems
+										} ${chalk.bold(item.name)}.`,
+									});
+								}
+							} else {
+								const spinner = createSpinner("").start();
+								spinner.error({ text: "No items bought." });
+							}
 						}
 
 						await delayMessage(null);
