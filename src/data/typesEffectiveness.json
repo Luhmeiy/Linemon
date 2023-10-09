@@ -1,0 +1,38 @@
+{
+	"fire": {
+		"water": 0.5,
+		"ground": 0.5,
+		"grass": 2,
+		"wind": 2
+	},
+	"water": {
+		"grass": 0.5,
+		"electric": 0.5,
+		"fire": 2,
+		"ground": 2
+	},
+	"grass": {
+		"fire": 0.5,
+		"wind": 0.5,
+		"water": 2,
+		"electric": 2
+	},
+	"wind": {
+		"fire": 0.5,
+		"electric": 0.5,
+		"grass": 2,
+		"ground": 2
+	},
+	"ground": {
+		"water": 0.5,
+		"wind": 0.5,
+		"fire": 2,
+		"electric": 2
+	},
+	"electric": {
+		"grass": 0.5,
+		"ground": 0.5,
+		"water": 2,
+		"wind": 2
+	}
+}

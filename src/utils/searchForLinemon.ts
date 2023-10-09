@@ -147,6 +147,14 @@ export const searchForLinemon = (
 		}
 
 		const type = formatType(wildLinemon!.info.type);
+		const linemon = player.getFirstTeam();
+
+		if (
+			wildLinemon.status.currentHp <= 0 ||
+			linemon.status.currentHp <= 0
+		) {
+			return search();
+		}
 
 		if (catchLinemon) {
 			console.log("\n");
@@ -188,8 +196,6 @@ export const searchForLinemon = (
 				findLinemon(wildLinemon, false);
 			}
 		} else {
-			const linemon = player.getFirstTeam();
-
 			const linemonActions = [
 				{ name: `${linemon.info.name}'s status`, value: "status" },
 				{ name: "Fight", value: "fight" },
@@ -200,6 +206,7 @@ export const searchForLinemon = (
 			console.log(`${wildLinemon.info.name} - Lvl. ${
 				wildLinemon.info.lvl
 			} ${wildLinemon.info.isShiny ? gradient.cristal("[Shiny]") : ""}
+HP: (${wildLinemon.status.currentHp}/${wildLinemon.status.maxHp})
 Type: ${type}`);
 
 			const answer = await createPrompt(
@@ -210,7 +217,7 @@ Type: ${type}`);
 			switch (answer.selectedOption) {
 				case "status":
 					await delayMessage(`HP: (${linemon.status.currentHp}/${linemon.status.maxHp})
-SP: ${linemon.status.pp}\n`);
+PP: (${linemon.status.currentPp}/${linemon.status.maxPp})\n`);
 					findLinemon(wildLinemon, false);
 					break;
 				case "fight":

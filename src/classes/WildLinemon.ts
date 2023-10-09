@@ -19,7 +19,8 @@ export class WildLinemon implements WildLinemonProps {
 		atk: number;
 		def: number;
 		spd: number;
-		pp: number;
+		maxPp: number;
+		currentPp: number;
 	};
 
 	constructor(
@@ -48,7 +49,31 @@ export class WildLinemon implements WildLinemonProps {
 				this.minMaxStatus.minSpd,
 				this.minMaxStatus.maxSpd
 			),
-			pp: 50,
+			maxPp: 60,
+			currentPp: 60,
 		};
 	}
+
+	attack = (
+		basePower: number,
+		modifiers: number,
+		adversaryDefense: number
+	) => {
+		const damage = Math.floor(
+			((this.info.lvl * 2) / 5 + 2) *
+				((basePower * this.status.atk) / adversaryDefense) *
+				(modifiers / 50) *
+				randomIntFromInterval(0.85, 1) +
+				2
+		);
+
+		return damage;
+	};
+
+	sleep = () => {
+		const recover = this.status.currentPp + this.status.maxPp / 2;
+
+		this.status.currentPp =
+			recover > this.status.maxPp ? this.status.maxPp : recover;
+	};
 }

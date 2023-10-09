@@ -10,6 +10,8 @@ import { delayMessage } from "./utils/delayMessage.js";
 const titleScreenOptions = [{ name: "Start game", value: "ts1" }];
 
 async function main() {
+	console.clear();
+
 	await generateTitle();
 
 	const answer = await createPrompt(

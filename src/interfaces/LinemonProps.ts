@@ -19,8 +19,17 @@ export interface LinemonProps {
 		atk: number;
 		def: number;
 		spd: number;
-		pp: number;
+		maxPp: number;
+		currentPp: number;
 	};
 
 	moves: Moves[];
+
+	attack: (
+		basePower: number,
+		modifiers: number,
+		adversaryDefense: number
+	) => number;
+
+	sleep: () => void;
 }
