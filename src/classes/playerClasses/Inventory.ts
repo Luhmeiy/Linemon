@@ -157,7 +157,7 @@ export class Inventory implements InventoryMethods {
 		];
 
 		if (this.inventory.disk.length == 0) {
-			console.log("No items.\n");
+			await delayMessage("No items.\n");
 
 			returnFunction(linemon, false);
 		} else {

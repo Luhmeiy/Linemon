@@ -22,7 +22,7 @@ export class Player implements PlayerMethods {
 	private linemonsSeen: string[];
 	private linemonsCaught: string[];
 
-	private team: TeamMethods;
+	team: TeamMethods;
 	private pc: PCMethods;
 	private inventory: InventoryMethods;
 
@@ -65,6 +65,7 @@ ${chalk.bold("Linemon caught:")} ${this.linemonsCaught.length}\n`);
 
 	// Team
 	getTeam = (returnFunction: () => void) => this.team.getTeam(returnFunction);
+	getFirstTeam = () => this.team.getFirstTeam();
 
 	addToTeam = async (linemon: LinemonProps) => {
 		const linemonForPC = await this.team.addToTeam(linemon);

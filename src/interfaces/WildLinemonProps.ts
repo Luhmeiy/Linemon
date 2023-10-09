@@ -1,3 +1,5 @@
+import type { Moves } from "../types/Moves.js";
+
 export interface WildLinemonProps {
 	id: string;
 
@@ -18,6 +20,8 @@ export interface WildLinemonProps {
 		atk: number;
 		def: number;
 		spd: number;
-		sp: number;
+		pp: number;
 	};
+
+	moves: Moves[];
 }

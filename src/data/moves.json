@@ -1,0 +1,39 @@
+[
+	{
+		"id": "tackle",
+		"name": "Tackle",
+		"description": "The monster charges at the opponent with great force.",
+		"type": "normal",
+		"power": 40,
+		"accuracy": 100,
+		"pp": 8
+	},
+	{
+		"id": "scratch",
+		"name": "Scratch",
+		"description": "The monster uses its sharp claws to scratch the opponent.",
+		"type": "normal",
+		"power": 35,
+		"accuracy": 95,
+		"pp": 10
+	},
+	{
+		"id": "slam",
+		"name": "Slam",
+		"description": "The monster slams its body into the opponent with incredible strength.",
+		"type": "normal",
+		"power": 70,
+		"accuracy": 80,
+		"pp": 12
+	},
+	{
+		"id": "quickAttack",
+		"name": "Quick Attack",
+		"description": "The monster moves at incredible speed to strike the opponent first.",
+		"type": "normal",
+		"power": 40,
+		"accuracy": 100,
+		"pp": 15,
+		"isFirst": true
+	}
+]

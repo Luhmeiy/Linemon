@@ -22,6 +22,8 @@ export class Team implements TeamMethods {
 		);
 	};
 
+	getFirstTeam = () => this.team[0];
+
 	addToTeam = async (linemon: LinemonProps) => {
 		let linemonForPC;
 
@@ -62,9 +64,10 @@ export class Team implements TeamMethods {
 		return linemonForPC;
 	};
 
-	removeFromTeam = (linemonId: number) => this.team.splice(linemonId, 1);
+	private removeFromTeam = (linemonId: number) =>
+		this.team.splice(linemonId, 1);
 
-	switchLinemon = (linemon: LinemonProps, id: number) => {
+	private switchLinemon = (linemon: LinemonProps, id: number) => {
 		this.team[id] = linemon;
 	};
 }

@@ -19,13 +19,14 @@ export class WildLinemon implements WildLinemonProps {
 		atk: number;
 		def: number;
 		spd: number;
-		sp: number;
+		pp: number;
 	};
 
 	constructor(
 		public id: WildLinemonProps["id"],
 		public info: WildLinemonProps["info"],
-		private minMaxStatus: minMaxStatus
+		private minMaxStatus: minMaxStatus,
+		public moves: WildLinemonProps["moves"]
 	) {
 		const hp = randomIntFromInterval(
 			this.minMaxStatus.minHp,
@@ -47,7 +48,7 @@ export class WildLinemon implements WildLinemonProps {
 				this.minMaxStatus.minSpd,
 				this.minMaxStatus.maxSpd
 			),
-			sp: 50,
+			pp: 50,
 		};
 	}
 }

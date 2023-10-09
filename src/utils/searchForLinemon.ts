@@ -1,4 +1,5 @@
 import jsonLinemons from "../data/linemons.json" assert { type: "json" };
+import jsonMoves from "../data/moves.json" assert { type: "json" };
 
 import chalk from "chalk";
 import gradient from "gradient-string";
@@ -6,19 +7,16 @@ import { createSpinner } from "nanospinner";
 
 import type { PlayerMethods } from "../interfaces/PlayerMethods.js";
 import type { WildLinemonProps } from "../interfaces/WildLinemonProps.js";
+import type { Moves } from "../types/Moves.js";
 
 import { Linemon } from "../classes/Linemon.js";
 import { WildLinemon } from "../classes/WildLinemon.js";
 
 import { createPrompt } from "./createPrompt.js";
 import { delayMessage } from "./delayMessage.js";
+import { getCombatMenu } from "./getCombatMenu.js";
 import { getFromJson } from "./getFromJson.js";
 import { randomIntFromInterval } from "./randomIntFromInterval.js";
-
-const linemonActions = [
-	{ name: "Catch", value: "catch" },
-	{ name: "Run", value: "run" },
-];
 
 export const searchForLinemon = (
 	linemonOptions: string[],
@@ -61,12 +59,38 @@ export const searchForLinemon = (
 		}
 	};
 
+	const generateMoves = (linemonType: string) => {
+		const generatedNumbers: number[] = [];
+		const moves: Moves[] = [];
+
+		let index = 0;
+		while (index < 4) {
+			let random: string | number = Math.floor(
+				Math.random() * jsonMoves.length
+			);
+
+			random = Number(random);
+			const move = jsonMoves[random];
+
+			if (
+				!generatedNumbers.includes(random) &&
+				(move.type === linemonType || move.type === "normal")
+			) {
+				generatedNumbers.push(random);
+				moves.push(move);
+				index++;
+			}
+		}
+
+		return moves;
+	};
+
 	const findLinemon = async (
-		linemon?: WildLinemonProps,
+		wildLinemon?: WildLinemonProps,
 		catchLinemon?: boolean,
 		diskBonus?: number
 	) => {
-		if (!linemon) {
+		if (!wildLinemon) {
 			const randomNumber = randomIntFromInterval(1, 100);
 
 			const linemonId = randomIntFromInterval(
@@ -84,7 +108,14 @@ export const searchForLinemon = (
 			);
 			info.lvl = randomIntFromInterval(level.min, level.max);
 
-			linemon = new WildLinemon(id, { ...info, isShiny }, minMaxStatus);
+			const moves = generateMoves(info.type);
+
+			wildLinemon = new WildLinemon(
+				id,
+				{ ...info, isShiny },
+				minMaxStatus,
+				moves
+			);
 
 			console.log("\n");
 
@@ -94,10 +125,16 @@ export const searchForLinemon = (
 
 			if (randomNumber <= findingChance) {
 				spinner.success({
-					text: `You found a ${linemon.info.name}!\n`,
+					text: `You found a ${wildLinemon.info.name}!`,
 				});
 
-				player.setLinemonsSeen(linemon.id);
+				await delayMessage(" ");
+
+				console.log(
+					`You sent out ${await player.getFirstTeam().info.name}\n`
+				);
+
+				player.setLinemonsSeen(wildLinemon.id);
 			} else {
 				spinner.error({
 					text: "You found nothing.\n",
@@ -109,7 +146,7 @@ export const searchForLinemon = (
 			await delayMessage(null);
 		}
 
-		const type = formatType(linemon!.info.type);
+		const type = formatType(wildLinemon!.info.type);
 
 		if (catchLinemon) {
 			console.log("\n");
@@ -117,10 +154,11 @@ export const searchForLinemon = (
 			const spinner = createSpinner("Catching...").start();
 
 			const catchProbability =
-				((3 * linemon.status.maxHp - 2 * linemon.status.currentHp) *
-					linemon.info.catchRate *
+				((3 * wildLinemon.status.maxHp -
+					2 * wildLinemon.status.currentHp) *
+					wildLinemon.info.catchRate *
 					diskBonus!) /
-				(3 * linemon.status.maxHp);
+				(3 * wildLinemon.status.maxHp);
 
 			const randomNumber = randomIntFromInterval(0, 255);
 
@@ -128,50 +166,62 @@ export const searchForLinemon = (
 
 			if (catchProbability >= randomNumber) {
 				spinner.success({
-					text: `You caught a ${linemon.info.name}!\n`,
+					text: `You caught a ${wildLinemon.info.name}!\n`,
 				});
 
-				player.setLinemonsCaught(linemon.id);
+				player.setLinemonsCaught(wildLinemon.id);
 
 				const caughtLinemon = new Linemon(
-					linemon.id,
-					linemon.info,
-					linemon.status
+					wildLinemon.id,
+					wildLinemon.info,
+					wildLinemon.status,
+					wildLinemon.moves
 				);
 
 				await player.addToTeam(caughtLinemon);
 				search();
 			} else {
 				spinner.error({
-					text: `${linemon.info.name} broke free!\n`,
+					text: `${wildLinemon.info.name} broke free!\n`,
 				});
 
-				findLinemon(linemon, false);
+				findLinemon(wildLinemon, false);
 			}
 		} else {
-			let fightOn = true;
-			while (fightOn) {
-				console.log(`${linemon!.info.name} - Lvl. ${
-					linemon!.info.lvl
-				} ${linemon!.info.isShiny ? gradient.cristal("[Shiny]") : ""}
+			const linemon = player.getFirstTeam();
+
+			const linemonActions = [
+				{ name: `${linemon.info.name}'s status`, value: "status" },
+				{ name: "Fight", value: "fight" },
+				{ name: "Catch", value: "catch" },
+				{ name: "Run", value: "run" },
+			];
+
+			console.log(`${wildLinemon.info.name} - Lvl. ${
+				wildLinemon.info.lvl
+			} ${wildLinemon.info.isShiny ? gradient.cristal("[Shiny]") : ""}
 Type: ${type}`);
 
-				const answer = await createPrompt(
-					"What do you want to do?",
-					linemonActions
-				);
+			const answer = await createPrompt(
+				"What do you want to do?",
+				linemonActions
+			);
 
-				if (!(answer.selectedOption === "run")) {
-					await delayMessage(null);
-					if (answer.selectedOption === "catch") {
-						fightOn = false;
-						player.getDisks(findLinemon, linemon!);
-					}
-				} else {
-					fightOn = false;
+			switch (answer.selectedOption) {
+				case "status":
+					await delayMessage(`HP: (${linemon.status.currentHp}/${linemon.status.maxHp})
+SP: ${linemon.status.pp}\n`);
+					findLinemon(wildLinemon, false);
+					break;
+				case "fight":
+					getCombatMenu(findLinemon, linemon, wildLinemon);
+					break;
+				case "catch":
+					player.getDisks(findLinemon, wildLinemon);
+					break;
+				default:
 					await delayMessage("You ran away.\n");
 					search();
-				}
 			}
 		}
 	};
