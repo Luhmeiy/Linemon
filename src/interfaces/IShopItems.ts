@@ -1,7 +1,5 @@
-import type { ShopItemsIds } from "../types/ShopItemsIds.js";
-
 export interface IShopItems {
-	id: ShopItemsIds;
+	id: string;
 	name: string;
 	description: string;
 	price: number;

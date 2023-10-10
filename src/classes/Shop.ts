@@ -7,7 +7,6 @@ import { createSpinner } from "nanospinner";
 import type { IShopItems } from "../interfaces/IShopItems.js";
 import type { PlayerMethods } from "../interfaces/PlayerMethods.js";
 import type { Option } from "../types/Option.js";
-import type { ShopItemsIds } from "../types/ShopItemsIds.js";
 import type { ShopMethods } from "../types/ShopMethods.js";
 
 import { createPrompt } from "../utils/createPrompt.js";
@@ -35,7 +34,7 @@ export class Shop implements ShopMethods {
 
 	constructor(
 		private cityName: string,
-		private shopItemsIds: ShopItemsIds[],
+		private shopItemsIds: string[],
 		private goToCityCenter: () => void,
 		private player: PlayerMethods
 	) {
