@@ -8,8 +8,13 @@ export interface InventoryItem {
 	quantity: number;
 }
 
+export interface ConsumableItem extends InventoryItem {
+	type: string;
+	health?: number;
+}
+
 export type InventoryType = {
-	consumable: InventoryItem[];
+	consumable: ConsumableItem[];
 	disk: InventoryItem[];
 	special: InventoryItem[];
 };
@@ -20,6 +25,11 @@ export interface InventoryMethods {
 	removeFromInventory: (
 		item: InventoryItem,
 		inventory: InventoryItem[]
+	) => void;
+	getConsumables: (
+		returnFunction: (linemon: LinemonProps) => void,
+		linemon: LinemonProps,
+		playerLinemon: LinemonProps
 	) => void;
 	getDisks: (
 		returnFunction: (linemon: LinemonProps) => void,

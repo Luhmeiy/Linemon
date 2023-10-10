@@ -1,6 +1,7 @@
 import type { IShopItems } from "../../interfaces/IShopItems.js";
 import type { LinemonProps } from "../../interfaces/LinemonProps.js";
 import type {
+	ConsumableItem,
 	InventoryItem,
 	InventoryMethods,
 	InventoryType,
@@ -91,28 +92,35 @@ export class Inventory implements InventoryMethods {
 	};
 
 	addToInventory = (item: IShopItems, quantity: number) => {
-		const formattedItem = {
+		let formattedItem = {
 			id: item.id,
 			name: item.name,
 			description: item.description,
 			quantity: quantity,
 		};
 
-		if (item.type === "consumable") {
+		if (item.category === "consumable") {
 			const response = this.increaseQuantityIfItemExists(
 				this.inventory.consumable,
 				item.name
 			);
 
-			if (!response) this.inventory.consumable?.push(formattedItem);
-		} else if (item.type === "disk") {
+			const formattedConsumableItem = {
+				...formattedItem,
+				type: item.type,
+				health: item.health && item.health,
+			} as ConsumableItem;
+
+			if (!response)
+				this.inventory.consumable?.push(formattedConsumableItem);
+		} else if (item.category === "disk") {
 			const response = this.increaseQuantityIfItemExists(
 				this.inventory.disk,
 				item.name
 			);
 
 			if (!response) this.inventory.disk?.push(formattedItem);
-		} else if (item.type === "special") {
+		} else if (item.category === "special") {
 			const response = this.increaseQuantityIfItemExists(
 				this.inventory.special,
 				item.name
@@ -140,6 +148,103 @@ export class Inventory implements InventoryMethods {
 		if (item.quantity <= 0) {
 			const index = inventory.findIndex((i) => i.id === item.id);
 			if (index !== -1) inventory.splice(index, 1);
+		}
+	};
+
+	getConsumables = async (
+		returnFunction: (linemon: LinemonProps) => void,
+		linemon: LinemonProps,
+		playerLinemon: LinemonProps
+	) => {
+		const consumableOptions: Option = [
+			...this.createOptions(this.inventory.consumable),
+			defaultOption,
+		];
+
+		if (this.inventory.consumable.length == 0) {
+			await delayMessage("No items.\n");
+
+			returnFunction(linemon);
+		} else {
+			const answer = await createPrompt(
+				"Choose a consumable: ",
+				consumableOptions
+			);
+
+			if (answer.selectedOption !== "back") {
+				for (const item of this.inventory.consumable) {
+					if (answer.selectedOption === item.id) {
+						const itemAnswer = await createPrompt(
+							item.name,
+							extendedItemOptions
+						);
+
+						switch (itemAnswer.selectedOption) {
+							case "use":
+								switch (item.type) {
+									case "potion":
+										const currentHp =
+											playerLinemon.status.currentHp;
+										const maxHp =
+											playerLinemon.status.maxHp;
+
+										if (currentHp === maxHp) {
+											await delayMessage(
+												`${playerLinemon.info.name} is at full health.\n`
+											);
+
+											return returnFunction(linemon);
+										}
+
+										const health =
+											currentHp + item.health! > maxHp
+												? maxHp - currentHp
+												: item.health;
+
+										playerLinemon.status.currentHp +=
+											health!;
+
+										await delayMessage(
+											`${playerLinemon.info.name} recovered ${health} HP.\n`
+										);
+										break;
+								}
+
+								this.removeFromInventory(
+									item,
+									this.inventory.consumable
+								);
+
+								return true;
+							case "quantity":
+								await delayMessage(
+									`Quantity: ${item.quantity}`
+								);
+
+								this.getConsumables(
+									returnFunction,
+									linemon,
+									playerLinemon
+								);
+								break;
+							case "description":
+								await delayMessage(
+									`${item.name}: ${item.description}`
+								);
+
+								this.getConsumables(
+									returnFunction,
+									linemon,
+									playerLinemon
+								);
+								break;
+						}
+					}
+				}
+			} else {
+				console.log(" ");
+				returnFunction(linemon);
+			}
 		}
 	};
 
@@ -190,6 +295,7 @@ export class Inventory implements InventoryMethods {
 					}
 				}
 			} else {
+				console.log(" ");
 				returnFunction(linemon, false);
 			}
 		}

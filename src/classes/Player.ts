@@ -90,6 +90,18 @@ ${chalk.bold("Linemon caught:")} ${this.linemonsCaught.length}\n`);
 		this.inventory.removeFromInventory(item, inventory);
 	};
 
+	getConsumables = async (
+		returnFunction: (linemon: LinemonProps) => void,
+		linemon: LinemonProps,
+		playerLinemon: LinemonProps
+	) => {
+		return await this.inventory.getConsumables(
+			returnFunction,
+			linemon,
+			playerLinemon
+		);
+	};
+
 	getDisks = (
 		returnFunction: (linemon: LinemonProps) => void,
 		linemon: LinemonProps

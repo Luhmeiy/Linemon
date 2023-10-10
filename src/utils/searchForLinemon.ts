@@ -11,6 +11,7 @@ import type { Moves } from "../types/Moves.js";
 
 import { Linemon } from "../classes/Linemon.js";
 
+import { attack } from "./attack.js";
 import { createPrompt } from "./createPrompt.js";
 import { delayMessage } from "./delayMessage.js";
 import { generateStatus } from "./generateStatus.js";
@@ -196,6 +197,7 @@ export const searchForLinemon = (
 				{ name: `${linemon.info.name}'s status`, value: "status" },
 				{ name: "Fight", value: "fight" },
 				{ name: "Catch", value: "catch" },
+				{ name: "Inventory", value: "inventory" },
 				{ name: "Run", value: "run" },
 			];
 
@@ -214,13 +216,29 @@ Type: ${type}`);
 				case "status":
 					await delayMessage(`HP: (${linemon.status.currentHp}/${linemon.status.maxHp})
 PP: (${linemon.status.currentPp}/${linemon.status.maxPp})\n`);
-					findLinemon(wildLinemon, false);
+					findLinemon(wildLinemon);
 					break;
 				case "fight":
 					getCombatMenu(findLinemon, linemon, wildLinemon);
 					break;
 				case "catch":
 					player.getDisks(findLinemon, wildLinemon);
+					break;
+				case "inventory":
+					const response = await player.getConsumables(
+						findLinemon,
+						wildLinemon,
+						linemon
+					);
+
+					if (response!) {
+						const selectedMove =
+							wildLinemon.moves[randomIntFromInterval(0, 3)];
+
+						await attack(selectedMove, wildLinemon, linemon);
+
+						findLinemon(wildLinemon);
+					}
 					break;
 				default:
 					await delayMessage("You ran away.\n");

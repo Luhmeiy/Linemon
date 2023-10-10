@@ -3,5 +3,7 @@ export interface IShopItems {
 	name: string;
 	description: string;
 	price: number;
-	type: "consumable" | "disk" | "special";
+	category: "consumable" | "disk" | "special";
+	type?: string;
+	health?: number;
 }

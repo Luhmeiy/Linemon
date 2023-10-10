@@ -40,13 +40,13 @@ export class Shop implements ShopMethods {
 	) {
 		this.shopItems = this.getFullShopItems();
 
-		this.shopConsumableOptions = this.filterByType("consumable");
+		this.shopConsumableOptions = this.filterByCategory("consumable");
 		this.shopConsumableOptions.push({ name: "Go back", value: "back" });
 
-		this.shopDiskOptions = this.filterByType("disk");
+		this.shopDiskOptions = this.filterByCategory("disk");
 		this.shopDiskOptions.push({ name: "Go back", value: "back" });
 
-		this.shopSpecialOptions = this.filterByType("special");
+		this.shopSpecialOptions = this.filterByCategory("special");
 		this.shopSpecialOptions.push({ name: "Go back", value: "back" });
 	}
 
@@ -163,10 +163,10 @@ export class Shop implements ShopMethods {
 		return `${name}${spacing}${price}`;
 	};
 
-	private filterByType = (type: IShopItems["type"]): Option => {
+	private filterByCategory = (category: IShopItems["category"]): Option => {
 		//@ts-ignore
 		return this.shopItems
-			.filter((item) => item.type === type)
+			.filter((item) => item.category === category)
 			.map((item) => {
 				return {
 					name: this.formatItem(item.name, item.price),
