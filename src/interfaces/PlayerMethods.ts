@@ -1,6 +1,5 @@
 import type { IShopItems } from "./IShopItems.js";
 import type { LinemonProps } from "./LinemonProps.js";
-import type { WildLinemonProps } from "./WildLinemonProps.js";
 
 export interface InventoryItem {
 	id: string;
@@ -23,8 +22,8 @@ export interface InventoryMethods {
 		inventory: InventoryItem[]
 	) => void;
 	getDisks: (
-		returnFunction: (linemon: WildLinemonProps) => void,
-		linemon: WildLinemonProps
+		returnFunction: (linemon: LinemonProps) => void,
+		linemon: LinemonProps
 	) => void;
 	hasFishingRod: () => boolean;
 }

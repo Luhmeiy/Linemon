@@ -11,6 +11,7 @@ export interface LinemonProps {
 		evolutionStage: number;
 		type: string;
 		isShiny: boolean;
+		catchRate: number;
 	};
 
 	status: {

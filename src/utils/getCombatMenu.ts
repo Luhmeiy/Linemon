@@ -3,7 +3,6 @@ import jsonTypesEffectiveness from "../data/typesEffectiveness.json" assert { ty
 import { createSpinner } from "nanospinner";
 
 import type { LinemonProps } from "../interfaces/LinemonProps.js";
-import type { WildLinemonProps } from "../interfaces/WildLinemonProps.js";
 import type { Moves } from "../types/Moves.js";
 
 import { createPrompt } from "./createPrompt.js";
@@ -85,9 +84,9 @@ const attack = async (
 };
 
 export const getCombatMenu = async (
-	returnFunction: (wildLinemon?: WildLinemonProps) => void,
+	returnFunction: (wildLinemon?: LinemonProps) => void,
 	linemon: LinemonProps,
-	adversary: WildLinemonProps
+	adversary: LinemonProps
 ) => {
 	const options = createOptions(linemon.moves);
 	options.push({ name: "Go back", value: "back" });

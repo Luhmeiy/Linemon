@@ -1,10 +1,10 @@
 import type { IShopItems } from "../../interfaces/IShopItems.js";
+import type { LinemonProps } from "../../interfaces/LinemonProps.js";
 import type {
 	InventoryItem,
 	InventoryMethods,
 	InventoryType,
 } from "../../interfaces/PlayerMethods.js";
-import type { WildLinemonProps } from "../../interfaces/WildLinemonProps.js";
 import type { Option } from "../../types/Option.js";
 
 import { createPrompt } from "../../utils/createPrompt.js";
@@ -145,11 +145,11 @@ export class Inventory implements InventoryMethods {
 
 	getDisks = async (
 		returnFunction: (
-			linemon: WildLinemonProps,
+			linemon: LinemonProps,
 			catchLinemon: boolean,
 			diskBonus?: number
 		) => void,
-		linemon: WildLinemonProps
+		linemon: LinemonProps
 	) => {
 		const diskOptions: Option = [
 			...this.createOptions(this.inventory.disk),

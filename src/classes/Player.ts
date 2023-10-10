@@ -1,6 +1,7 @@
 import chalk from "chalk";
 
 import type { IShopItems } from "../interfaces/IShopItems.js";
+import type { LinemonProps } from "../interfaces/LinemonProps.js";
 import type {
 	InventoryItem,
 	InventoryMethods,
@@ -8,8 +9,6 @@ import type {
 	PlayerMethods,
 	TeamMethods,
 } from "../interfaces/PlayerMethods.js";
-import type { WildLinemonProps } from "../interfaces/WildLinemonProps.js";
-import type { LinemonProps } from "../interfaces/LinemonProps.js";
 
 import { delayMessage } from "../utils/delayMessage.js";
 
@@ -92,8 +91,8 @@ ${chalk.bold("Linemon caught:")} ${this.linemonsCaught.length}\n`);
 	};
 
 	getDisks = (
-		returnFunction: (linemon: WildLinemonProps) => void,
-		linemon: WildLinemonProps
+		returnFunction: (linemon: LinemonProps) => void,
+		linemon: LinemonProps
 	) => {
 		this.inventory.getDisks(returnFunction, linemon);
 	};

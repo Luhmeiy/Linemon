@@ -5,15 +5,15 @@ import chalk from "chalk";
 import gradient from "gradient-string";
 import { createSpinner } from "nanospinner";
 
+import type { LinemonProps } from "../interfaces/LinemonProps.js";
 import type { PlayerMethods } from "../interfaces/PlayerMethods.js";
-import type { WildLinemonProps } from "../interfaces/WildLinemonProps.js";
 import type { Moves } from "../types/Moves.js";
 
 import { Linemon } from "../classes/Linemon.js";
-import { WildLinemon } from "../classes/WildLinemon.js";
 
 import { createPrompt } from "./createPrompt.js";
 import { delayMessage } from "./delayMessage.js";
+import { generateStatus } from "./generateStatus.js";
 import { getCombatMenu } from "./getCombatMenu.js";
 import { getFromJson } from "./getFromJson.js";
 import { randomIntFromInterval } from "./randomIntFromInterval.js";
@@ -86,7 +86,7 @@ export const searchForLinemon = (
 	};
 
 	const findLinemon = async (
-		wildLinemon?: WildLinemonProps,
+		wildLinemon?: LinemonProps,
 		catchLinemon?: boolean,
 		diskBonus?: number
 	) => {
@@ -109,13 +109,9 @@ export const searchForLinemon = (
 			info.lvl = randomIntFromInterval(level.min, level.max);
 
 			const moves = generateMoves(info.type);
+			const status = generateStatus(minMaxStatus);
 
-			wildLinemon = new WildLinemon(
-				id,
-				{ ...info, isShiny },
-				minMaxStatus,
-				moves
-			);
+			wildLinemon = new Linemon(id, { ...info, isShiny }, status, moves);
 
 			console.log("\n");
 

@@ -16,7 +16,7 @@ export class Linemon implements LinemonProps {
 	) => {
 		const damage = Math.floor(
 			((this.info.lvl * 2) / 5 + 2) *
-				((basePower * this.status.atk) / adversaryDefense) *
+				((basePower * this.status!.atk) / adversaryDefense) *
 				(modifiers / 50) *
 				randomIntFromInterval(0.85, 1) +
 				2
@@ -26,9 +26,9 @@ export class Linemon implements LinemonProps {
 	};
 
 	sleep = () => {
-		const recover = this.status.currentPp + this.status.maxPp / 2;
+		const recover = this.status!.currentPp + this.status!.maxPp / 2;
 
-		this.status.currentPp =
-			recover > this.status.maxPp ? this.status.maxPp : recover;
+		this.status!.currentPp =
+			recover > this.status!.maxPp ? this.status!.maxPp : recover;
 	};
 }
