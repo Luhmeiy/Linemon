@@ -2,7 +2,7 @@
 	{
 		"id": "potion",
 		"name": "Potion",
-		"description": "Used for healing Linemons.",
+		"description": "Heals the HP of your Linemon by 20 points.",
 		"price": 150,
 		"category": "consumable",
 		"type": "potion",

@@ -11,7 +11,7 @@ import type { Option } from "../../types/Option.js";
 import { createPrompt } from "../../utils/createPrompt.js";
 import { delayMessage } from "../../utils/delayMessage.js";
 
-const inventoryOptions = [
+const categoryOptions = [
 	{ name: "Consumables", value: "consumable" },
 	{ name: "Floppy Disks", value: "disk" },
 	{ name: "Special Items", value: "special" },
@@ -24,12 +24,7 @@ const itemOptions = [
 	{ name: "Go back", value: "back" },
 ];
 
-const extendedItemOptions = itemOptions;
-extendedItemOptions.unshift({
-	name: "Use",
-	value: "use",
-});
-
+const extendedItemOptions = [{ name: "Use", value: "use" }, ...itemOptions];
 const defaultOption = { name: "Go back", value: "back" };
 
 export class Inventory implements InventoryMethods {
@@ -43,11 +38,7 @@ export class Inventory implements InventoryMethods {
 		};
 	}
 
-	getInventory = async (returnFunction: () => void) => {
-		const consumableOptions: Option = [
-			...this.createOptions(this.inventory.consumable),
-			defaultOption,
-		];
+	getInventory = async (returnFunction: () => void, team: LinemonProps[]) => {
 		const diskOptions: Option = [
 			...this.createOptions(this.inventory.disk),
 			defaultOption,
@@ -59,32 +50,32 @@ export class Inventory implements InventoryMethods {
 
 		const answer = await createPrompt(
 			"Select a category: ",
-			inventoryOptions
+			categoryOptions
 		);
 
 		switch (answer.selectedOption) {
 			case "consumable":
-				await this.createItemMenus(
-					this.inventory.consumable,
-					consumableOptions,
-					returnFunction
-				);
+				const newReturnFunction = () =>
+					this.getInventory(returnFunction, team);
+				await this.getConsumables(newReturnFunction, team);
 				break;
 			case "disk":
 				await this.createItemMenus(
 					this.inventory.disk,
 					diskOptions,
-					returnFunction
+					returnFunction,
+					team
 				);
 				break;
 			case "special":
 				await this.createItemMenus(
 					this.inventory.special,
 					specialOptions,
-					returnFunction
+					returnFunction,
+					team
 				);
 				break;
-			case "back":
+			default:
 				console.log(" ");
 				returnFunction();
 				break;
@@ -92,6 +83,7 @@ export class Inventory implements InventoryMethods {
 	};
 
 	addToInventory = (item: IShopItems, quantity: number) => {
+		let inventory;
 		let formattedItem = {
 			id: item.id,
 			name: item.name,
@@ -99,35 +91,29 @@ export class Inventory implements InventoryMethods {
 			quantity: quantity,
 		};
 
-		if (item.category === "consumable") {
-			const response = this.increaseQuantityIfItemExists(
-				this.inventory.consumable,
-				item.name
-			);
-
-			const formattedConsumableItem = {
-				...formattedItem,
-				type: item.type,
-				health: item.health && item.health,
-			} as ConsumableItem;
-
-			if (!response)
-				this.inventory.consumable?.push(formattedConsumableItem);
-		} else if (item.category === "disk") {
-			const response = this.increaseQuantityIfItemExists(
-				this.inventory.disk,
-				item.name
-			);
-
-			if (!response) this.inventory.disk?.push(formattedItem);
-		} else if (item.category === "special") {
-			const response = this.increaseQuantityIfItemExists(
-				this.inventory.special,
-				item.name
-			);
-
-			if (!response) this.inventory.special?.push(formattedItem);
+		switch (item.category) {
+			case "consumable":
+				inventory = this.inventory.consumable;
+				formattedItem = {
+					...formattedItem,
+					type: item.type,
+					health: item.health && item.health,
+				} as ConsumableItem;
+				break;
+			case "disk":
+				inventory = this.inventory.disk;
+				break;
+			case "special":
+				inventory = this.inventory.special;
+				break;
 		}
+
+		const response = this.increaseQuantityIfItemExists(
+			inventory,
+			item.name
+		);
+
+		if (!response) inventory.push(formattedItem);
 	};
 
 	private increaseQuantityIfItemExists = (
@@ -151,99 +137,177 @@ export class Inventory implements InventoryMethods {
 		}
 	};
 
-	getConsumables = async (
-		returnFunction: (linemon: LinemonProps) => void,
-		linemon: LinemonProps,
-		playerLinemon: LinemonProps
+	private selectDiskBonus = (id: string) => {
+		switch (id) {
+			case "disk":
+				return 1;
+			case "silveDisk":
+				return 2;
+			case "goldenDisk":
+				return 3;
+		}
+	};
+
+	private createOptions = (items: InventoryItem[]) => {
+		return items.map((item) => {
+			return {
+				name: item.name,
+				value: item.id,
+			};
+		});
+	};
+
+	private itemDefaultVerification = async (
+		items: object[],
+		message: string,
+		options: Option,
+		returnFunction: () => void
 	) => {
+		if (items.length === 0) {
+			await delayMessage("No items.\n");
+			return returnFunction();
+		}
+
+		const answer = await createPrompt(message, options);
+
+		if (answer.selectedOption === "back") {
+			console.log(" ");
+			return returnFunction();
+		}
+
+		return answer;
+	};
+
+	getConsumables = async (
+		returnFunction: (linemon?: LinemonProps) => void,
+		team: LinemonProps[],
+		linemon?: LinemonProps
+	): Promise<any> => {
 		const consumableOptions: Option = [
 			...this.createOptions(this.inventory.consumable),
 			defaultOption,
 		];
 
-		if (this.inventory.consumable.length == 0) {
-			await delayMessage("No items.\n");
+		const newReturnFunction = () => returnFunction(linemon);
+		const answer = await this.itemDefaultVerification(
+			this.inventory.consumable,
+			"Choose a consumable: ",
+			consumableOptions,
+			newReturnFunction
+		);
 
-			returnFunction(linemon);
-		} else {
-			const answer = await createPrompt(
-				"Choose a consumable: ",
-				consumableOptions
-			);
+		if (!answer) return;
 
-			if (answer.selectedOption !== "back") {
-				for (const item of this.inventory.consumable) {
-					if (answer.selectedOption === item.id) {
-						const itemAnswer = await createPrompt(
-							item.name,
-							extendedItemOptions
-						);
+		for (const item of this.inventory.consumable) {
+			if (answer.selectedOption === item.id) {
+				const itemAnswer = await createPrompt(
+					item.name,
+					extendedItemOptions
+				);
 
-						switch (itemAnswer.selectedOption) {
-							case "use":
-								switch (item.type) {
-									case "potion":
-										const currentHp =
-											playerLinemon.status.currentHp;
-										const maxHp =
-											playerLinemon.status.maxHp;
+				switch (itemAnswer.selectedOption) {
+					case "use":
+						switch (item.type) {
+							case "potion":
+								const options = team.map((linemon, i) => {
+									return {
+										name: linemon.info.name,
+										value: `${i}`,
+									};
+								});
+								options.push({
+									name: "Go back",
+									value: "back",
+								});
 
-										if (currentHp === maxHp) {
-											await delayMessage(
-												`${playerLinemon.info.name} is at full health.\n`
-											);
+								const linemonAnswer: {
+									selectedOption: string;
+								} = await createPrompt(
+									"Select Linemon to heal: ",
+									options
+								);
 
-											return returnFunction(linemon);
-										}
-
-										const health =
-											currentHp + item.health! > maxHp
-												? maxHp - currentHp
-												: item.health;
-
-										playerLinemon.status.currentHp +=
-											health!;
-
-										await delayMessage(
-											`${playerLinemon.info.name} recovered ${health} HP.\n`
-										);
-										break;
+								if (linemonAnswer.selectedOption === "back") {
+									return this.getConsumables(
+										returnFunction,
+										team,
+										linemon
+									);
 								}
 
-								this.removeFromInventory(
-									item,
-									this.inventory.consumable
+								const linemonId = Number(
+									linemonAnswer.selectedOption
 								);
 
-								return true;
-							case "quantity":
+								const playerLinemon = team[linemonId];
+
+								const currentHp =
+									playerLinemon.status.currentHp;
+								const maxHp = playerLinemon.status.maxHp;
+
+								if (currentHp === maxHp) {
+									await delayMessage(
+										`${playerLinemon.info.name} is at full health.\n`
+									);
+
+									return this.getConsumables(
+										returnFunction,
+										team,
+										linemon
+									);
+								}
+
+								const health =
+									currentHp + item.health! > maxHp
+										? maxHp - currentHp
+										: item.health;
+
+								playerLinemon.status.currentHp += health!;
+
 								await delayMessage(
-									`Quantity: ${item.quantity}`
+									`${playerLinemon.info.name} recovered ${health} HP.\n`
 								);
-
-								this.getConsumables(
-									returnFunction,
-									linemon,
-									playerLinemon
-								);
-								break;
-							case "description":
-								await delayMessage(
-									`${item.name}: ${item.description}`
-								);
-
-								this.getConsumables(
-									returnFunction,
-									linemon,
-									playerLinemon
-								);
-								break;
 						}
-					}
+
+						this.removeFromInventory(
+							item,
+							this.inventory.consumable
+						);
+
+						if (linemon) {
+							return true;
+						} else {
+							return this.getConsumables(
+								returnFunction,
+								team,
+								linemon
+							);
+						}
+					case "quantity":
+						await delayMessage(`Quantity: ${item.quantity}\n`);
+
+						return this.getConsumables(
+							returnFunction,
+							team,
+							linemon
+						);
+					case "description":
+						await delayMessage(
+							`${item.name}: ${item.description}\n`
+						);
+
+						return this.getConsumables(
+							returnFunction,
+							team,
+							linemon
+						);
+					default:
+						return this.getConsumables(
+							returnFunction,
+							team,
+							linemon
+						);
 				}
-			} else {
-				console.log(" ");
-				returnFunction(linemon);
 			}
 		}
 	};
@@ -261,100 +325,73 @@ export class Inventory implements InventoryMethods {
 			defaultOption,
 		];
 
-		if (this.inventory.disk.length == 0) {
-			await delayMessage("No items.\n");
+		const newReturnFunction = () => returnFunction(linemon, false);
+		const answer = await this.itemDefaultVerification(
+			this.inventory.disk,
+			"Choose a floppy disk: ",
+			diskOptions,
+			newReturnFunction
+		);
 
-			returnFunction(linemon, false);
-		} else {
-			const answer = await createPrompt("Choose an disk: ", diskOptions);
+		if (!answer) return;
 
-			if (answer.selectedOption !== "back") {
-				for (const item of this.inventory.disk) {
-					if (answer.selectedOption === item.id) {
-						const itemAnswer = await createPrompt(
-							item.name,
-							extendedItemOptions
-						);
+		for (const item of this.inventory.disk) {
+			if (answer.selectedOption === item.id) {
+				const itemAnswer = await createPrompt(
+					item.name,
+					extendedItemOptions
+				);
 
-						if (itemAnswer.selectedOption === "use") {
-							const diskBonus = this.selectDiskBonus(item.id);
-							this.removeFromInventory(item, this.inventory.disk);
-							returnFunction(linemon, true, diskBonus);
-						} else if (itemAnswer.selectedOption === "quantity") {
-							await delayMessage(`Quantity: ${item.quantity}`);
-							this.getDisks(returnFunction, linemon);
-						} else if (
-							itemAnswer.selectedOption === "description"
-						) {
-							await delayMessage(
-								`${item.name}: ${item.description}`
-							);
-
-							this.getDisks(returnFunction, linemon);
-						}
-					}
+				switch (itemAnswer.selectedOption) {
+					case "use":
+						const diskBonus = this.selectDiskBonus(item.id);
+						this.removeFromInventory(item, this.inventory.disk);
+						return returnFunction(linemon, true, diskBonus);
+					case "quantity":
+						await delayMessage(`Quantity: ${item.quantity}`);
+						break;
+					case "description":
+						await delayMessage(`${item.name}: ${item.description}`);
+						break;
 				}
-			} else {
+
 				console.log(" ");
-				returnFunction(linemon, false);
+				this.getDisks(returnFunction, linemon);
 			}
 		}
-	};
-
-	private selectDiskBonus = (id: string) => {
-		if (id === "disk") {
-			return 1;
-		} else if (id === "silverDisk") {
-			return 2;
-		} else if (id === "goldenDisk") {
-			return 3;
-		}
-	};
-
-	private createOptions = (items: InventoryItem[]) => {
-		return items.map((item) => {
-			return {
-				name: item.name,
-				value: item.id,
-			};
-		});
 	};
 
 	private createItemMenus = async (
 		items: InventoryItem[],
 		options: Option,
-		returnFunction: () => void
+		returnFunction: () => void,
+		team: LinemonProps[]
 	) => {
-		if (items.length == 0) {
-			await delayMessage("No items\n");
-			this.getInventory(returnFunction);
-		} else {
-			const answer = await createPrompt("Choose an item: ", options);
+		const newReturnFunction = () => this.getInventory(returnFunction, team);
+		const answer = await this.itemDefaultVerification(
+			items,
+			"Choose an item: ",
+			options,
+			newReturnFunction
+		);
 
-			if (answer.selectedOption !== "back") {
-				for (const item of items) {
-					if (answer.selectedOption === item.id) {
-						const itemAnswer = await createPrompt(
-							item.name,
-							itemOptions
-						);
+		if (!answer) return;
 
-						if (itemAnswer.selectedOption === "quantity") {
-							await delayMessage(`Quantity: ${item.quantity}`);
-						} else if (
-							itemAnswer.selectedOption === "description"
-						) {
-							await delayMessage(
-								`${item.name}: ${item.description}`
-							);
-						}
+		for (const item of items) {
+			if (answer.selectedOption === item.id) {
+				const itemAnswer = await createPrompt(item.name, itemOptions);
 
-						console.log("\n");
-						this.getInventory(returnFunction);
-					}
+				switch (itemAnswer.selectedOption) {
+					case "quantity":
+						await delayMessage(`Quantity: ${item.quantity}`);
+						break;
+					case "description":
+						await delayMessage(`${item.name}: ${item.description}`);
+						break;
 				}
-			} else {
-				this.getInventory(returnFunction);
+
+				console.log(" ");
+				this.getInventory(returnFunction, team);
 			}
 		}
 	};

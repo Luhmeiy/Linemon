@@ -22,6 +22,7 @@ export class Team implements TeamMethods {
 		);
 	};
 
+	getTeamRaw = () => this.team;
 	getFirstTeam = () => this.team[0];
 
 	addToTeam = async (linemon: LinemonProps) => {

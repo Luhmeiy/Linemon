@@ -64,6 +64,7 @@ ${chalk.bold("Linemon caught:")} ${this.linemonsCaught.length}\n`);
 
 	// Team
 	getTeam = (returnFunction: () => void) => this.team.getTeam(returnFunction);
+	getTeamRaw = () => this.team.getTeamRaw();
 	getFirstTeam = () => this.team.getFirstTeam();
 
 	addToTeam = async (linemon: LinemonProps) => {
@@ -78,8 +79,9 @@ ${chalk.bold("Linemon caught:")} ${this.linemonsCaught.length}\n`);
 	addToPC = async (linemon: LinemonProps) => await this.pc.addToPC(linemon);
 
 	// Inventory
-	getInventory = (returnFunction: () => void) => {
-		this.inventory.getInventory(returnFunction);
+	getInventory = async (returnFunction: () => void) => {
+		const team = await this.team.getTeamRaw();
+		this.inventory.getInventory(returnFunction, team);
 	};
 
 	addToInventory = (item: IShopItems, quantity: number) => {
@@ -91,14 +93,14 @@ ${chalk.bold("Linemon caught:")} ${this.linemonsCaught.length}\n`);
 	};
 
 	getConsumables = async (
-		returnFunction: (linemon: LinemonProps) => void,
-		linemon: LinemonProps,
-		playerLinemon: LinemonProps
+		returnFunction: (linemon?: LinemonProps) => void,
+		team: LinemonProps[],
+		linemon?: LinemonProps
 	) => {
 		return await this.inventory.getConsumables(
 			returnFunction,
-			linemon,
-			playerLinemon
+			team,
+			linemon
 		);
 	};
 

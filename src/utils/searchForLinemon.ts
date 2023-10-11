@@ -114,7 +114,7 @@ export const searchForLinemon = (
 
 			wildLinemon = new Linemon(id, { ...info, isShiny }, status, moves);
 
-			console.log("\n");
+			console.log(" ");
 
 			const spinner = createSpinner(searchText).start();
 
@@ -154,7 +154,7 @@ export const searchForLinemon = (
 		}
 
 		if (catchLinemon) {
-			console.log("\n");
+			console.log(" ");
 
 			const spinner = createSpinner("Catching...").start();
 
@@ -184,66 +184,69 @@ export const searchForLinemon = (
 				);
 
 				await player.addToTeam(caughtLinemon);
-				search();
+				return search();
 			} else {
 				spinner.error({
 					text: `${wildLinemon.info.name} broke free!\n`,
 				});
 
-				findLinemon(wildLinemon, false);
-			}
-		} else {
-			const linemonActions = [
-				{ name: `${linemon.info.name}'s status`, value: "status" },
-				{ name: "Fight", value: "fight" },
-				{ name: "Catch", value: "catch" },
-				{ name: "Inventory", value: "inventory" },
-				{ name: "Run", value: "run" },
-			];
+				const selectedMove =
+					wildLinemon.moves[randomIntFromInterval(0, 3)];
 
-			console.log(`${wildLinemon.info.name} - Lvl. ${
-				wildLinemon.info.lvl
-			} ${wildLinemon.info.isShiny ? gradient.cristal("[Shiny]") : ""}
+				await attack(selectedMove, wildLinemon, linemon);
+			}
+		}
+
+		const linemonActions = [
+			{ name: `${linemon.info.name}'s status`, value: "status" },
+			{ name: "Fight", value: "fight" },
+			{ name: "Catch", value: "catch" },
+			{ name: "Inventory", value: "inventory" },
+			{ name: "Run", value: "run" },
+		];
+
+		console.log(`${wildLinemon.info.name} - Lvl. ${wildLinemon.info.lvl} ${
+			wildLinemon.info.isShiny ? gradient.cristal("[Shiny]") : ""
+		}
 HP: (${wildLinemon.status.currentHp}/${wildLinemon.status.maxHp})
 Type: ${type}`);
 
-			const answer = await createPrompt(
-				"What do you want to do?",
-				linemonActions
-			);
+		const answer = await createPrompt(
+			"What do you want to do?",
+			linemonActions
+		);
 
-			switch (answer.selectedOption) {
-				case "status":
-					await delayMessage(`HP: (${linemon.status.currentHp}/${linemon.status.maxHp})
+		switch (answer.selectedOption) {
+			case "status":
+				await delayMessage(`HP: (${linemon.status.currentHp}/${linemon.status.maxHp})
 PP: (${linemon.status.currentPp}/${linemon.status.maxPp})\n`);
+				findLinemon(wildLinemon);
+				break;
+			case "fight":
+				getCombatMenu(findLinemon, linemon, wildLinemon);
+				break;
+			case "catch":
+				player.getDisks(findLinemon, wildLinemon);
+				break;
+			case "inventory":
+				const response = await player.getConsumables(
+					findLinemon,
+					player.getTeamRaw(),
+					wildLinemon
+				);
+
+				if (response!) {
+					const selectedMove =
+						wildLinemon.moves[randomIntFromInterval(0, 3)];
+
+					await attack(selectedMove, wildLinemon, linemon);
+
 					findLinemon(wildLinemon);
-					break;
-				case "fight":
-					getCombatMenu(findLinemon, linemon, wildLinemon);
-					break;
-				case "catch":
-					player.getDisks(findLinemon, wildLinemon);
-					break;
-				case "inventory":
-					const response = await player.getConsumables(
-						findLinemon,
-						wildLinemon,
-						linemon
-					);
-
-					if (response!) {
-						const selectedMove =
-							wildLinemon.moves[randomIntFromInterval(0, 3)];
-
-						await attack(selectedMove, wildLinemon, linemon);
-
-						findLinemon(wildLinemon);
-					}
-					break;
-				default:
-					await delayMessage("You ran away.\n");
-					search();
-			}
+				}
+				break;
+			default:
+				await delayMessage("You ran away.\n");
+				search();
 		}
 	};
 
@@ -251,10 +254,13 @@ PP: (${linemon.status.currentPp}/${linemon.status.maxPp})\n`);
 		const answer = await createPrompt("What do you want to do?", options);
 
 		await delayMessage(null);
-		if (answer.selectedOption === "exit") {
-			returnToOrigin();
-		} else if (answer.selectedOption === "continue") {
-			findLinemon();
+		switch (answer.selectedOption) {
+			case "exit":
+				returnToOrigin();
+				break;
+			case "continue":
+				findLinemon();
+				break;
 		}
 	};
 

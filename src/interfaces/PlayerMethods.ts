@@ -1,3 +1,4 @@
+import type { Team } from "../classes/playerClasses/Team.js";
 import type { IShopItems } from "./IShopItems.js";
 import type { LinemonProps } from "./LinemonProps.js";
 
@@ -20,16 +21,16 @@ export type InventoryType = {
 };
 
 export interface InventoryMethods {
-	getInventory: (returnFunction: () => void) => void;
+	getInventory: (returnFunction: () => void, team: LinemonProps[]) => void;
 	addToInventory: (item: IShopItems, quantity: number) => void;
 	removeFromInventory: (
 		item: InventoryItem,
 		inventory: InventoryItem[]
 	) => void;
 	getConsumables: (
-		returnFunction: (linemon: LinemonProps) => void,
-		linemon: LinemonProps,
-		playerLinemon: LinemonProps
+		returnFunction: (linemon?: LinemonProps) => void,
+		team: LinemonProps[],
+		linemon?: LinemonProps
 	) => void;
 	getDisks: (
 		returnFunction: (linemon: LinemonProps) => void,
@@ -45,6 +46,7 @@ export interface PCMethods {
 
 export interface TeamMethods {
 	getTeam: (returnFunction: () => void) => void;
+	getTeamRaw: () => LinemonProps[];
 	getFirstTeam: () => LinemonProps;
 	addToTeam: (linemon: LinemonProps) => Promise<LinemonProps | undefined>;
 }
@@ -61,4 +63,6 @@ export interface PlayerMethods
 	setLinemonsCaught: (id: string) => void;
 
 	getStatus: (returnFunction: () => void) => void;
+
+	getInventory: (returnFunction: () => void) => void;
 }
