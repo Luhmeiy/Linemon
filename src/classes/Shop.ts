@@ -60,92 +60,80 @@ export class Shop implements ShopMethods {
 			filteredCategoryOptions
 		);
 
-		if (categoryAnswer.selectedOption !== "shopExit") {
-			let options: Option;
+		let options: Option;
 
-			switch (categoryAnswer.selectedOption) {
-				case "consumable":
-					options = this.shopConsumableOptions;
-					break;
-				case "disk":
-					options = this.shopDiskOptions;
-					break;
-				case "special":
-					options = this.shopSpecialOptions;
-					break;
-			}
+		switch (categoryAnswer.selectedOption) {
+			case "consumable":
+				options = this.shopConsumableOptions;
+				break;
+			case "disk":
+				options = this.shopDiskOptions;
+				break;
+			case "special":
+				options = this.shopSpecialOptions;
+				break;
+			default:
+				await delayMessage("You left.");
+				return this.goToCityCenter();
+		}
 
-			const answer = await createPrompt(
-				"What do you want to buy?",
-				options!
-			);
+		const answer = await createPrompt("What do you want to buy?", options!);
 
-			if (answer.selectedOption === "back") this.goToShop();
+		if (answer.selectedOption === "back") this.goToShop();
 
-			for (const item of this.shopItems) {
-				if (answer.selectedOption === item.id) {
-					console.log(`You have ${this.player.getMoney()} coins.`);
+		for (const item of this.shopItems) {
+			if (answer.selectedOption === item.id) {
+				const money = this.player.getMoney();
 
-					const itemAnswer = await createPrompt(
-						item.name,
-						itemOptions
-					);
+				console.log(`\nYou have ${chalk.blue(money)} coins.`);
 
-					if (itemAnswer.selectedOption === "buy") {
-						if (this.player.getMoney() < item.price) {
-							const spinner = createSpinner("").start();
+				const itemAnswer = await createPrompt(item.name, itemOptions);
+
+				switch (itemAnswer.selectedOption) {
+					case "buy":
+						const spinner = createSpinner("");
+
+						if (money < item.price) {
 							spinner.error({ text: "Not enough money." });
-						} else {
-							const numberAnswer = await inquirer.prompt([
-								{
-									type: "number",
-									name: "numberOfItems",
-									message: `How many ${item.name} you want to buy?`,
-								},
-							]);
-
-							if (!(numberAnswer.numberOfItems === 0)) {
-								const spinner = createSpinner("").start();
-
-								if (
-									this.player.getMoney() <
-									item.price * numberAnswer.numberOfItems
-								) {
-									spinner.error({
-										text: "Not enough money.",
-									});
-								} else {
-									this.player.addToInventory(
-										item,
-										numberAnswer.numberOfItems
-									);
-									this.player.setMoney(
-										-item.price * numberAnswer.numberOfItems
-									);
-
-									spinner.success({
-										text: `You bought ${
-											numberAnswer.numberOfItems
-										} ${chalk.bold(item.name)}.`,
-									});
-								}
-							} else {
-								const spinner = createSpinner("").start();
-								spinner.error({ text: "No items bought." });
-							}
+							break;
 						}
 
-						await delayMessage(null);
-					} else if (itemAnswer.selectedOption === "description") {
-						await delayMessage(`${item.name}: ${item.description}`);
-					}
+						const { numberOfItems } = await inquirer.prompt([
+							{
+								type: "number",
+								name: "numberOfItems",
+								message: `How many ${item.name} you want to buy?`,
+							},
+						]);
 
-					this.goToShop();
+						if (numberOfItems <= 0 || isNaN(numberOfItems)) {
+							spinner.error({ text: "No items bought." });
+							break;
+						}
+
+						if (money < item.price * numberOfItems) {
+							spinner.error({ text: "Not enough money." });
+							break;
+						}
+
+						this.player.addToInventory(item, numberOfItems);
+						this.player.setMoney(-item.price * numberOfItems);
+
+						spinner.success({
+							text: `You bought ${numberOfItems} ${chalk.bold(
+								item.name
+							)}.`,
+						});
+
+						await delayMessage(null);
+						break;
+					case "description":
+						await delayMessage(`${item.name}: ${item.description}`);
+						break;
 				}
+
+				this.goToShop();
 			}
-		} else {
-			await delayMessage("You left.");
-			this.goToCityCenter();
 		}
 	};
 
