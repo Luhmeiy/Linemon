@@ -92,16 +92,20 @@ export class City implements CityMethods {
 
 		switch (answer.selectedOption) {
 			case "heal":
-				await delayMessage("You healed.");
+				const team = this.player.getTeamRaw();
+
+				for (const linemon of team) {
+					linemon.status.currentHp = linemon.status.maxHp;
+				}
+
+				await delayMessage("Your Linemons are healed.");
 				this.goToHealing();
 				break;
 			case "pc":
-				this.player.getPC(this.goToHealing);
-				break;
+				return this.player.getPC(this.goToHealing);
 			default:
 				await delayMessage("You left.");
-				this.goToCityCenter();
-				break;
+				return this.goToCityCenter();
 		}
 	};
 }
