@@ -36,27 +36,28 @@ export class Forest implements ForestMethods {
 	goToForest = async () => {
 		console.log("\nYou are in the forest.");
 
-		const answer = await createPrompt(
+		const { selectedOption } = await createPrompt(
 			"Where do you want to go?",
 			forestOptions
 		);
 
 		await delayMessage(null);
-		if (answer.selectedOption === "tallGrass") {
-			searchForLinemon(
-				linemonOptions,
-				100,
-				{ min: 10, max: 16 },
-				"tallGrass",
-				this.player,
-				this.goToForest
-			);
-		} else if (answer.selectedOption === "grasslands") {
-			this.goToGrasslands();
-		} else if (answer.selectedOption === "lake") {
-			this.goToLake();
-		} else {
-			getMenu(this.player, this.goToForest);
+		switch (selectedOption) {
+			case "tallGrass":
+				return searchForLinemon(
+					linemonOptions,
+					100,
+					{ min: 8, max: 15 },
+					"tallGrass",
+					this.player,
+					this.goToForest
+				);
+			case "grasslands":
+				return this.goToGrasslands();
+			case "lake":
+				return this.goToLake();
+			default:
+				return getMenu(this.player, this.goToForest);
 		}
 	};
 }

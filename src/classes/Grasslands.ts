@@ -38,29 +38,30 @@ export class Grasslands implements GrasslandsMethods {
 	goToGrasslands = async () => {
 		console.log("\nYou are in the grasslands.");
 
-		const answer = await createPrompt(
+		const { selectedOption } = await createPrompt(
 			"Where do you want to go?",
 			grasslandsOptions
 		);
 
 		await delayMessage(null);
-		if (answer.selectedOption === "tallGrass") {
-			searchForLinemon(
-				linemonOptions,
-				100,
-				{ min: 8, max: 15 },
-				"tallGrass",
-				this.player,
-				this.goToGrasslands
-			);
-		} else if (answer.selectedOption === "city") {
-			this.goToCity();
-		} else if (answer.selectedOption === "forest") {
-			this.goToForest();
-		} else if (answer.selectedOption === "lake") {
-			this.goToLake();
-		} else {
-			getMenu(this.player, this.goToGrasslands);
+		switch (selectedOption) {
+			case "tallGrass":
+				return searchForLinemon(
+					linemonOptions,
+					100,
+					{ min: 8, max: 15 },
+					"tallGrass",
+					this.player,
+					this.goToGrasslands
+				);
+			case "city":
+				return this.goToCity();
+			case "forest":
+				return this.goToForest();
+			case "lake":
+				return this.goToLake();
+			default:
+				return getMenu(this.player, this.goToGrasslands);
 		}
 	};
 }

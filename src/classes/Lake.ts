@@ -54,15 +54,15 @@ export class Lake implements LakeMethods {
 
 		console.log("\nYou are in the lake.");
 
-		const answer = await createPrompt(
+		const { selectedOption } = await createPrompt(
 			"Where do you want to go?",
 			lakeOptions
 		);
 
 		await delayMessage(null);
-		switch (answer.selectedOption) {
+		switch (selectedOption) {
 			case "fish":
-				searchForLinemon(
+				return searchForLinemon(
 					waterOptions,
 					70,
 					{ min: 12, max: 20 },
@@ -70,9 +70,8 @@ export class Lake implements LakeMethods {
 					this.player,
 					this.goToLake
 				);
-				break;
 			case "tallGrass":
-				searchForLinemon(
+				return searchForLinemon(
 					tallGrassOptions,
 					100,
 					{ min: 10, max: 16 },
@@ -80,19 +79,14 @@ export class Lake implements LakeMethods {
 					this.player,
 					this.goToLake
 				);
-				break;
 			case "lakeCity":
-				this.goToLakeCity();
-				break;
+				return this.goToLakeCity();
 			case "grasslands":
-				this.goToGrasslands();
-				break;
+				return this.goToGrasslands();
 			case "forest":
-				this.goToForest();
-				break;
+				return this.goToForest();
 			default:
-				getMenu(this.player, this.goToLake);
-				break;
+				return getMenu(this.player, this.goToLake);
 		}
 	};
 }
