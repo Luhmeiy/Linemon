@@ -9,6 +9,24 @@
 		"health": 20
 	},
 	{
+		"id": "superPotion",
+		"name": "Super Potion",
+		"description": "Heals the HP of your Linemon by 50 points.",
+		"price": 250,
+		"category": "consumable",
+		"type": "potion",
+		"health": 50
+	},
+	{
+		"id": "hyperPotion",
+		"name": "Hyper Potion",
+		"description": "Heals the HP of your Linemon by 100 points.",
+		"price": 400,
+		"category": "consumable",
+		"type": "potion",
+		"health": 100
+	},
+	{
 		"id": "disk",
 		"name": "Floppy Disk",
 		"description": "Used for catching Linemons.",

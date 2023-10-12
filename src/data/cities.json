@@ -13,7 +13,7 @@
 				"value": "grasslands"
 			}
 		],
-		"shopItemsIds": ["potion", "disk"]
+		"shopItemsIds": ["potion", "superPotion", "disk"]
 	},
 	{
 		"id": "lakeCity",
@@ -29,6 +29,12 @@
 				"value": "lake"
 			}
 		],
-		"shopItemsIds": ["potion", "disk", "silverDisk", "fishingRod"]
+		"shopItemsIds": [
+			"potion",
+			"superPotion",
+			"disk",
+			"silverDisk",
+			"fishingRod"
+		]
 	}
 ]
