@@ -19,17 +19,13 @@ export const getMenu = async (
 
 		switch (answer.selectedOption) {
 			case "player":
-				player.getStatus(startMenu);
-				break;
+				return player.getStatus(startMenu);
 			case "team":
-				player.getTeam(startMenu);
-				break;
+				return player.getTeam(startMenu);
 			case "inventory":
-				player.getInventory(startMenu);
-				break;
+				return player.getInventory(startMenu);
 			case "back":
-				returnFunction();
-				break;
+				return returnFunction();
 		}
 	};
 

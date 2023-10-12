@@ -26,12 +26,7 @@ export const attack = async (
 ) => {
 	if (attackingLinemon.status.currentPp >= move.pp) {
 		const random = randomIntFromInterval(1, 100);
-
 		if (random <= move.accuracy) {
-			await delayMessage(
-				`${attackingLinemon.info.name} used ${move.name}.`
-			);
-
 			const modifiers = getTypeModifier(
 				move.type,
 				defendingLinemon.info.type
@@ -45,23 +40,27 @@ export const attack = async (
 
 			attackingLinemon.status.currentPp -= move.pp;
 			defendingLinemon.status.currentHp -= damage;
+
+			await delayMessage(
+				`${attackingLinemon.info.name} used ${move.name}.`
+			);
+
 			await delayMessage(
 				`${attackingLinemon.info.name} dealt ${damage} damage to ${defendingLinemon.info.name}.\n`
 			);
 		} else {
-			const spinner = createSpinner("Catching...").start();
-			spinner.error({
+			attackingLinemon.status.currentPp -= move.pp;
+
+			createSpinner().error({
 				text: `${attackingLinemon.info.name} missed.`,
 			});
 
 			await delayMessage(" ");
 		}
 	} else {
-		attackingLinemon.sleep();
+		const recover = attackingLinemon.sleep();
 		await delayMessage(
-			`${attackingLinemon.info.name} slept and recovered ${
-				attackingLinemon.status.maxPp / 2
-			} pp.\n`
+			`${attackingLinemon.info.name} slept and recovered ${recover} pp.\n`
 		);
 	}
 };

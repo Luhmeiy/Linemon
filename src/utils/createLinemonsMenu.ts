@@ -45,58 +45,52 @@ export const createLinemonsMenu = async (
 
 	if (linemons.length === 0) {
 		await delayMessage(noLinemonsMessage!);
-		returnFunction();
-	} else {
-		const availableLinemons: Option = [
-			...createOptions(linemons),
-			defaultOption,
-		];
+		return returnFunction();
+	}
 
-		const answer = await createPrompt(
-			"Choose a Linemon: ",
-			availableLinemons
-		);
+	const availableLinemons: Option = [
+		...createOptions(linemons),
+		defaultOption,
+	];
 
-		if (answer.selectedOption !== "back") {
-			const linemonId = Number(answer.selectedOption);
-			const linemon = linemons[linemonId];
+	const answer = await createPrompt("Choose a Linemon: ", availableLinemons);
 
-			const linemonAnswer = await createPrompt(
-				linemon.info.name,
-				linemonOptions
-			);
+	if (answer.selectedOption === "back") {
+		return returnFunction();
+	}
 
-			switch (linemonAnswer.selectedOption) {
-				case "status":
-					await delayMessage(`HP: (${linemon.status.currentHp}/${linemon.status.maxHp})
+	const linemonId = Number(answer.selectedOption);
+	const linemon = linemons[linemonId];
+
+	const linemonAnswer = await createPrompt(linemon.info.name, linemonOptions);
+
+	switch (linemonAnswer.selectedOption) {
+		case "status":
+			await delayMessage(`HP: (${linemon.status.currentHp}/${linemon.status.maxHp})
 ATK: ${linemon.status.atk}
 DEF: ${linemon.status.def}
 SPD: ${linemon.status.spd}\n`);
-					break;
-				case "description":
-					await delayMessage(
-						`${linemon.info.name}: ${linemon.info.description}\n`
-					);
-					break;
-				case "switch":
-					removeFunction(linemonId);
-					await addFunction(linemon);
-					break;
-				case "release":
-					await delayMessage(`${linemon.info.name} was released.\n`);
-					removeFunction(linemonId);
-					break;
-			}
-
-			createLinemonsMenu(
-				origin,
-				linemons,
-				addFunction,
-				removeFunction,
-				returnFunction
+			break;
+		case "description":
+			await delayMessage(
+				`${linemon.info.name}: ${linemon.info.description}\n`
 			);
-		} else {
-			returnFunction();
-		}
+			break;
+		case "switch":
+			removeFunction(linemonId);
+			await addFunction(linemon);
+			break;
+		case "release":
+			await delayMessage(`${linemon.info.name} was released.\n`);
+			removeFunction(linemonId);
+			break;
 	}
+
+	createLinemonsMenu(
+		origin,
+		linemons,
+		addFunction,
+		removeFunction,
+		returnFunction
+	);
 };

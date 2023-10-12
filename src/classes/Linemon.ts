@@ -26,9 +26,13 @@ export class Linemon implements LinemonProps {
 	};
 
 	sleep = () => {
-		const recover = this.status!.currentPp + this.status!.maxPp / 2;
+		const { currentPp, maxPp } = this.status;
 
-		this.status!.currentPp =
-			recover > this.status!.maxPp ? this.status!.maxPp : recover;
+		const recover =
+			currentPp + maxPp / 2 > maxPp ? maxPp - currentPp : maxPp / 2;
+
+		this.status.currentPp += recover;
+
+		return recover;
 	};
 }

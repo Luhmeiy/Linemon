@@ -96,6 +96,7 @@ export class City implements CityMethods {
 
 				for (const linemon of team) {
 					linemon.status.currentHp = linemon.status.maxHp;
+					linemon.status.currentPp = linemon.status.maxPp;
 				}
 
 				await delayMessage("Your Linemons are healed.");

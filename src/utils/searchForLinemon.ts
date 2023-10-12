@@ -90,18 +90,16 @@ export const searchForLinemon = (
 		wildLinemon?: LinemonProps,
 		catchLinemon?: boolean,
 		diskBonus?: number
-	) => {
+	): Promise<any> => {
 		if (!wildLinemon) {
 			const randomNumber = randomIntFromInterval(1, 100);
-
 			const linemonId = randomIntFromInterval(
 				0,
 				linemonOptions.length - 1
 			);
-			const shinyNumber = randomIntFromInterval(1, 1000);
 
-			let isShiny = false;
-			if (shinyNumber === 1000) isShiny = true;
+			const shinyNumber = randomIntFromInterval(1, 1000);
+			let isShiny = shinyNumber === 1000 ? true : false;
 
 			const { id, info, minMaxStatus } = getFromJson(
 				jsonLinemons,
@@ -117,7 +115,6 @@ export const searchForLinemon = (
 			console.log(" ");
 
 			const spinner = createSpinner(searchText).start();
-
 			await delayMessage(null);
 
 			if (randomNumber <= findingChance) {
@@ -154,10 +151,6 @@ export const searchForLinemon = (
 		}
 
 		if (catchLinemon) {
-			console.log(" ");
-
-			const spinner = createSpinner("Catching...").start();
-
 			const catchProbability =
 				((3 * wildLinemon.status.maxHp -
 					2 * wildLinemon.status.currentHp) *
@@ -167,6 +160,9 @@ export const searchForLinemon = (
 
 			const randomNumber = randomIntFromInterval(0, 255);
 
+			console.log(" ");
+
+			const spinner = createSpinner("Catching...").start();
 			await delayMessage(null);
 
 			if (catchProbability >= randomNumber) {
@@ -175,15 +171,8 @@ export const searchForLinemon = (
 				});
 
 				player.setLinemonsCaught(wildLinemon.id);
+				await player.addToTeam(wildLinemon);
 
-				const caughtLinemon = new Linemon(
-					wildLinemon.id,
-					wildLinemon.info,
-					wildLinemon.status,
-					wildLinemon.moves
-				);
-
-				await player.addToTeam(caughtLinemon);
 				return search();
 			} else {
 				spinner.error({
@@ -220,14 +209,11 @@ Type: ${type}`);
 			case "status":
 				await delayMessage(`HP: (${linemon.status.currentHp}/${linemon.status.maxHp})
 PP: (${linemon.status.currentPp}/${linemon.status.maxPp})\n`);
-				findLinemon(wildLinemon);
-				break;
+				return findLinemon(wildLinemon);
 			case "fight":
-				getCombatMenu(findLinemon, linemon, wildLinemon);
-				break;
+				return getCombatMenu(findLinemon, linemon, wildLinemon);
 			case "catch":
-				player.getDisks(findLinemon, wildLinemon);
-				break;
+				return player.getDisks(findLinemon, wildLinemon);
 			case "inventory":
 				const response = await player.getConsumables(
 					findLinemon,
@@ -250,17 +236,15 @@ PP: (${linemon.status.currentPp}/${linemon.status.maxPp})\n`);
 		}
 	};
 
-	const search = async () => {
+	const search = async (): Promise<any> => {
 		const answer = await createPrompt("What do you want to do?", options);
 
 		await delayMessage(null);
 		switch (answer.selectedOption) {
 			case "exit":
-				returnToOrigin();
-				break;
+				return returnToOrigin();
 			case "continue":
-				findLinemon();
-				break;
+				return findLinemon();
 		}
 	};
 
