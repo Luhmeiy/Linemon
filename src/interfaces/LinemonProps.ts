@@ -6,8 +6,11 @@ export interface LinemonProps {
 	info: {
 		name: string;
 		description: string;
+		xp: number;
+		xpToNextLevel: number;
 		lvl: number;
 		evolvesAt?: number;
+		evolutionFamily?: string;
 		evolutionStage: number;
 		type: string;
 		isShiny: boolean;
@@ -33,4 +36,6 @@ export interface LinemonProps {
 	) => number;
 
 	sleep: () => void;
+	setXp: (newXp: number) => void;
+	evolve: () => void;
 }

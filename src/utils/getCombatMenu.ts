@@ -34,7 +34,7 @@ export const getCombatMenu = async (
 	const answer = await createPrompt("Choose your move: ", options);
 
 	if (answer.selectedOption === "back") {
-		console.log(" ");
+		console.log();
 		return returnFunction(adversary);
 	}
 
@@ -84,6 +84,16 @@ export const getCombatMenu = async (
 
 			if (secondToGo.status.currentHp <= 0) {
 				await delayMessage(`${secondToGo.info.name} was defeated.\n`);
+
+				if (firstToGo === linemon) {
+					const xp = (112 * adversary.info.lvl) / 7;
+					linemon.setXp(xp);
+
+					await delayMessage(
+						`${linemon.info.name} received ${xp} xp.\n`
+					);
+				}
+
 				return returnFunction(adversary);
 			}
 

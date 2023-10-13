@@ -67,6 +67,7 @@ export const createLinemonsMenu = async (
 	switch (linemonAnswer.selectedOption) {
 		case "status":
 			await delayMessage(`HP: (${linemon.status.currentHp}/${linemon.status.maxHp})
+LVL: ${linemon.info.lvl} (${linemon.info.xp}/${linemon.info.xpToNextLevel})
 ATK: ${linemon.status.atk}
 DEF: ${linemon.status.def}
 SPD: ${linemon.status.spd}\n`);

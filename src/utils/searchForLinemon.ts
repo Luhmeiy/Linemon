@@ -106,13 +106,15 @@ export const searchForLinemon = (
 				linemonOptions[linemonId]
 			);
 			info.lvl = randomIntFromInterval(level.min, level.max);
+			info.xp = 1;
+			info.xpToNextLevel = Math.floor((info.lvl + 1) ** 3 / 2);
 
 			const moves = generateMoves(info.type);
 			const status = generateStatus(minMaxStatus);
 
 			wildLinemon = new Linemon(id, { ...info, isShiny }, status, moves);
 
-			console.log(" ");
+			console.log();
 
 			const spinner = createSpinner(searchText).start();
 			await delayMessage(null);
@@ -122,7 +124,7 @@ export const searchForLinemon = (
 					text: `You found a ${wildLinemon.info.name}!`,
 				});
 
-				await delayMessage(" ");
+				await delayMessage(null);
 
 				console.log(
 					`You sent out ${await player.getFirstTeam().info.name}\n`
@@ -160,7 +162,7 @@ export const searchForLinemon = (
 
 			const randomNumber = randomIntFromInterval(0, 255);
 
-			console.log(" ");
+			console.log();
 
 			const spinner = createSpinner("Catching...").start();
 			await delayMessage(null);
