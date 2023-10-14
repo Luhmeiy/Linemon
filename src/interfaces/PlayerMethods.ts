@@ -1,4 +1,3 @@
-import type { Team } from "../classes/playerClasses/Team.js";
 import type { IShopItems } from "./IShopItems.js";
 import type { LinemonProps } from "./LinemonProps.js";
 
@@ -14,9 +13,17 @@ export interface ConsumableItem extends InventoryItem {
 	health?: number;
 }
 
+export interface DiskItem extends InventoryItem {
+	bonus:
+		| number
+		| {
+				[type: string]: number;
+		  };
+}
+
 export type InventoryType = {
 	consumable: ConsumableItem[];
-	disk: InventoryItem[];
+	disk: DiskItem[];
 	special: InventoryItem[];
 };
 

@@ -121,7 +121,7 @@ export const searchForLinemon = (
 
 			if (randomNumber <= findingChance) {
 				spinner.success({
-					text: `You found a ${wildLinemon.info.name}!`,
+					text: `You found a ${wildLinemon.info.name}!\n`,
 				});
 
 				await delayMessage(null);

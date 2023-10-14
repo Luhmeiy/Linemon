@@ -2,6 +2,7 @@ import type { IShopItems } from "../../interfaces/IShopItems.js";
 import type { LinemonProps } from "../../interfaces/LinemonProps.js";
 import type {
 	ConsumableItem,
+	DiskItem,
 	InventoryItem,
 	InventoryMethods,
 	InventoryType,
@@ -76,7 +77,7 @@ export class Inventory implements InventoryMethods {
 				);
 				break;
 			default:
-				console.log(" ");
+				console.log();
 				returnFunction();
 				break;
 		}
@@ -102,6 +103,10 @@ export class Inventory implements InventoryMethods {
 				break;
 			case "disk":
 				inventory = this.inventory.disk;
+				formattedItem = {
+					...formattedItem,
+					bonus: item.bonus,
+				} as DiskItem;
 				break;
 			case "special":
 				inventory = this.inventory.special;
@@ -137,14 +142,15 @@ export class Inventory implements InventoryMethods {
 		}
 	};
 
-	private selectDiskBonus = (id: string) => {
-		switch (id) {
+	private selectDiskBonus = (disk: DiskItem, type: string) => {
+		switch (disk.id) {
 			case "disk":
-				return 1;
-			case "silveDisk":
-				return 2;
+			case "silverDisk":
 			case "goldenDisk":
-				return 3;
+				return disk.bonus;
+			default:
+				// @ts-ignore
+				return disk.bonus[type] || 1;
 		}
 	};
 
@@ -171,7 +177,7 @@ export class Inventory implements InventoryMethods {
 		const answer = await createPrompt(message, options);
 
 		if (answer.selectedOption === "back") {
-			console.log(" ");
+			console.log();
 			return returnFunction();
 		}
 
@@ -344,7 +350,11 @@ export class Inventory implements InventoryMethods {
 
 				switch (itemAnswer.selectedOption) {
 					case "use":
-						const diskBonus = this.selectDiskBonus(item.id);
+						const diskBonus = this.selectDiskBonus(
+							item,
+							linemon.info.type
+						);
+						console.log(diskBonus);
 						this.removeFromInventory(item, this.inventory.disk);
 						return returnFunction(linemon, true, diskBonus);
 					case "quantity":
@@ -355,7 +365,7 @@ export class Inventory implements InventoryMethods {
 						break;
 				}
 
-				console.log(" ");
+				console.log();
 				this.getDisks(returnFunction, linemon);
 			}
 		}
@@ -390,7 +400,7 @@ export class Inventory implements InventoryMethods {
 						break;
 				}
 
-				console.log(" ");
+				console.log();
 				this.getInventory(returnFunction, team);
 			}
 		}

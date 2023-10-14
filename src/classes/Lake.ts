@@ -9,13 +9,6 @@ import { delayMessage } from "../utils/delayMessage.js";
 import { getMenu } from "../utils/getMenu.js";
 import { searchForLinemon } from "../utils/searchForLinemon.js";
 
-let lakeOptions = [
-	{ name: `Go to ${chalk.green("tall grass")}`, value: "tallGrass" },
-	{ name: "Go to LakeCity", value: "lakeCity" },
-	{ name: `Go to ${chalk.green("grasslands")}`, value: "grasslands" },
-	{ name: `Go to ${chalk.green("forest")}`, value: "forest" },
-];
-
 const tallGrassOptions = [
 	"aquablob",
 	"earthlet",
@@ -40,11 +33,17 @@ export class Lake implements LakeMethods {
 		private goToLakeCity: () => void,
 		private goToForest: () => void,
 		private player: PlayerMethods
-	) {
-		lakeOptions = addMenuToOptions(lakeOptions);
-	}
+	) {}
 
 	goToLake = async () => {
+		let lakeOptions = [
+			{ name: `Go to ${chalk.green("tall grass")}`, value: "tallGrass" },
+			{ name: "Go to LakeCity", value: "lakeCity" },
+			{ name: `Go to ${chalk.green("grasslands")}`, value: "grasslands" },
+			{ name: `Go to ${chalk.green("forest")}`, value: "forest" },
+		];
+		lakeOptions = addMenuToOptions(lakeOptions);
+
 		if (this.player.hasFishingRod()) {
 			lakeOptions.unshift({
 				name: `${chalk.blue("Fish")}`,

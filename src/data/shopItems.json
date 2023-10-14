@@ -31,21 +31,84 @@
 		"name": "Floppy Disk",
 		"description": "Used for catching Linemons.",
 		"price": 100,
-		"category": "disk"
+		"category": "disk",
+		"bonus": 1
 	},
 	{
 		"id": "silverDisk",
 		"name": "Silver Floppy Disk",
 		"description": "A little bit better at catching Linemons than the normal Floppy Disk.",
 		"price": 250,
-		"category": "disk"
+		"category": "disk",
+		"bonus": 2
 	},
 	{
 		"id": "goldenDisk",
 		"name": "Golden Floppy Disk",
 		"description": "A little bit better at catching Linemons than the Silver Floppy Disk.",
 		"price": 500,
-		"category": "disk"
+		"category": "disk",
+		"bonus": 3
+	},
+	{
+		"id": "redDisk",
+		"name": "Red Floppy Disk",
+		"description": "A Floppy Disk for catching fire types.",
+		"price": 350,
+		"category": "disk",
+		"bonus": {
+			"fire": 3
+		}
+	},
+	{
+		"id": "blueDisk",
+		"name": "Blue Floppy Disk",
+		"description": "A Floppy Disk for catching water types.",
+		"price": 350,
+		"category": "disk",
+		"bonus": {
+			"water": 3
+		}
+	},
+	{
+		"id": "greenDisk",
+		"name": "Green Floppy Disk",
+		"description": "A Floppy Disk for catching grass types.",
+		"price": 350,
+		"category": "disk",
+		"bonus": {
+			"grass": 3
+		}
+	},
+	{
+		"id": "yellowDisk",
+		"name": "Yellow Floppy Disk",
+		"description": "A Floppy Disk for catching electric types.",
+		"price": 350,
+		"category": "disk",
+		"bonus": {
+			"electric": 3
+		}
+	},
+	{
+		"id": "brownDisk",
+		"name": "Brown Floppy Disk",
+		"description": "A Floppy Disk for catching ground types.",
+		"price": 350,
+		"category": "disk",
+		"bonus": {
+			"ground": 3
+		}
+	},
+	{
+		"id": "grayDisk",
+		"name": "Gray Floppy Disk",
+		"description": "A Floppy Disk for catching wind types.",
+		"price": 350,
+		"category": "disk",
+		"bonus": {
+			"wind": 3
+		}
 	},
 	{
 		"id": "fishingRod",

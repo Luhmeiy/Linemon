@@ -6,4 +6,9 @@ export interface IShopItems {
 	category: "consumable" | "disk" | "special";
 	type?: string;
 	health?: number;
+	bonus?:
+		| number
+		| {
+				[type: string]: number;
+		  };
 }
