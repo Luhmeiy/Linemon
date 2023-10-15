@@ -7,7 +7,6 @@ import { createSpinner } from "nanospinner";
 import type { IShopItems } from "../interfaces/IShopItems.js";
 import type { PlayerMethods } from "../interfaces/PlayerMethods.js";
 import type { Option } from "../types/Option.js";
-import type { ShopMethods } from "../types/ShopMethods.js";
 
 import { createPrompt } from "../utils/createPrompt.js";
 import { delayMessage } from "../utils/delayMessage.js";
@@ -26,7 +25,7 @@ const itemOptions = [
 	{ name: "Go back", value: "back" },
 ];
 
-export class Shop implements ShopMethods {
+export class Shop {
 	private shopConsumableOptions: Option;
 	private shopDiskOptions: Option;
 	private shopSpecialOptions: Option;

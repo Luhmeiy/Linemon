@@ -1,6 +1,5 @@
 import chalk from "chalk";
 
-import type { GrasslandsMethods } from "../types/GrasslandsMethods.js";
 import type { PlayerMethods } from "../interfaces/PlayerMethods.js";
 
 import { addMenuToOptions } from "../utils/addMenuToOptions.js";
@@ -25,7 +24,7 @@ const linemonOptions = [
 	"greenling",
 ];
 
-export class Grasslands implements GrasslandsMethods {
+export class Grasslands {
 	constructor(
 		private goToCity: () => void,
 		private goToForest: () => void,

@@ -2,10 +2,11 @@ import jsonCities from "../data/cities.json" assert { type: "json" };
 
 import chalk from "chalk";
 
-import type { CityMethods, CityProps } from "../interfaces/CityProps.js";
+import type { CityProps } from "../interfaces/CityProps.js";
 import type { PlayerMethods } from "../interfaces/PlayerMethods.js";
-import type { ShopMethods } from "../types/ShopMethods.js";
 import type { Option } from "../types/Option.js";
+
+import { Shop } from "./Shop.js";
 
 import { addMenuToOptions } from "../utils/addMenuToOptions.js";
 import { createPrompt } from "../utils/createPrompt.js";
@@ -14,21 +15,19 @@ import { getMenu } from "../utils/getMenu.js";
 import { getFromJson } from "../utils/getFromJson.js";
 import { stringToTemplateLiteral } from "../utils/stringToTemplateLiteral.js";
 
-import { Shop } from "./Shop.js";
-
 const healingOptions = [
 	{ name: "Heal", value: "heal" },
 	{ name: "PC", value: "pc" },
 	{ name: "Go back", value: "healingExit" },
 ];
 
-export class City implements CityMethods {
+export class City {
 	private selectedCity: CityProps;
 
 	private name: string;
 	private cityOptions: Option;
 
-	private shop: ShopMethods;
+	private shop: Shop;
 
 	constructor(
 		private id: string,

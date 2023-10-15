@@ -1,6 +1,5 @@
 import chalk from "chalk";
 
-import type { LakeMethods } from "../types/LakeMethods.js";
 import type { PlayerMethods } from "../interfaces/PlayerMethods.js";
 
 import { addMenuToOptions } from "../utils/addMenuToOptions.js";
@@ -27,7 +26,7 @@ const waterOptions = [
 	"zephyrwing",
 ];
 
-export class Lake implements LakeMethods {
+export class Lake {
 	constructor(
 		private goToGrasslands: () => void,
 		private goToLakeCity: () => void,

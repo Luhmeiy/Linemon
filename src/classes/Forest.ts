@@ -1,6 +1,5 @@
 import chalk from "chalk";
 
-import type { ForestMethods } from "../types/ForestMethods.js";
 import type { PlayerMethods } from "../interfaces/PlayerMethods.js";
 
 import { addMenuToOptions } from "../utils/addMenuToOptions.js";
@@ -24,7 +23,7 @@ const linemonOptions = [
 	"breezlet",
 ];
 
-export class Forest implements ForestMethods {
+export class Forest {
 	constructor(
 		private goToGrasslands: () => void,
 		private goToLake: () => void,
