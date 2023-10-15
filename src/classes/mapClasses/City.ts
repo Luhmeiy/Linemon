@@ -1,19 +1,19 @@
-import jsonCities from "../data/cities.json" assert { type: "json" };
+import jsonCities from "../../data/cities.json" assert { type: "json" };
 
 import chalk from "chalk";
 
-import type { CityProps } from "../interfaces/CityProps.js";
-import type { PlayerMethods } from "../interfaces/PlayerMethods.js";
-import type { Option } from "../types/Option.js";
+import type { CityProps } from "../../interfaces/CityProps.js";
+import type { PlayerMethods } from "../../interfaces/PlayerMethods.js";
+import type { Option } from "../../types/Option.js";
 
 import { Shop } from "./Shop.js";
 
-import { addMenuToOptions } from "../utils/addMenuToOptions.js";
-import { createPrompt } from "../utils/createPrompt.js";
-import { delayMessage } from "../utils/delayMessage.js";
-import { getMenu } from "../utils/getMenu.js";
-import { getFromJson } from "../utils/getFromJson.js";
-import { stringToTemplateLiteral } from "../utils/stringToTemplateLiteral.js";
+import { addMenuToOptions } from "../../utils/addMenuToOptions.js";
+import { createPrompt } from "../../utils/createPrompt.js";
+import { delayMessage } from "../../utils/delayMessage.js";
+import { getMenu } from "../../utils/getMenu.js";
+import { getFromJson } from "../../utils/getFromJson.js";
+import { stringToTemplateLiteral } from "../../utils/stringToTemplateLiteral.js";
 
 const healingOptions = [
 	{ name: "Heal", value: "heal" },

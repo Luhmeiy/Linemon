@@ -1,8 +1,12 @@
-import { City } from "./City.js";
-import { Forest } from "./Forest.js";
-import { Grasslands } from "./Grasslands.js";
-import { Lake } from "./Lake.js";
+import { Cave } from "./mapClasses/Cave.js";
+import { City } from "./mapClasses/City.js";
+import { Forest } from "./mapClasses/Forest.js";
+import { Grasslands } from "./mapClasses/Grasslands.js";
+import { Lake } from "./mapClasses/Lake.js";
 import { Player } from "./Player.js";
+
+import { createPrompt } from "../utils/createPrompt.js";
+import { delayMessage } from "../utils/delayMessage.js";
 
 export class Map {
 	private player: Player;
@@ -10,6 +14,7 @@ export class Map {
 	private city: City;
 	private lakeCity: City;
 
+	private cave: Cave;
 	private forest: Forest;
 	private grasslands: Grasslands;
 	private lake: Lake;
@@ -20,8 +25,11 @@ export class Map {
 		this.city = new City("city", this.player, this.goToGrasslands);
 		this.lakeCity = new City("lakeCity", this.player, this.goToLake);
 
+		this.cave = new Cave(this.goToForest, this.player);
+
 		this.forest = new Forest(
 			this.goToGrasslands,
+			this.goToMountain,
 			this.goToLake,
 			this.player
 		);
@@ -46,6 +54,32 @@ export class Map {
 	// Directions
 	goToCity = () => this.city.goToCityCenter();
 	goToLakeCity = () => this.lakeCity.goToCityCenter();
+
+	goToMountain = async (direction: "top" | "bottom") => {
+		switch (direction) {
+			case "bottom":
+				await delayMessage(
+					"To get to the mountain you first need to go through a cave.\n"
+				);
+
+				const { selectedOption } = await createPrompt(
+					"Do you want to go inside the cave?",
+					[
+						{ name: "Yes", value: "yes" },
+						{ name: "No", value: "no" },
+					]
+				);
+
+				switch (selectedOption) {
+					case "yes":
+						return this.cave.goToCave();
+					default:
+						return this.goToForest();
+				}
+			case "top":
+				return this.cave.goToCave();
+		}
+	};
 
 	goToForest = () => this.forest.goToForest();
 	goToGrasslands = () => this.grasslands.goToGrasslands();

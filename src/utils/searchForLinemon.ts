@@ -23,7 +23,7 @@ export const searchForLinemon = (
 	linemonOptions: string[],
 	findingChance: number,
 	level: { min: number; max: number },
-	location: "tallGrass" | "water",
+	location: "tallGrass" | "cave" | "water",
 	player: PlayerMethods,
 	returnToOrigin: () => void
 ) => {
@@ -32,6 +32,7 @@ export const searchForLinemon = (
 
 	switch (location) {
 		case "tallGrass":
+		case "cave":
 			options.unshift({ name: "Keep walking", value: "continue" });
 			searchText = "Searching for Linemon...";
 			break;

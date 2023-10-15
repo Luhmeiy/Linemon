@@ -1,15 +1,16 @@
 import chalk from "chalk";
 
-import type { PlayerMethods } from "../interfaces/PlayerMethods.js";
+import type { PlayerMethods } from "../../interfaces/PlayerMethods.js";
 
-import { addMenuToOptions } from "../utils/addMenuToOptions.js";
-import { createPrompt } from "../utils/createPrompt.js";
-import { delayMessage } from "../utils/delayMessage.js";
-import { getMenu } from "../utils/getMenu.js";
-import { searchForLinemon } from "../utils/searchForLinemon.js";
+import { addMenuToOptions } from "../../utils/addMenuToOptions.js";
+import { createPrompt } from "../../utils/createPrompt.js";
+import { delayMessage } from "../../utils/delayMessage.js";
+import { getMenu } from "../../utils/getMenu.js";
+import { searchForLinemon } from "../../utils/searchForLinemon.js";
 
 let forestOptions = [
 	{ name: `Go to ${chalk.green("tall grass")}`, value: "tallGrass" },
+	{ name: `Go to mountain`, value: "mountain" },
 	{ name: `Go to ${chalk.green("grasslands")}`, value: "grasslands" },
 	{ name: `Go to ${chalk.blue("lake")}`, value: "lake" },
 ];
@@ -26,6 +27,7 @@ const linemonOptions = [
 export class Forest {
 	constructor(
 		private goToGrasslands: () => void,
+		private goToMountain: (direction: "top" | "bottom") => void,
 		private goToLake: () => void,
 		private player: PlayerMethods
 	) {
@@ -51,6 +53,8 @@ export class Forest {
 					this.player,
 					this.goToForest
 				);
+			case "mountain":
+				return this.goToMountain("bottom");
 			case "grasslands":
 				return this.goToGrasslands();
 			case "lake":

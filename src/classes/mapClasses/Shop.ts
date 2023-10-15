@@ -1,16 +1,16 @@
-import jsonShopItems from "../data/shopItems.json" assert { type: "json" };
+import jsonShopItems from "../../data/shopItems.json" assert { type: "json" };
 
 import chalk from "chalk";
 import inquirer from "inquirer";
 import { createSpinner } from "nanospinner";
 
-import type { IShopItems } from "../interfaces/IShopItems.js";
-import type { PlayerMethods } from "../interfaces/PlayerMethods.js";
-import type { Option } from "../types/Option.js";
+import type { IShopItems } from "../../interfaces/IShopItems.js";
+import type { PlayerMethods } from "../../interfaces/PlayerMethods.js";
+import type { Option } from "../../types/Option.js";
 
-import { createPrompt } from "../utils/createPrompt.js";
-import { delayMessage } from "../utils/delayMessage.js";
-import { getFromJson } from "../utils/getFromJson.js";
+import { createPrompt } from "../../utils/createPrompt.js";
+import { delayMessage } from "../../utils/delayMessage.js";
+import { getFromJson } from "../../utils/getFromJson.js";
 
 const categoryOptions = [
 	{ name: "Consumables", value: "consumable" },
