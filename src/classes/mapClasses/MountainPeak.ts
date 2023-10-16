@@ -1,5 +1,3 @@
-import chalk from "chalk";
-
 import type { PlayerMethods } from "../../interfaces/PlayerMethods.js";
 
 import { addMenuToOptions } from "../../utils/addMenuToOptions.js";
@@ -8,38 +6,37 @@ import { delayMessage } from "../../utils/delayMessage.js";
 import { getMenu } from "../../utils/getMenu.js";
 import { searchForLinemon } from "../../utils/searchForLinemon.js";
 
-let caveOptions = [
-	{ name: `Walk around`, value: "walk" },
+let mountainPeakOptions = [
+	{ name: "Walk around", value: "walk" },
 	{ name: "Go to MountainCity", value: "mountainCity" },
-	{ name: `Go to ${chalk.green("forest")}`, value: "forest" },
 ];
 
 const linemonOptions = [
-	"firebeast",
-	"firepup",
-	"fireling",
-	"fireball",
-	"firesprite",
-	"terramite",
-	"groundling",
-	"terraclysm",
+	"sparkling",
+	"shockling",
+	"voltling",
+	"sparklet",
+	"thundertail",
+	"zephyrwing",
+	"guslet",
+	"breezlet",
+	"zephyrete",
 ];
 
-export class Cave {
+export class MountainPeak {
 	constructor(
 		private goToMountainCity: () => void,
-		private goToForest: () => void,
 		private player: PlayerMethods
 	) {
-		caveOptions = addMenuToOptions(caveOptions);
+		mountainPeakOptions = addMenuToOptions(mountainPeakOptions);
 	}
 
-	goToCave = async () => {
-		console.log("\nYou are in the cave.");
+	goToMountainPeak = async () => {
+		console.log("\nYou are in the mountain peak.");
 
 		const { selectedOption } = await createPrompt(
 			"Where do you want to go?",
-			caveOptions
+			mountainPeakOptions
 		);
 
 		await delayMessage(null);
@@ -51,14 +48,12 @@ export class Cave {
 					{ min: 15, max: 20 },
 					"mountain",
 					this.player,
-					this.goToCave
+					this.goToMountainPeak
 				);
 			case "mountainCity":
 				return this.goToMountainCity();
-			case "forest":
-				return this.goToForest();
 			default:
-				return getMenu(this.player, this.goToCave);
+				return getMenu(this.player, this.goToMountainPeak);
 		}
 	};
 }

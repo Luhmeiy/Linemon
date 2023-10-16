@@ -3,6 +3,7 @@ import { City } from "./mapClasses/City.js";
 import { Forest } from "./mapClasses/Forest.js";
 import { Grasslands } from "./mapClasses/Grasslands.js";
 import { Lake } from "./mapClasses/Lake.js";
+import { MountainPeak } from "./mapClasses/MountainPeak.js";
 import { Player } from "./Player.js";
 
 import { createPrompt } from "../utils/createPrompt.js";
@@ -19,6 +20,7 @@ export class Map {
 	private forest: Forest;
 	private grasslands: Grasslands;
 	private lake: Lake;
+	private mountainPeak: MountainPeak;
 
 	constructor(name: string) {
 		this.player = new Player(name);
@@ -28,6 +30,7 @@ export class Map {
 		this.mountainCity = new City(
 			"mountainCity",
 			this.player,
+			this.goToMountainPeak,
 			this.goToMountain
 		);
 
@@ -58,7 +61,12 @@ export class Map {
 			this.player
 		);
 
-		this.city.goToCityCenter();
+		this.mountainPeak = new MountainPeak(
+			this.goToMountainCity,
+			this.player
+		);
+
+		this.mountainCity.goToCityCenter();
 	}
 
 	// Directions
@@ -95,4 +103,5 @@ export class Map {
 	goToForest = () => this.forest.goToForest();
 	goToGrasslands = () => this.grasslands.goToGrasslands();
 	goToLake = () => this.lake.goToLake();
+	goToMountainPeak = () => this.mountainPeak.goToMountainPeak();
 }

@@ -48,13 +48,18 @@
 				"value": "healingCenter"
 			},
 			{
-				"name": "Go to mountain",
-				"value": "mountain"
+				"name": "Go to mountain peak",
+				"value": "mountainPeak"
+			},
+			{
+				"name": "Go to cave",
+				"value": "cave"
 			}
 		],
 		"shopItemsIds": [
 			"potion",
 			"superPotion",
+			"hyperPotion",
 			"disk",
 			"silverDisk",
 			"goldenDisk",
