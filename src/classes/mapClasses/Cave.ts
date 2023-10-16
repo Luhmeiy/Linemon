@@ -10,6 +10,7 @@ import { searchForLinemon } from "../../utils/searchForLinemon.js";
 
 let caveOptions = [
 	{ name: `Walk around`, value: "walk" },
+	{ name: "Go to MountainCity", value: "mountainCity" },
 	{ name: `Go to ${chalk.green("forest")}`, value: "forest" },
 ];
 
@@ -25,7 +26,11 @@ const linemonOptions = [
 ];
 
 export class Cave {
-	constructor(private goToForest: () => void, private player: PlayerMethods) {
+	constructor(
+		private goToMountainCity: () => void,
+		private goToForest: () => void,
+		private player: PlayerMethods
+	) {
 		caveOptions = addMenuToOptions(caveOptions);
 	}
 
@@ -48,6 +53,8 @@ export class Cave {
 					this.player,
 					this.goToCave
 				);
+			case "mountainCity":
+				return this.goToMountainCity();
 			case "forest":
 				return this.goToForest();
 			default:

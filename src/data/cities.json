@@ -34,7 +34,33 @@
 			"superPotion",
 			"disk",
 			"silverDisk",
+			"blueDisk",
 			"fishingRod"
+		]
+	},
+	{
+		"id": "mountainCity",
+		"name": "MountainCity",
+		"cityOptions": [
+			{ "name": "Go to ${chalk.blue('shop')}", "value": "shop" },
+			{
+				"name": "Go to ${chalk.red('healing center')}",
+				"value": "healingCenter"
+			},
+			{
+				"name": "Go to mountain",
+				"value": "mountain"
+			}
+		],
+		"shopItemsIds": [
+			"potion",
+			"superPotion",
+			"disk",
+			"silverDisk",
+			"goldenDisk",
+			"redDisk",
+			"brownDisk",
+			"yellowDisk"
 		]
 	}
 ]

@@ -13,6 +13,7 @@ export class Map {
 
 	private city: City;
 	private lakeCity: City;
+	private mountainCity: City;
 
 	private cave: Cave;
 	private forest: Forest;
@@ -24,8 +25,17 @@ export class Map {
 
 		this.city = new City("city", this.player, this.goToGrasslands);
 		this.lakeCity = new City("lakeCity", this.player, this.goToLake);
+		this.mountainCity = new City(
+			"mountainCity",
+			this.player,
+			this.goToMountain
+		);
 
-		this.cave = new Cave(this.goToForest, this.player);
+		this.cave = new Cave(
+			this.goToMountainCity,
+			this.goToForest,
+			this.player
+		);
 
 		this.forest = new Forest(
 			this.goToGrasslands,
@@ -54,6 +64,7 @@ export class Map {
 	// Directions
 	goToCity = () => this.city.goToCityCenter();
 	goToLakeCity = () => this.lakeCity.goToCityCenter();
+	goToMountainCity = () => this.mountainCity.goToCityCenter();
 
 	goToMountain = async (direction: "top" | "bottom") => {
 		switch (direction) {

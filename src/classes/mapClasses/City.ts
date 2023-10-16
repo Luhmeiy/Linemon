@@ -32,7 +32,9 @@ export class City {
 	constructor(
 		private id: string,
 		private player: PlayerMethods,
-		private goToPlace: () => void
+		private goToPlace:
+			| (() => void)
+			| ((direction: "top" | "bottom") => Promise<void>)
 	) {
 		this.selectedCity = getFromJson(jsonCities, this.id);
 
@@ -68,10 +70,15 @@ export class City {
 				this.goToHealing();
 				break;
 			case "grasslands":
+				// @ts-ignore
 				this.goToPlace();
 				break;
 			case "lake":
+				// @ts-ignore
 				this.goToPlace();
+				break;
+			case "mountain":
+				await this.goToPlace("top");
 				break;
 			default:
 				getMenu(this.player, this.goToCityCenter);
