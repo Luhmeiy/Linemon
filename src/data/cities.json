@@ -16,6 +16,32 @@
 		"shopItemsIds": ["potion", "superPotion", "disk"]
 	},
 	{
+		"id": "desertCity",
+		"name": "DesertCity",
+		"cityOptions": [
+			{ "name": "Go to ${chalk.blue('shop')}", "value": "shop" },
+			{
+				"name": "Go to ${chalk.red('healing center')}",
+				"value": "healingCenter"
+			},
+			{
+				"name": "Go to desert",
+				"value": "desert"
+			}
+		],
+		"shopItemsIds": [
+			"potion",
+			"superPotion",
+			"hyperPotion",
+			"disk",
+			"silverDisk",
+			"goldenDisk",
+			"redDisk",
+			"yellowDisk",
+			"grayDisk"
+		]
+	},
+	{
 		"id": "lakeCity",
 		"name": "LakeCity",
 		"cityOptions": [
@@ -35,6 +61,7 @@
 			"disk",
 			"silverDisk",
 			"blueDisk",
+			"greenDisk",
 			"fishingRod"
 		]
 	},

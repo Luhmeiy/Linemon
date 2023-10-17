@@ -65,30 +65,22 @@ export class City {
 		await delayMessage(null);
 		switch (answer.selectedOption) {
 			case "shop":
-				this.shop.goToShop();
-				break;
+				return this.shop.goToShop();
 			case "healingCenter":
-				this.goToHealing();
-				break;
+				return this.goToHealing();
+			case "desert":
 			case "grasslands":
-				this.goToPlace();
-				break;
 			case "lake":
-				this.goToPlace();
-				break;
-			case "cave":
-				await this.goToSecundaryPlace!("top");
-				break;
 			case "mountainPeak":
-				await this.goToPlace();
-				break;
+				return this.goToPlace();
+			case "cave":
+				return await this.goToSecundaryPlace!("top");
 			default:
-				getMenu(this.player, this.goToCityCenter);
-				break;
+				return getMenu(this.player, this.goToCityCenter);
 		}
 	};
 
-	private goToHealing = async () => {
+	private goToHealing = async (): Promise<any> => {
 		console.log(
 			`\nYou are in ${this.name}'s ${chalk.red("healing center")}.`
 		);
@@ -108,8 +100,7 @@ export class City {
 				}
 
 				await delayMessage("Your Linemons are healed.");
-				this.goToHealing();
-				break;
+				return this.goToHealing();
 			case "pc":
 				return this.player.getPC(this.goToHealing);
 			default:

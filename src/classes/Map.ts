@@ -14,6 +14,7 @@ export class Map {
 	private player: Player;
 
 	private city: City;
+	private desertCity: City;
 	private lakeCity: City;
 	private mountainCity: City;
 
@@ -28,6 +29,7 @@ export class Map {
 		this.player = new Player(name);
 
 		this.city = new City("city", this.player, this.goToGrasslands);
+		this.desertCity = new City("desertCity", this.player, this.goToDesert);
 		this.lakeCity = new City("lakeCity", this.player, this.goToLake);
 		this.mountainCity = new City(
 			"mountainCity",
@@ -43,7 +45,11 @@ export class Map {
 			this.player
 		);
 
-		this.desert = new Desert(this.goToMountain, this.player);
+		this.desert = new Desert(
+			this.goToDesertCity,
+			this.goToMountain,
+			this.player
+		);
 
 		this.forest = new Forest(
 			this.goToGrasslands,
@@ -76,6 +82,7 @@ export class Map {
 
 	// Directions
 	goToCity = () => this.city.goToCityCenter();
+	goToDesertCity = () => this.desertCity.goToCityCenter();
 	goToLakeCity = () => this.lakeCity.goToCityCenter();
 	goToMountainCity = () => this.mountainCity.goToCityCenter();
 

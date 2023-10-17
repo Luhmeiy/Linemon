@@ -8,6 +8,7 @@ import { searchForLinemon } from "../../utils/searchForLinemon.js";
 
 let desertOptions = [
 	{ name: "Walk around", value: "walk" },
+	{ name: "Go to DesertCity", value: "desertCity" },
 	{ name: "Go to mountain", value: "mountain" },
 ];
 
@@ -22,6 +23,7 @@ const linemonOptions = [
 
 export class Desert {
 	constructor(
+		private goToDesertCity: () => void,
 		private goToMountain: (direction: "top" | "bottom") => void,
 		private player: PlayerMethods
 	) {
@@ -47,6 +49,8 @@ export class Desert {
 					this.player,
 					this.goToDesert
 				);
+			case "desertCity":
+				return this.goToDesertCity();
 			case "mountain":
 				return this.goToMountain("bottom");
 			default:
