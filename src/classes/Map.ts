@@ -1,5 +1,6 @@
 import { Cave } from "./mapClasses/Cave.js";
 import { City } from "./mapClasses/City.js";
+import { Desert } from "./mapClasses/Desert.js";
 import { Forest } from "./mapClasses/Forest.js";
 import { Grasslands } from "./mapClasses/Grasslands.js";
 import { Lake } from "./mapClasses/Lake.js";
@@ -17,6 +18,7 @@ export class Map {
 	private mountainCity: City;
 
 	private cave: Cave;
+	private desert: Desert;
 	private forest: Forest;
 	private grasslands: Grasslands;
 	private lake: Lake;
@@ -36,9 +38,12 @@ export class Map {
 
 		this.cave = new Cave(
 			this.goToMountainCity,
+			this.goToDesert,
 			this.goToForest,
 			this.player
 		);
+
+		this.desert = new Desert(this.goToMountain, this.player);
 
 		this.forest = new Forest(
 			this.goToGrasslands,
@@ -66,7 +71,7 @@ export class Map {
 			this.player
 		);
 
-		this.mountainCity.goToCityCenter();
+		this.city.goToCityCenter();
 	}
 
 	// Directions
@@ -100,6 +105,7 @@ export class Map {
 		}
 	};
 
+	goToDesert = () => this.desert.goToDesert();
 	goToForest = () => this.forest.goToForest();
 	goToGrasslands = () => this.grasslands.goToGrasslands();
 	goToLake = () => this.lake.goToLake();
