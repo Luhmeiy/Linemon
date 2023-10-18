@@ -10,9 +10,10 @@ export class PC implements PCMethods {
 	constructor(
 		private addToTeam: (
 			linemon: LinemonProps
-		) => Promise<LinemonProps | undefined>
+		) => Promise<LinemonProps | undefined>,
+		pc?: LinemonProps[]
 	) {
-		this.pc = [];
+		this.pc = pc || [];
 	}
 
 	getPC = async (returnFunction: () => void) => {

@@ -17,6 +17,7 @@ import { PC } from "./playerClasses/PC.js";
 import { Team } from "./playerClasses/Team.js";
 
 export class Player implements PlayerMethods {
+	private name: string;
 	private money: number;
 	private linemonsSeen: string[];
 	private linemonsCaught: string[];
@@ -25,14 +26,29 @@ export class Player implements PlayerMethods {
 	private pc: PCMethods;
 	private inventory: InventoryMethods;
 
-	constructor(private name: string) {
-		this.money = 1000;
-		this.linemonsSeen = [];
-		this.linemonsCaught = [];
+	constructor(player: string | Player) {
+		if (typeof player === "string") {
+			this.name = player;
+			this.money = 1000;
+			this.linemonsSeen = [];
+			this.linemonsCaught = [];
 
-		this.team = new Team(this.addToPC);
-		this.pc = new PC(this.addToTeam);
-		this.inventory = new Inventory();
+			this.team = new Team(this.addToPC);
+			this.pc = new PC(this.addToTeam);
+			this.inventory = new Inventory();
+		} else {
+			this.name = player.name;
+			this.money = player.money;
+			this.linemonsSeen = player.linemonsSeen;
+			this.linemonsCaught = player.linemonsCaught;
+
+			//@ts-ignore
+			this.team = new Team(this.addToPC, player.team.team);
+			//@ts-ignore
+			this.pc = new PC(this.addToTeam, player.pc.pc);
+			//@ts-ignore
+			this.inventory = new Inventory(player.inventory.inventory);
+		}
 	}
 
 	// Player

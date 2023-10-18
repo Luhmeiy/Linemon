@@ -25,8 +25,8 @@ export class Map {
 	private lake: Lake;
 	private mountainPeak: MountainPeak;
 
-	constructor(name: string) {
-		this.player = new Player(name);
+	constructor(player: string | Player) {
+		this.player = new Player(player);
 
 		this.city = new City("city", this.player, this.goToGrasslands);
 		this.desertCity = new City("desertCity", this.player, this.goToDesert);

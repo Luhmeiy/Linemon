@@ -8,8 +8,11 @@ import { delayMessage } from "../../utils/delayMessage.js";
 export class Team implements TeamMethods {
 	private team: LinemonProps[];
 
-	constructor(private addToPC: (linemon: LinemonProps) => void) {
-		this.team = [];
+	constructor(
+		private addToPC: (linemon: LinemonProps) => void,
+		team?: LinemonProps[]
+	) {
+		this.team = team || [];
 	}
 
 	getTeam = async (returnFunction: () => void) => {

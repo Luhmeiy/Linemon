@@ -31,8 +31,8 @@ const defaultOption = { name: "Go back", value: "back" };
 export class Inventory implements InventoryMethods {
 	inventory: InventoryType;
 
-	constructor() {
-		this.inventory = {
+	constructor(inventory?: InventoryType) {
+		this.inventory = inventory || {
 			consumable: [],
 			disk: [],
 			special: [],
@@ -115,7 +115,8 @@ export class Inventory implements InventoryMethods {
 
 		const response = this.increaseQuantityIfItemExists(
 			inventory,
-			item.name
+			item.name,
+			quantity
 		);
 
 		if (!response) inventory.push(formattedItem);
@@ -123,11 +124,12 @@ export class Inventory implements InventoryMethods {
 
 	private increaseQuantityIfItemExists = (
 		inventory: InventoryItem[],
-		itemName: string
+		itemName: string,
+		quantity: number
 	) => {
 		for (const item of inventory) {
 			if (item.name === itemName) {
-				item.quantity += 1;
+				item.quantity += quantity;
 				return true;
 			}
 		}
