@@ -35,5 +35,222 @@
 		"accuracy": 100,
 		"pp": 15,
 		"isFirst": true
+	},
+	{
+		"id": "emberWave",
+		"name": "Ember Wave",
+		"description": "Blasts the opponent with a wave of scorching embers.",
+		"type": "fire",
+		"power": 40,
+		"accuracy": 90,
+		"pp": 10
+	},
+	{
+		"id": "flameBurst",
+		"name": "Flame Burst",
+		"description": "Creates an explosion of fiery energy.",
+		"type": "fire",
+		"power": 50,
+		"accuracy": 85,
+		"pp": 11
+	},
+	{
+		"id": "infernoPulse",
+		"name": "Inferno Pulse",
+		"description": "Unleashes a powerful pulse of inferno, dealing massive fire damage to the opponent.",
+		"type": "fire",
+		"power": 70,
+		"accuracy": 80,
+		"pp": 10
+	},
+	{
+		"id": "blazeStrike",
+		"name": "Blaze Strike",
+		"description": "Charges into the opponent with fiery speed, causing great damage.",
+		"type": "fire",
+		"power": 70,
+		"accuracy": 85,
+		"pp": 12
+	},
+	{
+		"id": "aquaBlast",
+		"name": "Aqua Blast",
+		"description": "Shoots a powerful burst of pressurized water at the opponent with good power and accuracy.",
+		"type": "water",
+		"power": 70,
+		"accuracy": 95,
+		"pp": 12
+	},
+	{
+		"id": "tidalSurge",
+		"name": "Tidal Surge",
+		"description": "Summons a surging wave of water to crash into the opponent, dealing moderate damage.",
+		"type": "water",
+		"power": 60,
+		"accuracy": 90,
+		"pp": 10
+	},
+	{
+		"id": "hydroStrike",
+		"name": "Hydro Strike",
+		"description": "Executes a precise and powerful strike with water's energy.",
+		"type": "water",
+		"power": 65,
+		"accuracy": 85,
+		"pp": 11
+	},
+	{
+		"id": "torrentialRush",
+		"name": "Torrential Rush",
+		"description": "Charges at the opponent with the force of a raging river.",
+		"type": "water",
+		"power": 80,
+		"accuracy": 70,
+		"pp": 10
+	},
+	{
+		"id": "vineWhip",
+		"name": "Vine Whip",
+		"description": "Strikes the opponent with long, whip-like vines, delivering a swift and accurate attack.",
+		"type": "grass",
+		"power": 40,
+		"accuracy": 100,
+		"pp": 10,
+		"isFirst": true
+	},
+	{
+		"id": "leafBlade",
+		"name": "Leaf Blade",
+		"description": "Empowers the Linemon's blade-like leaves to execute a precise and powerful strike.",
+		"type": "grass",
+		"power": 80,
+		"accuracy": 80,
+		"pp": 11
+	},
+	{
+		"id": "photosynthesisBeam",
+		"name": "Photosynthesis Beam",
+		"description": "Harnesses the power of sunlight to release a beam of energy.",
+		"type": "grass",
+		"power": 65,
+		"accuracy": 85,
+		"pp": 10
+	},
+	{
+		"id": "thornStrike",
+		"name": "Thorn Strike",
+		"description": "Fires sharp thorns at the opponent.",
+		"type": "grass",
+		"power": 60,
+		"accuracy": 90,
+		"pp": 12
+	},
+	{
+		"id": "shockBolt",
+		"name": "Shock Bolt",
+		"description": "Fires a bolt of electric energy at the opponent.",
+		"type": "electric",
+		"power": 70,
+		"accuracy": 85,
+		"pp": 10
+	},
+	{
+		"id": "thunderStrike",
+		"name": "Thunder Strike",
+		"description": "Executes a precise and powerful electric strike.",
+		"type": "electric",
+		"power": 65,
+		"accuracy": 85,
+		"pp": 11
+	},
+	{
+		"id": "electroshockWave",
+		"name": "Electroshock Wave",
+		"description": "Unleashes a powerful wave of electric energy.",
+		"type": "electric",
+		"power": 70,
+		"accuracy": 95,
+		"pp": 12
+	},
+	{
+		"id": "zapCharge",
+		"name": "Zap Charge",
+		"description": "Charges at the opponent with electrifying speed.",
+		"type": "electric",
+		"power": 100,
+		"accuracy": 85,
+		"pp": 15
+	},
+	{
+		"id": "earthquake",
+		"name": "Earthquake",
+		"description": "Causes the ground to shake violently.",
+		"type": "ground",
+		"power": 70,
+		"accuracy": 85,
+		"pp": 11
+	},
+	{
+		"id": "sandstormStrike",
+		"name": "Sandstorm Strike",
+		"description": "Strikes the opponent with a sandstorm-infused attack.",
+		"type": "ground",
+		"power": 60,
+		"accuracy": 90,
+		"pp": 11
+	},
+	{
+		"id": "tremorWave",
+		"name": "Tremor Wave",
+		"description": "Creates a powerful wave of seismic energy.",
+		"type": "ground",
+		"power": 65,
+		"accuracy": 85,
+		"pp": 12
+	},
+	{
+		"id": "diggingStrike",
+		"name": "Digging Strike",
+		"description": "Digs into the ground and emerges to strike the opponent.",
+		"type": "ground",
+		"power": 60,
+		"accuracy": 90,
+		"pp": 12
+	},
+	{
+		"id": "gustBlow",
+		"name": "Gust Blow",
+		"description": "Unleashes a powerful gust of wind at the opponent.",
+		"type": "wind",
+		"power": 70,
+		"accuracy": 85,
+		"pp": 12
+	},
+	{
+		"id": "whirlwindStrike",
+		"name": "Whirlwind Strike",
+		"description": "Strikes the opponent with a whirlwind-infused attack.",
+		"type": "wind",
+		"power": 60,
+		"accuracy": 90,
+		"pp": 11
+	},
+	{
+		"id": "airSlicer",
+		"name": "Air Slicer",
+		"description": "Creates sharp slices of compressed air, dealing a precise and powerful strike.",
+		"type": "wind",
+		"power": 85,
+		"accuracy": 90,
+		"pp": 13
+	},
+	{
+		"id": "zephyrCharge",
+		"name": "Zephyr Charge",
+		"description": "Charges at the opponent with the speed of a zephyr, delivering a moderate damage.",
+		"type": "wind",
+		"power": 70,
+		"accuracy": 90,
+		"pp": 12
 	}
 ]
