@@ -3,6 +3,7 @@ import type { PlayerMethods } from "../interfaces/PlayerMethods.js";
 import { existsSync, mkdirSync, writeFileSync } from "fs";
 import moment from "moment";
 
+import { main } from "../app.js";
 import { createPrompt } from "./createPrompt.js";
 import { delayMessage } from "./delayMessage.js";
 
@@ -11,6 +12,7 @@ const actionsOptions = [
 	{ name: "Team", value: "team" },
 	{ name: "Inventory", value: "inventory" },
 	{ name: "Save", value: "save" },
+	{ name: "Exit game", value: "exit" },
 	{ name: "Go back", value: "back" },
 ];
 
@@ -42,6 +44,20 @@ export const getMenu = async (
 				);
 
 				await delayMessage("Game saved!\n");
+				return getMenu(player, returnFunction);
+			case "exit":
+				const response = await createPrompt(
+					"Are you sure you want to exit? All unsaved progress will be lost.",
+					[
+						{ name: "Yes", value: "yes" },
+						{ name: "No", value: "no" },
+					]
+				);
+
+				if (response.selectedOption === "yes") {
+					return main();
+				}
+
 				return getMenu(player, returnFunction);
 			case "back":
 				return returnFunction();

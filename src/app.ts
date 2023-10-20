@@ -16,9 +16,10 @@ const promisedReaddir = promisify(readdir);
 const titleScreenOptions = [
 	{ name: "New game", value: "new" },
 	{ name: "Load game", value: "load" },
+	{ name: "Exit", value: "exit" },
 ];
 
-async function main() {
+export async function main() {
 	console.clear();
 
 	await generateTitle();
@@ -75,6 +76,8 @@ async function main() {
 			await delayMessage(`Welcome, ${data.name}`);
 
 			return new Map(data);
+		case "exit":
+			process.exit();
 	}
 }
 

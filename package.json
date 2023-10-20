@@ -5,7 +5,8 @@
 	"main": "app.ts",
 	"type": "module",
 	"scripts": {
-		"dev": "nodemon --exec node --loader ts-node/esm src/app.ts"
+		"dev": "nodemon --exec node --loader ts-node/esm src/app.ts",
+		"start": "node --loader ts-node/esm src/app.ts"
 	},
 	"keywords": [],
 	"author": "",
@@ -28,3 +29,4 @@
 		"typescript": "^5.2.2"
 	}
 }
+
