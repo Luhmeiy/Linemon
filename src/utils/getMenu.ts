@@ -1,6 +1,7 @@
 import type { PlayerMethods } from "../interfaces/PlayerMethods.js";
 
 import { existsSync, mkdirSync, writeFileSync } from "fs";
+import moment from "moment";
 
 import { createPrompt } from "./createPrompt.js";
 import { delayMessage } from "./delayMessage.js";
@@ -31,7 +32,15 @@ export const getMenu = async (
 				return player.getInventory(startMenu);
 			case "save":
 				if (!existsSync("./src/save")) mkdirSync("./src/save");
-				writeFileSync("./src/save/save.json", JSON.stringify(player));
+
+				const date = moment();
+				const currentData = date.format("YYYYMMDD-HHmmss");
+
+				writeFileSync(
+					`./src/save/${currentData}.json`,
+					JSON.stringify(player)
+				);
+
 				await delayMessage("Game saved!\n");
 				return getMenu(player, returnFunction);
 			case "back":
