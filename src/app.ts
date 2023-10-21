@@ -1,17 +1,14 @@
 import { createSpinner } from "nanospinner";
 import figlet from "figlet";
-import { readFileSync, readdir } from "fs";
+import { readdirSync, readFileSync, unlinkSync } from "fs";
 import gradient from "gradient-string";
 import inquirer from "inquirer";
 import { join } from "path";
-import { promisify } from "util";
 
 import { Map } from "./classes/Map.js";
 
 import { createPrompt } from "./utils/createPrompt.js";
 import { delayMessage } from "./utils/delayMessage.js";
-
-const promisedReaddir = promisify(readdir);
 
 const titleScreenOptions = [
 	{ name: "New game", value: "new" },
@@ -19,9 +16,67 @@ const titleScreenOptions = [
 	{ name: "Exit", value: "exit" },
 ];
 
+const fileOptions = [
+	{ name: "Load", value: "load" },
+	{ name: "Delete", value: "delete" },
+	{ name: "Back", value: "back" },
+];
+
+async function getSaveFiles() {
+	const dirPath = "./src/save";
+	const files = readdirSync(dirPath);
+
+	if (files.length === 0) {
+		await delayMessage("No saves found.");
+		return main();
+	}
+
+	const fileQuestions = [
+		{
+			type: "list",
+			name: "selectedFile",
+			message: "Select a file:",
+			choices: [...files, { name: "Go back", value: "back" }],
+		},
+	];
+
+	const { selectedFile } = await inquirer.prompt(fileQuestions);
+
+	if (selectedFile === "back") return main();
+
+	const selectedFilePath = join(dirPath, selectedFile);
+
+	const { selectedOption } = await createPrompt(
+		"Select an option:",
+		fileOptions
+	);
+
+	switch (selectedOption) {
+		case "load":
+			const jsonPlayer = readFileSync(selectedFilePath, "utf-8");
+			const data = JSON.parse(jsonPlayer);
+
+			const spinner = createSpinner("Loading...").start();
+			await delayMessage(null);
+			spinner.success({ text: "Game loaded!\n" });
+
+			await delayMessage(`Welcome, ${data.name}`);
+
+			return new Map(data);
+		case "delete":
+			unlinkSync(selectedFilePath);
+
+			createSpinner().success({ text: "Save deleted.\n" });
+			await delayMessage(null);
+
+			return getSaveFiles();
+		case "back":
+			return getSaveFiles();
+	}
+}
+
 export async function main() {
 	console.clear();
-
 	await generateTitle();
 
 	const { selectedOption } = await createPrompt(
@@ -40,42 +95,12 @@ export async function main() {
 			]);
 
 			const name = inputName.name !== "" ? inputName.name : "Player";
-
 			await delayMessage(`Welcome, ${name}`);
 
 			return new Map(name);
 		case "load":
-			const dirPath = "./src/save";
-
-			const files = await promisedReaddir(dirPath);
-
-			if (files.length === 0) {
-				await delayMessage("No saves found.");
-				return main();
-			}
-
-			const fileQuestions = [
-				{
-					type: "list",
-					name: "selectedFile",
-					message: "Select a file:",
-					choices: files,
-				},
-			];
-
-			const { selectedFile } = await inquirer.prompt(fileQuestions);
-
-			const selectedFilePath = join(dirPath, selectedFile);
-			const jsonPlayer = readFileSync(selectedFilePath, "utf-8");
-			const data = JSON.parse(jsonPlayer);
-
-			const spinner = createSpinner("Loading...").start();
-			await delayMessage(null);
-			spinner.success({ text: "Game loaded!\n" });
-
-			await delayMessage(`Welcome, ${data.name}`);
-
-			return new Map(data);
+			await getSaveFiles();
+			break;
 		case "exit":
 			process.exit();
 	}
