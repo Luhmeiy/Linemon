@@ -27,6 +27,60 @@
 		"health": 100
 	},
 	{
+		"id": "fireStone",
+		"name": "Fire Stone",
+		"description": "A stone capable of evolving fire-types.",
+		"price": 5000,
+		"category": "consumable",
+		"type": "stone",
+		"evolvesType": "fire"
+	},
+	{
+		"id": "waterStone",
+		"name": "Water Stone",
+		"description": "A stone capable of evolving water-types.",
+		"price": 5000,
+		"category": "consumable",
+		"type": "stone",
+		"evolvesType": "water"
+	},
+	{
+		"id": "grassStone",
+		"name": "Grass Stone",
+		"description": "A stone capable of evolving grass-type Linemons.",
+		"price": 5000,
+		"category": "consumable",
+		"type": "stone",
+		"evolvesType": "grass"
+	},
+	{
+		"id": "electricStone",
+		"name": "Electric Stone",
+		"description": "A stone capable of evolving electric-type Linemons.",
+		"price": 5000,
+		"category": "consumable",
+		"type": "stone",
+		"evolvesType": "electric"
+	},
+	{
+		"id": "groundStone",
+		"name": "Ground Stone",
+		"description": "A stone capable of evolving ground-type Linemons.",
+		"price": 5000,
+		"category": "consumable",
+		"type": "stone",
+		"evolvesType": "ground"
+	},
+	{
+		"id": "windStone",
+		"name": "Wind Stone",
+		"description": "A stone capable of evolving wind-type Linemons.",
+		"price": 5000,
+		"category": "consumable",
+		"type": "stone",
+		"evolvesType": "wind"
+	},
+	{
 		"id": "disk",
 		"name": "Floppy Disk",
 		"description": "Used for catching Linemons.",
@@ -53,7 +107,7 @@
 	{
 		"id": "redDisk",
 		"name": "Red Floppy Disk",
-		"description": "A Floppy Disk for catching fire types.",
+		"description": "A Floppy Disk for catching fire-types.",
 		"price": 350,
 		"category": "disk",
 		"bonus": {
@@ -63,7 +117,7 @@
 	{
 		"id": "blueDisk",
 		"name": "Blue Floppy Disk",
-		"description": "A Floppy Disk for catching water types.",
+		"description": "A Floppy Disk for catching water-types.",
 		"price": 350,
 		"category": "disk",
 		"bonus": {
@@ -73,7 +127,7 @@
 	{
 		"id": "greenDisk",
 		"name": "Green Floppy Disk",
-		"description": "A Floppy Disk for catching grass types.",
+		"description": "A Floppy Disk for catching grass-types.",
 		"price": 350,
 		"category": "disk",
 		"bonus": {
@@ -83,7 +137,7 @@
 	{
 		"id": "yellowDisk",
 		"name": "Yellow Floppy Disk",
-		"description": "A Floppy Disk for catching electric types.",
+		"description": "A Floppy Disk for catching electric-types.",
 		"price": 350,
 		"category": "disk",
 		"bonus": {
@@ -93,7 +147,7 @@
 	{
 		"id": "brownDisk",
 		"name": "Brown Floppy Disk",
-		"description": "A Floppy Disk for catching ground types.",
+		"description": "A Floppy Disk for catching ground-types.",
 		"price": 350,
 		"category": "disk",
 		"bonus": {
@@ -103,7 +157,7 @@
 	{
 		"id": "grayDisk",
 		"name": "Gray Floppy Disk",
-		"description": "A Floppy Disk for catching wind types.",
+		"description": "A Floppy Disk for catching wind-types.",
 		"price": 350,
 		"category": "disk",
 		"bonus": {

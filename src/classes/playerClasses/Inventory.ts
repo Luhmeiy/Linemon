@@ -58,7 +58,7 @@ export class Inventory implements InventoryMethods {
 			case "consumable":
 				const newReturnFunction = () =>
 					this.getInventory(returnFunction, team);
-				await this.getConsumables(newReturnFunction, team);
+				await this.getConsumables(newReturnFunction, team, "inventory");
 				break;
 			case "disk":
 				await this.createItemMenus(
@@ -186,135 +186,128 @@ export class Inventory implements InventoryMethods {
 		return answer;
 	};
 
+	private createLinemonsMenu = async (team: LinemonProps[]) => {
+		const options = team.map((linemon, i) => {
+			return {
+				name: linemon.info.name,
+				value: `${i}`,
+			};
+		});
+		options.push({
+			name: "Go back",
+			value: "back",
+		});
+
+		const linemonAnswer = await createPrompt(
+			"Select Linemon to heal: ",
+			options
+		);
+
+		if (linemonAnswer.selectedOption === "back") {
+			return true;
+		}
+
+		const linemonId = Number(linemonAnswer.selectedOption);
+		return team[linemonId];
+	};
+
+	private getItemMenu = async (
+		item: ConsumableItem,
+		team: LinemonProps[]
+	): Promise<any> => {
+		const itemAnswer = await createPrompt(item.name, extendedItemOptions);
+
+		switch (itemAnswer.selectedOption) {
+			case "use":
+				const playerLinemon = await this.createLinemonsMenu(team);
+
+				if (typeof playerLinemon === "boolean") {
+					return this.getItemMenu(item, team);
+				}
+
+				switch (item.type) {
+					case "potion":
+						const currentHp = playerLinemon.status.currentHp;
+						const maxHp = playerLinemon.status.maxHp;
+
+						if (currentHp === maxHp) {
+							await delayMessage(
+								`${playerLinemon.info.name} is at full health.\n`
+							);
+
+							return this.getItemMenu(item, team);
+						}
+
+						const health =
+							currentHp + item.health! > maxHp
+								? maxHp - currentHp
+								: item.health;
+
+						playerLinemon.status.currentHp += health!;
+
+						await delayMessage(
+							`${playerLinemon.info.name} recovered ${health} HP.\n`
+						);
+						break;
+					case "stone":
+						if (!(playerLinemon.info.type === item.evolvesType)) {
+							await delayMessage(
+								`${item.name} can't be used in ${playerLinemon.info.type}-types.\n`
+							);
+
+							return this.getItemMenu(item, team);
+						}
+
+						await playerLinemon.evolve();
+						break;
+				}
+
+				this.removeFromInventory(item, this.inventory.consumable);
+				return true;
+			case "quantity":
+				await delayMessage(`Quantity: ${item.quantity}\n`);
+				return this.getItemMenu(item, team);
+			case "description":
+				await delayMessage(`${item.name}: ${item.description}\n`);
+				return this.getItemMenu(item, team);
+			default:
+				return false;
+		}
+	};
+
 	getConsumables = async (
-		returnFunction: (linemon?: LinemonProps) => void,
+		returnFunction: () => void,
 		team: LinemonProps[],
-		linemon?: LinemonProps
+		location: "battle" | "inventory"
 	): Promise<any> => {
 		const consumableOptions: Option = [
 			...this.createOptions(this.inventory.consumable),
 			defaultOption,
 		];
 
-		const newReturnFunction = () => returnFunction(linemon);
 		const answer = await this.itemDefaultVerification(
 			this.inventory.consumable,
 			"Choose a consumable: ",
 			consumableOptions,
-			newReturnFunction
+			returnFunction
 		);
 
 		if (!answer) return;
 
 		for (const item of this.inventory.consumable) {
 			if (answer.selectedOption === item.id) {
-				const itemAnswer = await createPrompt(
-					item.name,
-					extendedItemOptions
-				);
+				const response = await this.getItemMenu(item, team);
 
-				switch (itemAnswer.selectedOption) {
-					case "use":
-						switch (item.type) {
-							case "potion":
-								const options = team.map((linemon, i) => {
-									return {
-										name: linemon.info.name,
-										value: `${i}`,
-									};
-								});
-								options.push({
-									name: "Go back",
-									value: "back",
-								});
-
-								const linemonAnswer: {
-									selectedOption: string;
-								} = await createPrompt(
-									"Select Linemon to heal: ",
-									options
-								);
-
-								if (linemonAnswer.selectedOption === "back") {
-									return this.getConsumables(
-										returnFunction,
-										team,
-										linemon
-									);
-								}
-
-								const linemonId = Number(
-									linemonAnswer.selectedOption
-								);
-
-								const playerLinemon = team[linemonId];
-
-								const currentHp =
-									playerLinemon.status.currentHp;
-								const maxHp = playerLinemon.status.maxHp;
-
-								if (currentHp === maxHp) {
-									await delayMessage(
-										`${playerLinemon.info.name} is at full health.\n`
-									);
-
-									return this.getConsumables(
-										returnFunction,
-										team,
-										linemon
-									);
-								}
-
-								const health =
-									currentHp + item.health! > maxHp
-										? maxHp - currentHp
-										: item.health;
-
-								playerLinemon.status.currentHp += health!;
-
-								await delayMessage(
-									`${playerLinemon.info.name} recovered ${health} HP.\n`
-								);
-						}
-
-						this.removeFromInventory(
-							item,
-							this.inventory.consumable
-						);
-
-						if (linemon) {
-							return true;
-						} else {
-							return this.getConsumables(
-								returnFunction,
-								team,
-								linemon
-							);
-						}
-					case "quantity":
-						await delayMessage(`Quantity: ${item.quantity}\n`);
-
+				if (response !== undefined) {
+					if (location === "battle" && response) {
+						return response;
+					} else {
 						return this.getConsumables(
 							returnFunction,
 							team,
-							linemon
+							location
 						);
-					case "description":
-						await delayMessage(
-							`${item.name}: ${item.description}\n`
-						);
-
-						return this.getConsumables(
-							returnFunction,
-							team,
-							linemon
-						);
-					default:
-						return this.getConsumables(
-							returnFunction,
-							team,
-							linemon
-						);
+					}
 				}
 			}
 		}
@@ -356,7 +349,7 @@ export class Inventory implements InventoryMethods {
 							item,
 							linemon.info.type
 						);
-						console.log(diskBonus);
+
 						this.removeFromInventory(item, this.inventory.disk);
 						return returnFunction(linemon, true, diskBonus);
 					case "quantity":

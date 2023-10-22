@@ -219,10 +219,11 @@ PP: (${linemon.status.currentPp}/${linemon.status.maxPp})\n`);
 			case "catch":
 				return player.getDisks(findLinemon, wildLinemon);
 			case "inventory":
+				const newFunction = () => findLinemon(wildLinemon);
 				const response = await player.getConsumables(
-					findLinemon,
+					newFunction,
 					player.getTeamRaw(),
-					wildLinemon
+					"battle"
 				);
 
 				if (response!) {

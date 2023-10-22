@@ -1,6 +1,8 @@
 import type { LinemonProps } from "../../interfaces/LinemonProps.js";
 import type { TeamMethods } from "../../interfaces/PlayerMethods.js";
 
+import { Linemon } from "../Linemon.js";
+
 import { createLinemonsMenu } from "../../utils/createLinemonsMenu.js";
 import { createPrompt } from "../../utils/createPrompt.js";
 import { delayMessage } from "../../utils/delayMessage.js";
@@ -12,7 +14,13 @@ export class Team implements TeamMethods {
 		private addToPC: (linemon: LinemonProps) => void,
 		team?: LinemonProps[]
 	) {
-		this.team = team || [];
+		if (team) {
+			this.team = team.map(({ id, info, status, moves }) => {
+				return new Linemon(id, info, status, moves);
+			});
+		} else {
+			this.team = [];
+		}
 	}
 
 	getTeam = async (returnFunction: () => void) => {

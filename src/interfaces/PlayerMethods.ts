@@ -11,6 +11,7 @@ export interface InventoryItem {
 export interface ConsumableItem extends InventoryItem {
 	type: string;
 	health?: number;
+	evolvesType?: string;
 }
 
 export interface DiskItem extends InventoryItem {
@@ -35,9 +36,9 @@ export interface InventoryMethods {
 		inventory: InventoryItem[]
 	) => void;
 	getConsumables: (
-		returnFunction: (linemon?: LinemonProps) => void,
+		returnFunction: () => void,
 		team: LinemonProps[],
-		linemon?: LinemonProps
+		location: "battle" | "inventory"
 	) => void;
 	getDisks: (
 		returnFunction: (linemon: LinemonProps) => void,

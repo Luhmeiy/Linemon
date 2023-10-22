@@ -111,12 +111,12 @@ ${chalk.bold("Linemon caught:")} ${this.linemonsCaught.length}\n`);
 	getConsumables = async (
 		returnFunction: (linemon?: LinemonProps) => void,
 		team: LinemonProps[],
-		linemon?: LinemonProps
+		location: "battle" | "inventory"
 	) => {
 		return await this.inventory.getConsumables(
 			returnFunction,
 			team,
-			linemon
+			location
 		);
 	};
 

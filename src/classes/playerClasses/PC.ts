@@ -1,6 +1,8 @@
 import type { LinemonProps } from "../../interfaces/LinemonProps.js";
 import type { PCMethods } from "../../interfaces/PlayerMethods.js";
 
+import { Linemon } from "../Linemon.js";
+
 import { createLinemonsMenu } from "../../utils/createLinemonsMenu.js";
 import { delayMessage } from "../../utils/delayMessage.js";
 
@@ -13,7 +15,13 @@ export class PC implements PCMethods {
 		) => Promise<LinemonProps | undefined>,
 		pc?: LinemonProps[]
 	) {
-		this.pc = pc || [];
+		if (pc) {
+			this.pc = pc.map(({ id, info, status, moves }) => {
+				return new Linemon(id, info, status, moves);
+			});
+		} else {
+			this.pc = [];
+		}
 	}
 
 	getPC = async (returnFunction: () => void) => {
