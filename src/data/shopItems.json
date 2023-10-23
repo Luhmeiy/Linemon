@@ -27,6 +27,33 @@
 		"health": 100
 	},
 	{
+		"id": "elixir",
+		"name": "Elixir",
+		"description": "Heals the PP of your Linemon by 10 points.",
+		"price": 150,
+		"category": "consumable",
+		"type": "elixir",
+		"power": 10
+	},
+	{
+		"id": "superElixir",
+		"name": "Super Elixir",
+		"description": "Heals the PP of your Linemon by 20 points.",
+		"price": 250,
+		"category": "consumable",
+		"type": "elixir",
+		"power": 20
+	},
+	{
+		"id": "hyperElixir",
+		"name": "Hyper Elixir",
+		"description": "Heals the PP of your Linemon by 40 points.",
+		"price": 400,
+		"category": "consumable",
+		"type": "elixir",
+		"power": 40
+	},
+	{
 		"id": "fireStone",
 		"name": "Fire Stone",
 		"description": "A stone capable of evolving fire-types.",

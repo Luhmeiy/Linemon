@@ -11,6 +11,7 @@ export interface InventoryItem {
 export interface ConsumableItem extends InventoryItem {
 	type: string;
 	health?: number;
+	power?: number;
 	evolvesType?: string;
 }
 

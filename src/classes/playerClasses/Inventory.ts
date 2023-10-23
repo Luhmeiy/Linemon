@@ -99,6 +99,8 @@ export class Inventory implements InventoryMethods {
 					...formattedItem,
 					type: item.type,
 					health: item.health && item.health,
+					power: item.power && item.power,
+					evolvesType: item.evolvesType && item.evolvesType,
 				} as ConsumableItem;
 				break;
 			case "disk":
@@ -247,6 +249,29 @@ export class Inventory implements InventoryMethods {
 
 						await delayMessage(
 							`${playerLinemon.info.name} recovered ${health} HP.\n`
+						);
+						break;
+					case "elixir":
+						const currentPp = playerLinemon.status.currentPp;
+						const maxPp = playerLinemon.status.maxPp;
+
+						if (currentPp === maxPp) {
+							await delayMessage(
+								`${playerLinemon.info.name} has all PP.\n`
+							);
+
+							return this.getItemMenu(item, team);
+						}
+
+						const power =
+							currentPp + item.power! > maxPp
+								? maxPp - currentPp
+								: item.power;
+
+						playerLinemon.status.currentPp += power!;
+
+						await delayMessage(
+							`${playerLinemon.info.name} recovered ${power} PP.\n`
 						);
 						break;
 					case "stone":
