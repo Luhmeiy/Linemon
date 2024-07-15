@@ -1,16 +1,17 @@
-import type { IShopItems } from "../../interfaces/IShopItems.js";
-import type { LinemonProps } from "../../interfaces/LinemonProps.js";
+import type { IShopItems } from "@/interfaces/IShopItems.js";
+import type { LinemonProps } from "@/interfaces/LinemonProps.js";
 import type {
 	ConsumableItem,
 	DiskItem,
 	InventoryItem,
 	InventoryMethods,
 	InventoryType,
-} from "../../interfaces/PlayerMethods.js";
-import type { Option } from "../../types/Option.js";
+} from "@/interfaces/PlayerMethods.js";
+import type { Option } from "@/types/Option.js";
 
-import { createPrompt } from "../../utils/createPrompt.js";
-import { delayMessage } from "../../utils/delayMessage.js";
+import { createPrompt } from "@/utils/createPrompt.js";
+import { delayMessage } from "@/utils/delayMessage.js";
+import { getRoute } from "@/utils/getRoute.js";
 
 const categoryOptions = [
 	{ name: "Consumables", value: "consumable" },
@@ -39,7 +40,7 @@ export class Inventory implements InventoryMethods {
 		};
 	}
 
-	getInventory = async (returnFunction: () => void, team: LinemonProps[]) => {
+	getInventory = async (url: string, team: LinemonProps[]) => {
 		const diskOptions: Option = [
 			...this.createOptions(this.inventory.disk),
 			defaultOption,
@@ -56,15 +57,14 @@ export class Inventory implements InventoryMethods {
 
 		switch (answer.selectedOption) {
 			case "consumable":
-				const newReturnFunction = () =>
-					this.getInventory(returnFunction, team);
+				const newReturnFunction = () => this.getInventory(url, team);
 				await this.getConsumables(newReturnFunction, team, "inventory");
 				break;
 			case "disk":
 				await this.createItemMenus(
 					this.inventory.disk,
 					diskOptions,
-					returnFunction,
+					url,
 					team
 				);
 				break;
@@ -72,13 +72,13 @@ export class Inventory implements InventoryMethods {
 				await this.createItemMenus(
 					this.inventory.special,
 					specialOptions,
-					returnFunction,
+					url,
 					team
 				);
 				break;
 			default:
 				console.log();
-				returnFunction();
+				await getRoute(url);
 				break;
 		}
 	};
@@ -394,10 +394,10 @@ export class Inventory implements InventoryMethods {
 	private createItemMenus = async (
 		items: InventoryItem[],
 		options: Option,
-		returnFunction: () => void,
+		url: string,
 		team: LinemonProps[]
 	) => {
-		const newReturnFunction = () => this.getInventory(returnFunction, team);
+		const newReturnFunction = () => this.getInventory(url, team);
 		const answer = await this.itemDefaultVerification(
 			items,
 			"Choose an item: ",
@@ -421,7 +421,7 @@ export class Inventory implements InventoryMethods {
 				}
 
 				console.log();
-				this.getInventory(returnFunction, team);
+				this.getInventory(url, team);
 			}
 		}
 	};

@@ -1,16 +1,17 @@
-import jsonLinemons from "../data/linemons.json" assert { type: "json" };
-import jsonMoves from "../data/moves.json" assert { type: "json" };
+import { FindingSettings } from "./../interfaces/LocationProps";
+import jsonLinemons from "@/data/linemons.json";
+import jsonMoves from "@/data/moves.json";
 
 import chalk from "chalk";
 import gradient from "gradient-string";
 import { createSpinner } from "nanospinner";
 
-import type { LinemonProps } from "../interfaces/LinemonProps.js";
-import type { PlayerMethods } from "../interfaces/PlayerMethods.js";
-import type { Moves } from "../types/Moves.js";
+import type { LinemonProps } from "@/interfaces/LinemonProps.js";
+import type { Moves } from "@/types/Moves.js";
 
-import { Linemon } from "../classes/Linemon.js";
+import { Linemon } from "@/classes/Linemon.js";
 
+import { getRoute } from "./getRoute.js";
 import { attack } from "./attack.js";
 import { createPrompt } from "./createPrompt.js";
 import { delayMessage } from "./delayMessage.js";
@@ -18,15 +19,14 @@ import { generateStatus } from "./generateStatus.js";
 import { getCombatMenu } from "./getCombatMenu.js";
 import { getFromJson } from "./getFromJson.js";
 import { randomIntFromInterval } from "./randomIntFromInterval.js";
+import { player } from "@/routes/map/index.js";
 
 export const searchForLinemon = (
 	linemonOptions: string[],
-	findingChance: number,
-	level: { min: number; max: number },
-	location: "desert" | "mountain" | "tallGrass" | "water",
-	player: PlayerMethods,
-	returnToOrigin: () => void
+	findingSettings: FindingSettings,
+	url: string
 ) => {
+	const { findingChance, level, location } = findingSettings;
 	const options = [{ name: "Leave", value: "exit" }];
 	let searchText: string;
 
@@ -226,6 +226,7 @@ PP: (${linemon.status.currentPp}/${linemon.status.maxPp})\n`);
 					"battle"
 				);
 
+				// @ts-ignore
 				if (response!) {
 					const selectedMove =
 						wildLinemon.moves[randomIntFromInterval(0, 3)];
@@ -247,7 +248,7 @@ PP: (${linemon.status.currentPp}/${linemon.status.maxPp})\n`);
 		await delayMessage(null);
 		switch (answer.selectedOption) {
 			case "exit":
-				return returnToOrigin();
+				return await getRoute(url);
 			case "continue":
 				return findLinemon();
 		}

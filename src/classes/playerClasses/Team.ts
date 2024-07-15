@@ -1,11 +1,11 @@
-import type { LinemonProps } from "../../interfaces/LinemonProps.js";
-import type { TeamMethods } from "../../interfaces/PlayerMethods.js";
+import type { LinemonProps } from "@/interfaces/LinemonProps.js";
+import type { TeamMethods } from "@/interfaces/PlayerMethods.js";
 
 import { Linemon } from "../Linemon.js";
 
-import { createLinemonsMenu } from "../../utils/createLinemonsMenu.js";
-import { createPrompt } from "../../utils/createPrompt.js";
-import { delayMessage } from "../../utils/delayMessage.js";
+import { createLinemonsMenu } from "@/utils/createLinemonsMenu.js";
+import { createPrompt } from "@/utils/createPrompt.js";
+import { delayMessage } from "@/utils/delayMessage.js";
 
 export class Team implements TeamMethods {
 	private team: LinemonProps[];
@@ -23,13 +23,13 @@ export class Team implements TeamMethods {
 		}
 	}
 
-	getTeam = async (returnFunction: () => void) => {
+	getTeam = async (url: string) => {
 		await createLinemonsMenu(
 			"team",
 			this.team,
 			this.addToPC,
 			this.removeFromTeam,
-			returnFunction
+			url
 		);
 	};
 

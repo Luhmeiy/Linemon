@@ -1,0 +1,232 @@
+[
+	{
+		"id": "101",
+		"name": "Route 101",
+		"routes": ["map/city/desertCity", "map/city/city"],
+		"locationOptions": [
+			{
+				"name": "Go to ${chalk.green('tall grass')}",
+				"value": "tallGrass"
+			},
+			{
+				"name": "Go to DesertCity",
+				"value": "0"
+			},
+			{
+				"name": "Go to City",
+				"value": "1"
+			}
+		],
+		"linemonOptions": [
+			"groundling",
+			"earthlet",
+			"normfang",
+			"normalite",
+			"normlet",
+			"greenling"
+		],
+		"findingSettings": {
+			"findingChance": 100,
+			"level": {
+				"min": 8,
+				"max": 15
+			},
+			"location": "tallGrass"
+		}
+	},
+	{
+		"id": "201",
+		"name": "Route 201",
+		"routes": ["map/city/lakeCity", "map/city/desertCity"],
+		"locationOptions": [
+			{ "name": "Walk around", "value": "tallGrass" },
+			{
+				"name": "Go to LakeCity",
+				"value": "0"
+			},
+			{
+				"name": "Go to DesertCity",
+				"value": "1"
+			}
+		],
+		"linemonOptions": [
+			"sandshifter",
+			"firebeast",
+			"firepup",
+			"zephyrete",
+			"aerowind",
+			"guslet"
+		],
+		"findingSettings": {
+			"findingChance": 80,
+			"level": {
+				"min": 15,
+				"max": 20
+			},
+			"location": "tallGrass"
+		}
+	},
+	{
+		"id": "301",
+		"name": "Route 301",
+		"routes": ["map/city/mountainCity", "map/city/lakeCity"],
+		"locationOptions": [
+			{
+				"name": "Go to ${chalk.green('tall grass')}",
+				"value": "tallGrass"
+			},
+			{
+				"name": "Go to MountainCity",
+				"value": "0"
+			},
+			{
+				"name": "Go to LakeCity",
+				"value": "1"
+			}
+		],
+		"linemonOptions": [
+			"aquablob",
+			"earthlet",
+			"groundling",
+			"normalite",
+			"normlet",
+			"seedlet"
+		],
+		"secondaryLinemonOptions": [
+			"aquablob",
+			"watersplash",
+			"aquabubble",
+			"aquadrop",
+			"oceanlance",
+			"zephyrwing"
+		],
+		"findingSettings": {
+			"findingChance": 100,
+			"level": {
+				"min": 10,
+				"max": 16
+			},
+			"location": "tallGrass"
+		},
+		"secondaryFindingSettings": {
+			"findingChance": 70,
+			"level": {
+				"min": 12,
+				"max": 20
+			},
+			"location": "water"
+		}
+	},
+	{
+		"id": "city",
+		"name": "City",
+		"routes": ["map/route/101"],
+		"locationOptions": [
+			{ "name": "Go to ${chalk.blue('shop')}", "value": "shop" },
+			{
+				"name": "Go to ${chalk.red('healing center')}",
+				"value": "healingCenter"
+			},
+			{
+				"name": "Go to ${chalk.green('Route 101')}",
+				"value": "0"
+			}
+		],
+		"shopItemsIds": ["potion", "superPotion", "disk"]
+	},
+	{
+		"id": "desertCity",
+		"name": "DesertCity",
+		"routes": ["map/route/201", "map/route/101"],
+		"locationOptions": [
+			{ "name": "Go to ${chalk.blue('shop')}", "value": "shop" },
+			{
+				"name": "Go to ${chalk.red('healing center')}",
+				"value": "healingCenter"
+			},
+			{
+				"name": "Go to ${chalk.green('Route 201')}",
+				"value": "0"
+			},
+			{
+				"name": "Go to ${chalk.green('Route 101')}",
+				"value": "1"
+			}
+		],
+		"shopItemsIds": [
+			"potion",
+			"superPotion",
+			"hyperPotion",
+			"disk",
+			"silverDisk",
+			"goldenDisk",
+			"redDisk",
+			"yellowDisk",
+			"grayDisk"
+		]
+	},
+	{
+		"id": "lakeCity",
+		"name": "LakeCity",
+		"routes": ["map/route/301", "map/route/201"],
+		"locationOptions": [
+			{ "name": "Go to ${chalk.blue('shop')}", "value": "shop" },
+			{
+				"name": "Go to ${chalk.red('healing center')}",
+				"value": "healingCenter"
+			},
+			{
+				"name": "Go to ${chalk.green('Route 301')}",
+				"value": "0"
+			},
+			{
+				"name": "Go to ${chalk.green('Route 201')}",
+				"value": "1"
+			}
+		],
+		"shopItemsIds": [
+			"potion",
+			"superPotion",
+			"disk",
+			"silverDisk",
+			"blueDisk",
+			"greenDisk",
+			"fishingRod"
+		]
+	},
+	{
+		"id": "mountainCity",
+		"name": "MountainCity",
+		"routes": ["map/route/301"],
+		"locationOptions": [
+			{ "name": "Go to ${chalk.blue('shop')}", "value": "shop" },
+			{
+				"name": "Go to ${chalk.red('healing center')}",
+				"value": "healingCenter"
+			},
+			{
+				"name": "Go to ${chalk.green('Route 301')}",
+				"value": "0"
+			},
+			{
+				"name": "Go to mountain peak",
+				"value": "mountainPeak"
+			},
+			{
+				"name": "Go to cave",
+				"value": "cave"
+			}
+		],
+		"shopItemsIds": [
+			"potion",
+			"superPotion",
+			"hyperPotion",
+			"disk",
+			"silverDisk",
+			"goldenDisk",
+			"redDisk",
+			"brownDisk",
+			"yellowDisk"
+		]
+	}
+]

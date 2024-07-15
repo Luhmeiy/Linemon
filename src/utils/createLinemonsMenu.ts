@@ -1,8 +1,9 @@
-import type { LinemonProps } from "../interfaces/LinemonProps.js";
-import type { Option } from "../types/Option.js";
+import type { LinemonProps } from "@/interfaces/LinemonProps.js";
+import type { Option } from "@/types/Option.js";
 
 import { createPrompt } from "./createPrompt.js";
 import { delayMessage } from "./delayMessage.js";
+import { getRoute } from "./getRoute.js";
 
 const linemonOptions = [
 	{ name: "Status", value: "status" },
@@ -28,7 +29,7 @@ export const createLinemonsMenu = async (
 	linemons: LinemonProps[],
 	addFunction: (linemon: LinemonProps) => void,
 	removeFunction: (linemonId: number) => void,
-	returnFunction: () => void
+	url: string
 ) => {
 	let noLinemonsMessage;
 
@@ -45,7 +46,7 @@ export const createLinemonsMenu = async (
 
 	if (linemons.length === 0) {
 		await delayMessage(noLinemonsMessage!);
-		return returnFunction();
+		return await getRoute(url);
 	}
 
 	const availableLinemons: Option = [
@@ -56,7 +57,7 @@ export const createLinemonsMenu = async (
 	const answer = await createPrompt("Choose a Linemon: ", availableLinemons);
 
 	if (answer.selectedOption === "back") {
-		return returnFunction();
+		return await getRoute(url);
 	}
 
 	const linemonId = Number(answer.selectedOption);
@@ -87,11 +88,5 @@ SPD: ${linemon.status.spd}\n`);
 			break;
 	}
 
-	createLinemonsMenu(
-		origin,
-		linemons,
-		addFunction,
-		removeFunction,
-		returnFunction
-	);
+	createLinemonsMenu(origin, linemons, addFunction, removeFunction, url);
 };

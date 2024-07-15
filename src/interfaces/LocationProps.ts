@@ -1,0 +1,21 @@
+import type { Option } from "../types/Option.js";
+
+export type FindingSettings = {
+	findingChance?: number;
+	level?: {
+		min: number;
+		max: number;
+	};
+	location?: "tallGrass" | "desert" | "mountain" | "water";
+};
+
+export interface LocationProps {
+	name: string;
+	routes: string[];
+	locationOptions: Option;
+	shopItemsIds?: string[];
+	linemonOptions?: string[];
+	secondaryLinemonOptions?: string[];
+	findingSettings: FindingSettings;
+	secondaryFindingSettings: FindingSettings;
+}

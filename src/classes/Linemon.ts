@@ -1,12 +1,12 @@
-import jsonLinemons from "../data/linemons.json" assert { type: "json" };
+import jsonLinemons from "@/data/linemons.json";
 
 import { createSpinner } from "nanospinner";
 
-import type { LinemonProps } from "../interfaces/LinemonProps.js";
+import type { LinemonProps } from "@/interfaces/LinemonProps.js";
 
-import { createPrompt } from "../utils/createPrompt.js";
-import { delayMessage } from "../utils/delayMessage.js";
-import { randomIntFromInterval } from "../utils/randomIntFromInterval.js";
+import { createPrompt } from "@/utils/createPrompt.js";
+import { delayMessage } from "@/utils/delayMessage.js";
+import { randomIntFromInterval } from "@/utils/randomIntFromInterval.js";
 
 export class Linemon implements LinemonProps {
 	constructor(

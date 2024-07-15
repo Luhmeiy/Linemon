@@ -1,10 +1,10 @@
-import type { LinemonProps } from "../../interfaces/LinemonProps.js";
-import type { PCMethods } from "../../interfaces/PlayerMethods.js";
+import type { LinemonProps } from "@/interfaces/LinemonProps.js";
+import type { PCMethods } from "@/interfaces/PlayerMethods.js";
 
 import { Linemon } from "../Linemon.js";
 
-import { createLinemonsMenu } from "../../utils/createLinemonsMenu.js";
-import { delayMessage } from "../../utils/delayMessage.js";
+import { createLinemonsMenu } from "@/utils/createLinemonsMenu.js";
+import { delayMessage } from "@/utils/delayMessage.js";
 
 export class PC implements PCMethods {
 	private pc: LinemonProps[];
@@ -24,13 +24,13 @@ export class PC implements PCMethods {
 		}
 	}
 
-	getPC = async (returnFunction: () => void) => {
+	getPC = async (url: string) => {
 		await createLinemonsMenu(
 			"pc",
 			this.pc,
 			this.addToTeam,
 			this.removeFromPC,
-			returnFunction
+			url
 		);
 	};
 

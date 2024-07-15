@@ -1,7 +1,7 @@
 import chalk from "chalk";
 
-import type { IShopItems } from "../interfaces/IShopItems.js";
-import type { LinemonProps } from "../interfaces/LinemonProps.js";
+import type { IShopItems } from "@/interfaces/IShopItems.js";
+import type { LinemonProps } from "@/interfaces/LinemonProps.js";
 import type {
 	InventoryItem,
 	InventoryMethods,
@@ -10,7 +10,8 @@ import type {
 	TeamMethods,
 } from "../interfaces/PlayerMethods.js";
 
-import { delayMessage } from "../utils/delayMessage.js";
+import { delayMessage } from "@/utils/delayMessage.js";
+import { getRoute } from "@/utils/getRoute.js";
 
 import { Inventory } from "./playerClasses/Inventory.js";
 import { PC } from "./playerClasses/PC.js";
@@ -69,17 +70,17 @@ export class Player implements PlayerMethods {
 
 	hasFishingRod = () => this.inventory.hasFishingRod();
 
-	getStatus = async (returnFunction: () => void) => {
+	getStatus = async (url: string) => {
 		await delayMessage(`${chalk.underline.bold(`${this.name}'s Status`)}
 ${chalk.bold("Money:")} ${this.money}
 ${chalk.bold("Linemon seen:")} ${this.linemonsSeen.length}
 ${chalk.bold("Linemon caught:")} ${this.linemonsCaught.length}\n`);
 
-		returnFunction();
+		await getRoute(url);
 	};
 
 	// Team
-	getTeam = (returnFunction: () => void) => this.team.getTeam(returnFunction);
+	getTeam = (url: string) => this.team.getTeam(url);
 	getTeamRaw = () => this.team.getTeamRaw();
 	getFirstTeam = () => this.team.getFirstTeam();
 
@@ -91,13 +92,13 @@ ${chalk.bold("Linemon caught:")} ${this.linemonsCaught.length}\n`);
 	};
 
 	// PC
-	getPC = (returnFunction: () => void) => this.pc.getPC(returnFunction);
+	getPC = (url: string) => this.pc.getPC(url);
 	addToPC = async (linemon: LinemonProps) => await this.pc.addToPC(linemon);
 
 	// Inventory
-	getInventory = async (returnFunction: () => void) => {
+	getInventory = async (url: string) => {
 		const team = await this.team.getTeamRaw();
-		this.inventory.getInventory(returnFunction, team);
+		this.inventory.getInventory(url, team);
 	};
 
 	addToInventory = (item: IShopItems, quantity: number) => {

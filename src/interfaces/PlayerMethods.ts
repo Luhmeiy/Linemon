@@ -30,7 +30,7 @@ export type InventoryType = {
 };
 
 export interface InventoryMethods {
-	getInventory: (returnFunction: () => void, team: LinemonProps[]) => void;
+	getInventory: (url: string, team: LinemonProps[]) => void;
 	addToInventory: (item: IShopItems, quantity: number) => void;
 	removeFromInventory: (
 		item: InventoryItem,
@@ -49,12 +49,12 @@ export interface InventoryMethods {
 }
 
 export interface PCMethods {
-	getPC: (returnFunction: () => void) => void;
+	getPC: (url: string) => void;
 	addToPC: (linemon: LinemonProps) => void;
 }
 
 export interface TeamMethods {
-	getTeam: (returnFunction: () => void) => void;
+	getTeam: (url: string) => void;
 	getTeamRaw: () => LinemonProps[];
 	getFirstTeam: () => LinemonProps;
 	addToTeam: (linemon: LinemonProps) => Promise<LinemonProps | undefined>;
@@ -71,7 +71,7 @@ export interface PlayerMethods
 	setLinemonsSeen: (id: string) => void;
 	setLinemonsCaught: (id: string) => void;
 
-	getStatus: (returnFunction: () => void) => void;
+	getStatus: (url: string) => void;
 
-	getInventory: (returnFunction: () => void) => void;
+	getInventory: (url: string) => void;
 }
