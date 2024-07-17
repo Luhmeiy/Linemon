@@ -1,4 +1,4 @@
-import jsonTypesEffectiveness from "../data/typesEffectiveness.json" assert { type: "json" };
+import jsonTypesEffectiveness from "../data/typesEffectiveness.json";
 
 import { createSpinner } from "nanospinner";
 

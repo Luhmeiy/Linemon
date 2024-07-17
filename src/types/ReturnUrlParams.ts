@@ -1,8 +1,8 @@
-import { LinemonProps } from "@/interfaces/LinemonProps";
+import { Linemon } from "@/classes/Linemon";
 import { FindingSettings } from "@/interfaces/LocationProps";
 
 export type ReturnUrlParams = {
 	findingSettings: FindingSettings;
 	url: string;
-	wildLinemon: LinemonProps;
+	wildLinemon: Linemon;
 };

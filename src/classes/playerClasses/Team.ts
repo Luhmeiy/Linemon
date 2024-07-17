@@ -15,8 +15,8 @@ export class Team implements TeamMethods {
 		team?: LinemonProps[]
 	) {
 		if (team) {
-			this.team = team.map(({ id, info, status, moves }) => {
-				return new Linemon(id, info, status, moves);
+			this.team = team.map((linemon) => {
+				return new Linemon(linemon as Linemon);
 			});
 		} else {
 			this.team = [];

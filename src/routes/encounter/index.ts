@@ -29,7 +29,7 @@ interface BaseEncounterProps {
 }
 
 interface EncounterProps extends BaseEncounterProps {
-	wildLinemon?: LinemonProps;
+	wildLinemon?: Linemon;
 	catchLinemon?: boolean;
 	diskBonus?: number;
 	battleWon?: boolean;
@@ -100,7 +100,12 @@ const generateLinemon = async (
 	const moves = generateMoves(info.type);
 	const status = generateStatus(minMaxStatus);
 
-	return new Linemon(id, { ...info, isShiny }, status, moves);
+	return new Linemon({
+		id,
+		info: { ...info, isShiny },
+		status,
+		moves,
+	} as Linemon);
 };
 
 const tryCatchingLinemon = async (
@@ -192,12 +197,7 @@ export default async (req: Request<{}, {}, {}, EncounterProps>) => {
 	if (battleWon) return search(baseEncounterProps);
 
 	if (wildLinemon) {
-		wildLinemon = new Linemon(
-			wildLinemon.id,
-			wildLinemon.info,
-			wildLinemon.status,
-			wildLinemon.moves
-		);
+		wildLinemon = new Linemon(wildLinemon);
 	}
 
 	const linemon = player.getFirstTeam();

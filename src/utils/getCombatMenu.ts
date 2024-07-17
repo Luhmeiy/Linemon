@@ -30,12 +30,7 @@ export const getCombatMenu = async (
 	linemon: LinemonProps
 ): Promise<any> => {
 	const { wildLinemon } = returnUrlParams;
-	const adversary = new Linemon(
-		wildLinemon.id,
-		wildLinemon.info,
-		wildLinemon.status,
-		wildLinemon.moves
-	);
+	const adversary = new Linemon(wildLinemon);
 
 	const options = [
 		...createOptions(linemon.moves),

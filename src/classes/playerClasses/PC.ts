@@ -16,8 +16,8 @@ export class PC implements PCMethods {
 		pc?: LinemonProps[]
 	) {
 		if (pc) {
-			this.pc = pc.map(({ id, info, status, moves }) => {
-				return new Linemon(id, info, status, moves);
+			this.pc = pc.map((linemon) => {
+				return new Linemon(linemon as Linemon);
 			});
 		} else {
 			this.pc = [];

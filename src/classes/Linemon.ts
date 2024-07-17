@@ -9,12 +9,17 @@ import { delayMessage } from "@/utils/delayMessage.js";
 import { randomIntFromInterval } from "@/utils/randomIntFromInterval.js";
 
 export class Linemon implements LinemonProps {
-	constructor(
-		public id: LinemonProps["id"],
-		public info: LinemonProps["info"],
-		public status: LinemonProps["status"],
-		public moves: LinemonProps["moves"]
-	) {}
+	public id: LinemonProps["id"];
+	public info: LinemonProps["info"];
+	public status: LinemonProps["status"];
+	public moves: LinemonProps["moves"];
+
+	constructor(data: Linemon) {
+		this.id = data.id;
+		this.info = data.info;
+		this.status = data.status;
+		this.moves = data.moves;
+	}
 
 	attack = (
 		basePower: number,
