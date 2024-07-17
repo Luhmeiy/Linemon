@@ -1,3 +1,4 @@
+import { ReturnUrlParams } from "@/types/ReturnUrlParams.js";
 import type { IShopItems } from "./IShopItems.js";
 import type { LinemonProps } from "./LinemonProps.js";
 
@@ -37,14 +38,12 @@ export interface InventoryMethods {
 		inventory: InventoryItem[]
 	) => void;
 	getConsumables: (
-		returnFunction: () => void,
+		url: string,
 		team: LinemonProps[],
-		location: "battle" | "inventory"
+		location: "battle" | "inventory",
+		returnUrlParams: ReturnUrlParams
 	) => void;
-	getDisks: (
-		returnFunction: (linemon: LinemonProps) => void,
-		linemon: LinemonProps
-	) => void;
+	getDisks: (url: string, returnUrlParams: ReturnUrlParams) => void;
 	hasFishingRod: () => boolean;
 }
 

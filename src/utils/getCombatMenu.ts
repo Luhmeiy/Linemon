@@ -1,9 +1,12 @@
-import type { LinemonProps } from "../interfaces/LinemonProps.js";
+import { ReturnUrlParams } from "@/types/ReturnUrlParams.js";
+import { LinemonProps } from "@/interfaces/LinemonProps.js";
 
 import { attack } from "./attack.js";
 import { createPrompt } from "./createPrompt.js";
 import { delayMessage } from "./delayMessage.js";
+import { getRoute } from "./getRoute.js";
 import { randomIntFromInterval } from "./randomIntFromInterval.js";
+import { Linemon } from "@/classes/Linemon.js";
 
 const moveOptions = [
 	{ name: "Use", value: "use" },
@@ -22,10 +25,18 @@ const createOptions = (moves: LinemonProps["moves"]) => {
 };
 
 export const getCombatMenu = async (
-	returnFunction: (wildLinemon?: LinemonProps) => void,
-	linemon: LinemonProps,
-	adversary: LinemonProps
+	url: string,
+	returnUrlParams: ReturnUrlParams,
+	linemon: LinemonProps
 ): Promise<any> => {
+	const { wildLinemon } = returnUrlParams;
+	const adversary = new Linemon(
+		wildLinemon.id,
+		wildLinemon.info,
+		wildLinemon.status,
+		wildLinemon.moves
+	);
+
 	const options = [
 		...createOptions(linemon.moves),
 		{ name: "Go back", value: "back" },
@@ -35,7 +46,7 @@ export const getCombatMenu = async (
 
 	if (answer.selectedOption === "back") {
 		console.log();
-		return returnFunction(adversary);
+		return await getRoute(url, returnUrlParams);
 	}
 
 	const selectedMove = linemon.moves[Number(answer.selectedOption)];
@@ -63,7 +74,7 @@ export const getCombatMenu = async (
 						break;
 				}
 
-				return returnFunction(adversary);
+				return await getRoute(url, returnUrlParams);
 			}
 
 			const linemonGoesFirst =
@@ -92,23 +103,28 @@ export const getCombatMenu = async (
 					await delayMessage(
 						`${linemon.info.name} received ${xp} xp.\n`
 					);
+
+					return await getRoute(url, {
+						...returnUrlParams,
+						battleWon: true,
+					});
 				}
 
-				return returnFunction(adversary);
+				return await getRoute(url, returnUrlParams);
 			}
 
 			await attack(secondAttack, secondToGo, firstToGo);
-			return returnFunction(adversary);
+			return await getRoute(url, returnUrlParams);
 		case "description":
 			await delayMessage(
 				`${selectedMove.name}: ${selectedMove.description}\n`
 			);
-			return getCombatMenu(returnFunction, linemon, adversary);
+			return getCombatMenu(url, returnUrlParams, linemon);
 		case "status":
 			await delayMessage(`Type: ${selectedMove.type}
 Power: ${selectedMove.power}
 Accuracy: ${selectedMove.accuracy}%
 PP Cost: ${selectedMove.pp}\n`);
-			return getCombatMenu(returnFunction, linemon, adversary);
+			return getCombatMenu(url, returnUrlParams, linemon);
 	}
 };

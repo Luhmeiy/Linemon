@@ -6,7 +6,7 @@ export type FindingSettings = {
 		min: number;
 		max: number;
 	};
-	location?: "tallGrass" | "desert" | "mountain" | "water";
+	location?: "tallGrass" | "water";
 };
 
 export interface LocationProps {

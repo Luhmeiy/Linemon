@@ -8,6 +8,7 @@ import type {
 	InventoryType,
 } from "@/interfaces/PlayerMethods.js";
 import type { Option } from "@/types/Option.js";
+import { ReturnUrlParams } from "@/types/ReturnUrlParams";
 
 import { createPrompt } from "@/utils/createPrompt.js";
 import { delayMessage } from "@/utils/delayMessage.js";
@@ -57,8 +58,7 @@ export class Inventory implements InventoryMethods {
 
 		switch (answer.selectedOption) {
 			case "consumable":
-				const newReturnFunction = () => this.getInventory(url, team);
-				await this.getConsumables(newReturnFunction, team, "inventory");
+				await this.getConsumables(url, team, "inventory");
 				break;
 			case "disk":
 				await this.createItemMenus(
@@ -171,18 +171,19 @@ export class Inventory implements InventoryMethods {
 		items: object[],
 		message: string,
 		options: Option,
-		returnFunction: () => void
+		url: string,
+		returnUrlParams?: ReturnUrlParams
 	) => {
 		if (items.length === 0) {
 			await delayMessage("No items.\n");
-			return returnFunction();
+			return await getRoute(url, returnUrlParams);
 		}
 
 		const answer = await createPrompt(message, options);
 
 		if (answer.selectedOption === "back") {
 			console.log();
-			return returnFunction();
+			return await getRoute(url, returnUrlParams);
 		}
 
 		return answer;
@@ -301,9 +302,10 @@ export class Inventory implements InventoryMethods {
 	};
 
 	getConsumables = async (
-		returnFunction: () => void,
+		url: string,
 		team: LinemonProps[],
-		location: "battle" | "inventory"
+		location: "battle" | "inventory",
+		returnUrlParams?: ReturnUrlParams
 	): Promise<any> => {
 		const consumableOptions: Option = [
 			...this.createOptions(this.inventory.consumable),
@@ -314,7 +316,8 @@ export class Inventory implements InventoryMethods {
 			this.inventory.consumable,
 			"Choose a consumable: ",
 			consumableOptions,
-			returnFunction
+			url,
+			returnUrlParams
 		);
 
 		if (!answer) return;
@@ -328,9 +331,10 @@ export class Inventory implements InventoryMethods {
 						return response;
 					} else {
 						return this.getConsumables(
-							returnFunction,
+							url,
 							team,
-							location
+							location,
+							returnUrlParams
 						);
 					}
 				}
@@ -338,25 +342,20 @@ export class Inventory implements InventoryMethods {
 		}
 	};
 
-	getDisks = async (
-		returnFunction: (
-			linemon: LinemonProps,
-			catchLinemon: boolean,
-			diskBonus?: number
-		) => void,
-		linemon: LinemonProps
-	) => {
+	getDisks = async (url: string, returnUrlParams: ReturnUrlParams) => {
+		const { wildLinemon } = returnUrlParams;
+
 		const diskOptions: Option = [
 			...this.createOptions(this.inventory.disk),
 			defaultOption,
 		];
 
-		const newReturnFunction = () => returnFunction(linemon, false);
 		const answer = await this.itemDefaultVerification(
 			this.inventory.disk,
 			"Choose a floppy disk: ",
 			diskOptions,
-			newReturnFunction
+			"encounter",
+			returnUrlParams
 		);
 
 		if (!answer) return;
@@ -372,11 +371,15 @@ export class Inventory implements InventoryMethods {
 					case "use":
 						const diskBonus = this.selectDiskBonus(
 							item,
-							linemon.info.type
+							wildLinemon.info.type
 						);
 
 						this.removeFromInventory(item, this.inventory.disk);
-						return returnFunction(linemon, true, diskBonus);
+						return await getRoute("encounter", {
+							...returnUrlParams,
+							catchLinemon: true,
+							diskBonus,
+						});
 					case "quantity":
 						await delayMessage(`Quantity: ${item.quantity}`);
 						break;
@@ -386,7 +389,7 @@ export class Inventory implements InventoryMethods {
 				}
 
 				console.log();
-				this.getDisks(returnFunction, linemon);
+				this.getDisks(url, returnUrlParams);
 			}
 		}
 	};
@@ -397,12 +400,11 @@ export class Inventory implements InventoryMethods {
 		url: string,
 		team: LinemonProps[]
 	) => {
-		const newReturnFunction = () => this.getInventory(url, team);
 		const answer = await this.itemDefaultVerification(
 			items,
 			"Choose an item: ",
 			options,
-			newReturnFunction
+			url
 		);
 
 		if (!answer) return;

@@ -10,7 +10,6 @@ import { createPrompt } from "@/utils/createPrompt";
 import { delayMessage } from "@/utils/delayMessage";
 import { getFromJson } from "@/utils/getFromJson";
 import { getRoute } from "@/utils/getRoute";
-import { searchForLinemon } from "@/utils/searchForLinemon";
 import { stringToTemplateLiteral } from "@/utils/stringToTemplateLiteral";
 
 export default async (req: Request) => {
@@ -41,17 +40,17 @@ export default async (req: Request) => {
 	await delayMessage(null);
 	switch (selectedOption) {
 		case "tallGrass":
-			return searchForLinemon(
-				route.linemonOptions,
-				route.findingSettings,
-				`map/route/${id}`
-			);
+			return await getRoute("encounter", {
+				linemonOptions: route.linemonOptions,
+				findingSettings: route.findingSettings,
+				url: `map/route/${id}`,
+			});
 		case "fish":
-			return searchForLinemon(
-				route.secondaryLinemonOptions,
-				route.secondaryFindingSettings,
-				`map/route/${id}`
-			);
+			return await getRoute("encounter", {
+				linemonOptions: route.secondaryLinemonOptions,
+				findingSettings: route.secondaryFindingSettings,
+				url: `map/route/${id}`,
+			});
 		case "menu":
 			return await getRoute(`menu?url=map/route/${id}`);
 		default:

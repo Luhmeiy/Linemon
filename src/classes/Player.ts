@@ -9,6 +9,7 @@ import type {
 	PlayerMethods,
 	TeamMethods,
 } from "../interfaces/PlayerMethods.js";
+import { ReturnUrlParams } from "@/types/ReturnUrlParams.js";
 
 import { delayMessage } from "@/utils/delayMessage.js";
 import { getRoute } from "@/utils/getRoute.js";
@@ -110,21 +111,20 @@ ${chalk.bold("Linemon caught:")} ${this.linemonsCaught.length}\n`);
 	};
 
 	getConsumables = async (
-		returnFunction: (linemon?: LinemonProps) => void,
+		url: string,
 		team: LinemonProps[],
-		location: "battle" | "inventory"
+		location: "battle" | "inventory",
+		returnUrlParams: ReturnUrlParams
 	) => {
 		return await this.inventory.getConsumables(
-			returnFunction,
+			url,
 			team,
-			location
+			location,
+			returnUrlParams
 		);
 	};
 
-	getDisks = (
-		returnFunction: (linemon: LinemonProps) => void,
-		linemon: LinemonProps
-	) => {
-		this.inventory.getDisks(returnFunction, linemon);
+	getDisks = (url: string, returnUrlParams: ReturnUrlParams) => {
+		this.inventory.getDisks(url, returnUrlParams);
 	};
 }
