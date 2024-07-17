@@ -2,25 +2,23 @@ import { existsSync, mkdirSync, writeFileSync } from "fs";
 import { Request } from "express";
 import moment from "moment";
 
+import { player } from "../map/index.js";
 import { createPrompt } from "@/utils/createPrompt.js";
 import { delayMessage } from "@/utils/delayMessage.js";
+import { getLinepedia } from "@/utils/getLinepedia.js";
 import { getRoute } from "@/utils/getRoute.js";
-import { player } from "../map/index.js";
 
 const actionsOptions = [
 	{ name: "player", value: "player" },
 	{ name: "Team", value: "team" },
 	{ name: "Inventory", value: "inventory" },
+	{ name: "Linepedia", value: "linepedia" },
 	{ name: "Save", value: "save" },
 	{ name: "Exit game", value: "exit" },
 	{ name: "Go back", value: "back" },
 ];
 
-interface Url {
-	url: string;
-}
-
-export default async (req: Request<{}, {}, {}, Url>) => {
+export default async (req: Request<{}, {}, {}, { url: string }>) => {
 	const { url } = req.query;
 
 	actionsOptions[0].name = player.getName();
@@ -34,6 +32,8 @@ export default async (req: Request<{}, {}, {}, Url>) => {
 			return player.getTeam(`menu?url=${url}`);
 		case "inventory":
 			return player.getInventory(`menu?url=${url}`);
+		case "linepedia":
+			return getLinepedia(`menu?url=${url}`);
 		case "save":
 			if (!existsSync("./src/save")) mkdirSync("./src/save");
 

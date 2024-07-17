@@ -69,6 +69,9 @@ export class Player implements PlayerMethods {
 		}
 	};
 
+	getLinemonsSeen = () => this.linemonsSeen;
+	getLinemonsCaught = () => this.linemonsCaught;
+
 	hasFishingRod = () => this.inventory.hasFishingRod();
 
 	getStatus = async (url: string) => {

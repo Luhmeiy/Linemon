@@ -70,6 +70,9 @@ export interface PlayerMethods
 	setLinemonsSeen: (id: string) => void;
 	setLinemonsCaught: (id: string) => void;
 
+	getLinemonsSeen: () => string[];
+	getLinemonsCaught: () => string[];
+
 	getStatus: (url: string) => void;
 
 	getInventory: (url: string) => void;
