@@ -163,7 +163,7 @@ const search = async (encounterProps: BaseEncounterProps) => {
 	const answer = await createPrompt("What do you want to do?", options);
 
 	await delayMessage(null);
-	switch (answer.selectedOption) {
+	switch (answer) {
 		case "exit":
 			return await getRoute(encounterProps.url);
 		case "continue":
@@ -269,7 +269,7 @@ Type: ${type}`);
 		wildLinemon: removeFunctionsFromLinemon(wildLinemon),
 	};
 
-	switch (answer.selectedOption) {
+	switch (answer) {
 		case "status":
 			await delayMessage(`HP: (${linemon.status.currentHp}/${linemon.status.maxHp})
 PP: (${linemon.status.currentPp}/${linemon.status.maxPp})\n`);

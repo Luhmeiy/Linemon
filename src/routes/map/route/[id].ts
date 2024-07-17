@@ -32,13 +32,13 @@ export default async (req: Request) => {
 
 	console.log(`\nYou are in the ${route.name}.`);
 
-	const { selectedOption } = await createPrompt(
+	const answer = await createPrompt(
 		"Where do you want to go?",
 		locationOptions
 	);
 
 	await delayMessage(null);
-	switch (selectedOption) {
+	switch (answer) {
 		case "tallGrass":
 			return await getRoute("encounter", {
 				linemonOptions: route.linemonOptions,
@@ -54,6 +54,6 @@ export default async (req: Request) => {
 		case "menu":
 			return await getRoute(`menu?url=map/route/${id}`);
 		default:
-			return await getRoute(route.routes[selectedOption]);
+			return await getRoute(route.routes[answer]);
 	}
 };

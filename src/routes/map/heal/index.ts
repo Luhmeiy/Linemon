@@ -22,7 +22,7 @@ export default async (req: Request<{}, {}, {}, { cityName: string }>) => {
 		healingOptions
 	);
 
-	switch (answer.selectedOption) {
+	switch (answer) {
 		case "heal":
 			const team = player.getTeamRaw();
 

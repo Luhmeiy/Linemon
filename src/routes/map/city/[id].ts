@@ -26,7 +26,7 @@ export default async (req: Request) => {
 	);
 
 	await delayMessage(null);
-	switch (answer.selectedOption) {
+	switch (answer) {
 		case "shop":
 			await getRoute(
 				`map/shop?cityName=${city.name}&shopItemsIds=${city.shopItemsIds}&url=map/city/${id}`
@@ -36,6 +36,6 @@ export default async (req: Request) => {
 		case "menu":
 			return getRoute(`menu?url=map/city/${id}`);
 		default:
-			await getRoute(city.routes[answer.selectedOption]);
+			await getRoute(city.routes[answer]);
 	}
 };

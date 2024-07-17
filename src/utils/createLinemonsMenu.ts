@@ -56,16 +56,16 @@ export const createLinemonsMenu = async (
 
 	const answer = await createPrompt("Choose a Linemon: ", availableLinemons);
 
-	if (answer.selectedOption === "back") {
+	if (answer === "back") {
 		return await getRoute(url);
 	}
 
-	const linemonId = Number(answer.selectedOption);
+	const linemonId = Number(answer);
 	const linemon = linemons[linemonId];
 
 	const linemonAnswer = await createPrompt(linemon.info.name, linemonOptions);
 
-	switch (linemonAnswer.selectedOption) {
+	switch (linemonAnswer) {
 		case "status":
 			await delayMessage(`HP: (${linemon.status.currentHp}/${linemon.status.maxHp})
 LVL: ${linemon.info.lvl} (${linemon.info.xp}/${linemon.info.xpToNextLevel})

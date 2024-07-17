@@ -39,16 +39,16 @@ export const getCombatMenu = async (
 
 	const answer = await createPrompt("Choose your move: ", options);
 
-	if (answer.selectedOption === "back") {
+	if (answer === "back") {
 		console.log();
 		return await getRoute(url, returnUrlParams);
 	}
 
-	const selectedMove = linemon.moves[Number(answer.selectedOption)];
+	const selectedMove = linemon.moves[Number(answer)];
 
 	const moveAnswer = await createPrompt(selectedMove.name, moveOptions);
 
-	switch (moveAnswer.selectedOption) {
+	switch (moveAnswer) {
 		case "use":
 			const adversarySelectedMove =
 				adversary.moves[randomIntFromInterval(0, 3)];
@@ -62,7 +62,7 @@ export const getCombatMenu = async (
 					]
 				);
 
-				switch (sleepAnswer.selectedOption) {
+				switch (sleepAnswer) {
 					case "sleep":
 						await attack(selectedMove, linemon, adversary);
 						await attack(adversarySelectedMove, adversary, linemon);

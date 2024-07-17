@@ -1,6 +1,7 @@
 import { existsSync, mkdirSync, writeFileSync } from "fs";
 import { Request } from "express";
 import moment from "moment";
+import confirm from "@inquirer/confirm";
 
 import { player } from "../map/index.js";
 import { createPrompt } from "@/utils/createPrompt.js";
@@ -25,7 +26,7 @@ export default async (req: Request<{}, {}, {}, { url: string }>) => {
 
 	const answer = await createPrompt("Choose an option: ", actionsOptions);
 
-	switch (answer.selectedOption) {
+	switch (answer) {
 		case "player":
 			return player.getStatus(`menu?url=${url}`);
 		case "team":
@@ -48,18 +49,12 @@ export default async (req: Request<{}, {}, {}, { url: string }>) => {
 			await delayMessage("Game saved!\n");
 			return await getRoute(`menu?url=${url}`);
 		case "exit":
-			const response = await createPrompt(
-				"Are you sure you want to exit? All unsaved progress will be lost.",
-				[
-					{ name: "Yes", value: "yes" },
-					{ name: "No", value: "no" },
-				]
-			);
+			const answer = await confirm({
+				message:
+					"Are you sure you want to exit? All unsaved progress will be lost.",
+			});
 
-			if (response.selectedOption === "yes") {
-				await getRoute("start/");
-			}
-
+			if (answer) await getRoute("start/");
 			return await getRoute("menu/");
 		case "back":
 			return await getRoute(url);

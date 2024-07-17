@@ -51,7 +51,7 @@ export class Team implements TeamMethods {
 				]
 			);
 
-			if (answer.selectedOption === "yes") {
+			if (answer === "yes") {
 				const options = this.team.map((linemon, i) => {
 					return {
 						name: linemon.info.name,
@@ -59,10 +59,12 @@ export class Team implements TeamMethods {
 					};
 				});
 
-				const linemonAnswer: { selectedOption: string } =
-					await createPrompt("Select Linemon to release: ", options);
+				const linemonAnswer = await createPrompt(
+					"Select Linemon to release: ",
+					options
+				);
 
-				const linemonId = Number(linemonAnswer.selectedOption);
+				const linemonId = Number(linemonAnswer);
 
 				linemonForPC = this.team[linemonId];
 				this.switchLinemon(linemon, linemonId);

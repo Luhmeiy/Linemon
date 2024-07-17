@@ -56,7 +56,7 @@ export class Inventory implements InventoryMethods {
 			categoryOptions
 		);
 
-		switch (answer.selectedOption) {
+		switch (answer) {
 			case "consumable":
 				await this.getConsumables(url, team, "inventory");
 				break;
@@ -181,7 +181,7 @@ export class Inventory implements InventoryMethods {
 
 		const answer = await createPrompt(message, options);
 
-		if (answer.selectedOption === "back") {
+		if (answer === "back") {
 			console.log();
 			return await getRoute(url, returnUrlParams);
 		}
@@ -206,11 +206,11 @@ export class Inventory implements InventoryMethods {
 			options
 		);
 
-		if (linemonAnswer.selectedOption === "back") {
+		if (linemonAnswer === "back") {
 			return true;
 		}
 
-		const linemonId = Number(linemonAnswer.selectedOption);
+		const linemonId = Number(linemonAnswer);
 		return team[linemonId];
 	};
 
@@ -220,7 +220,7 @@ export class Inventory implements InventoryMethods {
 	): Promise<any> => {
 		const itemAnswer = await createPrompt(item.name, extendedItemOptions);
 
-		switch (itemAnswer.selectedOption) {
+		switch (itemAnswer) {
 			case "use":
 				const playerLinemon = await this.createLinemonsMenu(team);
 
@@ -323,7 +323,7 @@ export class Inventory implements InventoryMethods {
 		if (!answer) return;
 
 		for (const item of this.inventory.consumable) {
-			if (answer.selectedOption === item.id) {
+			if (answer === item.id) {
 				const response = await this.getItemMenu(item, team);
 
 				if (response !== undefined) {
@@ -361,13 +361,13 @@ export class Inventory implements InventoryMethods {
 		if (!answer) return;
 
 		for (const item of this.inventory.disk) {
-			if (answer.selectedOption === item.id) {
+			if (answer === item.id) {
 				const itemAnswer = await createPrompt(
 					item.name,
 					extendedItemOptions
 				);
 
-				switch (itemAnswer.selectedOption) {
+				switch (itemAnswer) {
 					case "use":
 						const diskBonus = this.selectDiskBonus(
 							item,
@@ -410,10 +410,10 @@ export class Inventory implements InventoryMethods {
 		if (!answer) return;
 
 		for (const item of items) {
-			if (answer.selectedOption === item.id) {
+			if (answer === item.id) {
 				const itemAnswer = await createPrompt(item.name, itemOptions);
 
-				switch (itemAnswer.selectedOption) {
+				switch (itemAnswer) {
 					case "quantity":
 						await delayMessage(`Quantity: ${item.quantity}`);
 						break;

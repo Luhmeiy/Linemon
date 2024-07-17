@@ -1,10 +1,11 @@
 import { Response } from "express";
-import { createSpinner } from "nanospinner";
 import figlet from "figlet";
 import { readdirSync, readFileSync, unlinkSync } from "fs";
 import gradient from "gradient-string";
-import inquirer from "inquirer";
+import { createSpinner } from "nanospinner";
 import { join } from "path";
+import input from "@inquirer/input";
+import select from "@inquirer/select";
 
 import { createPrompt } from "@/utils/createPrompt";
 import { delayMessage } from "@/utils/delayMessage";
@@ -31,27 +32,23 @@ async function getSaveFiles() {
 		return await getRoute("start/");
 	}
 
-	const fileQuestions = [
-		{
-			type: "list",
-			name: "selectedFile",
-			message: "Select a file:",
-			choices: [...files, { name: "Go back", value: "back" }],
-		},
-	];
-
-	const { selectedFile } = await inquirer.prompt(fileQuestions);
+	const selectedFile = await select({
+		message: "Select a file:",
+		choices: [
+			...files.map((file) => {
+				return { name: file, value: file };
+			}),
+			{ name: "Go back", value: "back" },
+		],
+	});
 
 	if (selectedFile === "back") return await getRoute("start/");
 
 	const selectedFilePath = join(dirPath, selectedFile);
 
-	const { selectedOption } = await createPrompt(
-		"Select an option:",
-		fileOptions
-	);
+	const answer = await createPrompt("Select an option:", fileOptions);
 
-	switch (selectedOption) {
+	switch (answer) {
 		case "load":
 			const jsonPlayer = readFileSync(selectedFilePath, "utf-8");
 			const data = JSON.parse(jsonPlayer);
@@ -87,20 +84,17 @@ export default async (res: Response) => {
 	console.clear();
 	await generateTitle();
 
-	const { selectedOption } = await createPrompt(
+	const selectedOption = await createPrompt(
 		"Welcome to Linemon!",
 		titleScreenOptions
 	);
+
 	switch (selectedOption) {
 		case "new":
-			const inputName = await inquirer.prompt([
-				{
-					type: "input",
-					name: "name",
-					message: "What is your name?",
-				},
-			]);
-			const name = inputName.name !== "" ? inputName.name : "Player";
+			const inputName = await input({
+				message: "What is your name?",
+			});
+			const name = inputName !== "" ? inputName : "Player";
 			await delayMessage(`Welcome, ${name}`);
 			return await getRoute(`map?name=${name}`);
 		case "load":

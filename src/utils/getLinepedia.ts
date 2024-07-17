@@ -35,7 +35,7 @@ export const getLinepedia = async (url: string) => {
 		{ name: "Go back\n", value: "back" },
 	]);
 
-	if (answer.selectedOption === "back") {
+	if (answer === "back") {
 		return await getRoute(url);
 	} else {
 		await getLinepedia(url);

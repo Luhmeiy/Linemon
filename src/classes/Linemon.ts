@@ -67,7 +67,7 @@ export class Linemon implements LinemonProps {
 			if (this.info.lvl === this.info.evolvesAt) {
 				await delayMessage(`What? ${this.info.name} is evolving!\n`);
 
-				const { selectedOption } = await createPrompt(
+				const answer = await createPrompt(
 					`Want to prevent ${this.info.name} from evolving?`,
 					[
 						{ name: "No", value: "no" },
@@ -75,7 +75,7 @@ export class Linemon implements LinemonProps {
 					]
 				);
 
-				switch (selectedOption) {
+				switch (answer) {
 					case "no":
 						return await this.evolve();
 					case "yes":

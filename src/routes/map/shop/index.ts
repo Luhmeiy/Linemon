@@ -1,6 +1,6 @@
 import chalk from "chalk";
 import { Request } from "express";
-import inquirer from "inquirer";
+import input from "@inquirer/input";
 import { createSpinner } from "nanospinner";
 
 import jsonShopItems from "@/data/shopItems.json";
@@ -96,7 +96,7 @@ export default async (req: Request<{}, {}, {}, ShopProps>) => {
 
 	let options: Option;
 
-	switch (categoryAnswer.selectedOption) {
+	switch (categoryAnswer) {
 		case "consumable":
 			options = shopConsumableOptions;
 			break;
@@ -113,21 +113,21 @@ export default async (req: Request<{}, {}, {}, ShopProps>) => {
 
 	const answer = await createPrompt("What do you want to buy?", options!);
 
-	if (answer.selectedOption === "back") {
+	if (answer === "back") {
 		return await getRoute(
 			`map/shop?cityName=${cityName}&shopItemsIds=${shopItemsIds}&url=${url}`
 		);
 	}
 
 	for (const item of shopItems) {
-		if (answer.selectedOption === item.id) {
+		if (answer === item.id) {
 			const money = player.getMoney();
 
 			console.log(`\nYou have ${chalk.blue(money)} coins.`);
 
 			const itemAnswer = await createPrompt(item.name, itemOptions);
 
-			switch (itemAnswer.selectedOption) {
+			switch (itemAnswer) {
 				case "buy":
 					const spinner = createSpinner("");
 
@@ -136,13 +136,11 @@ export default async (req: Request<{}, {}, {}, ShopProps>) => {
 						break;
 					}
 
-					const { numberOfItems } = await inquirer.prompt([
-						{
-							type: "number",
-							name: "numberOfItems",
+					const numberOfItems = Number(
+						await input({
 							message: `How many ${item.name} you want to buy?`,
-						},
-					]);
+						})
+					);
 
 					if (numberOfItems <= 0 || isNaN(numberOfItems)) {
 						spinner.error({ text: "No items bought." });
