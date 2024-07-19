@@ -24,6 +24,40 @@ const createOptions = (moves: LinemonProps["moves"]) => {
 	});
 };
 
+const verifyIfDefeated = async (
+	url: string,
+	returnUrlParams: ReturnUrlParams,
+	linemon: LinemonProps,
+	adversary: LinemonProps
+) => {
+	let defeatedLinemon: LinemonProps;
+
+	if (linemon.status.currentHp <= 0 || adversary.status.currentHp <= 0) {
+		defeatedLinemon = linemon.status.currentHp <= 0 ? linemon : adversary;
+	}
+
+	if (defeatedLinemon) {
+		await delayMessage(`${defeatedLinemon.info.name} was defeated.\n`);
+
+		if (defeatedLinemon !== linemon) {
+			const xp = (112 * adversary.info.lvl) / 7;
+			linemon.setXp(xp);
+
+			await delayMessage(`${linemon.info.name} received ${xp} xp.\n`);
+
+			return await getRoute(url, {
+				...returnUrlParams,
+				battleWon: true,
+			});
+		}
+
+		return await getRoute(url, {
+			...returnUrlParams,
+			activePlayerLinemonId: "",
+		});
+	}
+};
+
 export const getCombatMenu = async (
 	url: string,
 	returnUrlParams: ReturnUrlParams,
@@ -87,28 +121,11 @@ export const getCombatMenu = async (
 				: selectedMove;
 
 			await attack(firstAttack, firstToGo, secondToGo);
-
-			if (secondToGo.status.currentHp <= 0) {
-				await delayMessage(`${secondToGo.info.name} was defeated.\n`);
-
-				if (firstToGo === linemon) {
-					const xp = (112 * adversary.info.lvl) / 7;
-					linemon.setXp(xp);
-
-					await delayMessage(
-						`${linemon.info.name} received ${xp} xp.\n`
-					);
-
-					return await getRoute(url, {
-						...returnUrlParams,
-						battleWon: true,
-					});
-				}
-
-				return await getRoute(url, returnUrlParams);
-			}
+			await verifyIfDefeated(url, returnUrlParams, linemon, adversary);
 
 			await attack(secondAttack, secondToGo, firstToGo);
+			await verifyIfDefeated(url, returnUrlParams, linemon, adversary);
+
 			return await getRoute(url, returnUrlParams);
 		case "description":
 			await delayMessage(

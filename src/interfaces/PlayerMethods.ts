@@ -56,6 +56,7 @@ export interface TeamMethods {
 	getTeam: (url: string) => void;
 	getTeamRaw: () => LinemonProps[];
 	getFirstTeam: () => LinemonProps;
+	getLinemonById: (id: string) => LinemonProps;
 	addToTeam: (linemon: LinemonProps) => Promise<LinemonProps | undefined>;
 }
 

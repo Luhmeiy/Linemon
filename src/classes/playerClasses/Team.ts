@@ -28,13 +28,23 @@ export class Team implements TeamMethods {
 			"team",
 			this.team,
 			this.addToPC,
+			this.switchLinemon,
 			this.removeFromTeam,
 			url
 		);
 	};
 
 	getTeamRaw = () => this.team;
-	getFirstTeam = () => this.team[0];
+	getFirstTeam = () => {
+		for (const linemon of this.team) {
+			if (linemon.status.currentHp > 0) {
+				return linemon;
+			}
+		}
+	};
+	getLinemonById = (id: string) => {
+		return this.team.find((linemon) => linemon.referenceId === id);
+	};
 
 	addToTeam = async (linemon: LinemonProps) => {
 		let linemonForPC;
@@ -67,7 +77,7 @@ export class Team implements TeamMethods {
 				const linemonId = Number(linemonAnswer);
 
 				linemonForPC = this.team[linemonId];
-				this.switchLinemon(linemon, linemonId);
+				this.team[linemonId] = linemon;
 
 				await delayMessage(`${linemon.info.name} added to team.\n`);
 			} else {
@@ -78,10 +88,30 @@ export class Team implements TeamMethods {
 		return linemonForPC;
 	};
 
-	private removeFromTeam = (linemonId: number) =>
-		this.team.splice(linemonId, 1);
+	private switchLinemon = (
+		firstLinemonId: string,
+		secondLinemonId: string
+	) => {
+		const firstIndex = this.team.findIndex(
+			(linemon) => linemon.referenceId === firstLinemonId
+		);
+		const secondIndex = this.team.findIndex(
+			(linemon) => linemon.referenceId === secondLinemonId
+		);
 
-	private switchLinemon = (linemon: LinemonProps, id: number) => {
-		this.team[id] = linemon;
+		[this.team[firstIndex], this.team[secondIndex]] = [
+			this.team[secondIndex],
+			this.team[firstIndex],
+		];
+
+		return this.team;
+	};
+
+	private removeFromTeam = (linemonId: string) => {
+		this.team = this.team.filter(
+			(linemon) => linemon.referenceId !== linemonId
+		);
+
+		return this.team;
 	};
 }

@@ -1,6 +1,8 @@
+import { UUID } from "crypto";
 import type { Moves } from "../types/Moves.js";
 
 export interface LinemonProps {
+	referenceId: UUID;
 	id: string;
 
 	info: {

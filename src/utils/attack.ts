@@ -38,8 +38,10 @@ export const attack = async (
 				defendingLinemon.status.def
 			);
 
+			const updatedHp = defendingLinemon.status.currentHp - damage;
+
 			attackingLinemon.status.currentPp -= move.pp;
-			defendingLinemon.status.currentHp -= damage;
+			defendingLinemon.status.currentHp = updatedHp <= 0 ? 0 : updatedHp;
 
 			await delayMessage(
 				`${attackingLinemon.info.name} used ${move.name}.`

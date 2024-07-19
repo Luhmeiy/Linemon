@@ -29,6 +29,7 @@ export class PC implements PCMethods {
 			"pc",
 			this.pc,
 			this.addToTeam,
+			this.switchLinemon,
 			this.removeFromPC,
 			url
 		);
@@ -39,5 +40,30 @@ export class PC implements PCMethods {
 		this.pc.push(linemon);
 	};
 
-	private removeFromPC = (linemonId: number) => this.pc.splice(linemonId, 1);
+	private switchLinemon = (
+		firstLinemonId: string,
+		secondLinemonId: string
+	) => {
+		const firstIndex = this.pc.findIndex(
+			(linemon) => linemon.referenceId === firstLinemonId
+		);
+		const secondIndex = this.pc.findIndex(
+			(linemon) => linemon.referenceId === secondLinemonId
+		);
+
+		[this.pc[firstIndex], this.pc[secondIndex]] = [
+			this.pc[secondIndex],
+			this.pc[firstIndex],
+		];
+
+		return this.pc;
+	};
+
+	private removeFromPC = (linemonId: string) => {
+		this.pc = this.pc.filter(
+			(linemon) => linemon.referenceId !== linemonId
+		);
+
+		return this.pc;
+	};
 }

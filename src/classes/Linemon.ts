@@ -1,5 +1,6 @@
 import jsonLinemons from "@/data/linemons.json";
 
+import { randomUUID } from "crypto";
 import { createSpinner } from "nanospinner";
 
 import type { LinemonProps } from "@/interfaces/LinemonProps.js";
@@ -10,12 +11,14 @@ import { randomIntFromInterval } from "@/utils/randomIntFromInterval.js";
 
 export class Linemon implements LinemonProps {
 	public id: LinemonProps["id"];
+	public referenceId: LinemonProps["referenceId"];
 	public info: LinemonProps["info"];
 	public status: LinemonProps["status"];
 	public moves: LinemonProps["moves"];
 
 	constructor(data: Linemon) {
 		this.id = data.id;
+		this.referenceId = data.referenceId;
 		this.info = data.info;
 		this.status = data.status;
 		this.moves = data.moves;

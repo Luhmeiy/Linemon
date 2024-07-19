@@ -8,6 +8,7 @@ import { getRoute } from "./getRoute.js";
 const linemonOptions = [
 	{ name: "Status", value: "status" },
 	{ name: "Description", value: "description" },
+	{ name: "Swap positions", value: "swap" },
 	{ name: "", value: "switch" },
 	{ name: "Release", value: "release" },
 	{ name: "Go back", value: "back" },
@@ -16,10 +17,12 @@ const linemonOptions = [
 const defaultOption = { name: "Go back", value: "back" };
 
 const createOptions = (linemons: LinemonProps[]) => {
-	return linemons.map((linemon, i) => {
+	return linemons.map((linemon) => {
+		const isFainted = linemon.status.currentHp === 0;
+
 		return {
-			name: linemon.info.name,
-			value: `${i}`,
+			name: `${linemon.info.name} ${isFainted ? "[fainted]" : ""}`,
+			value: `${linemon.referenceId}`,
 		};
 	});
 };
@@ -28,18 +31,22 @@ export const createLinemonsMenu = async (
 	origin: string,
 	linemons: LinemonProps[],
 	addFunction: (linemon: LinemonProps) => void,
-	removeFunction: (linemonId: number) => void,
+	switchFunction: (
+		firstLinemonId: string,
+		secondLinemonId: string
+	) => LinemonProps[],
+	removeFunction: (linemonId: string) => LinemonProps[],
 	url: string
 ) => {
 	let noLinemonsMessage;
 
 	switch (origin) {
 		case "team":
-			linemonOptions[2].name = "Send to PC";
+			linemonOptions[3].name = "Send to PC";
 			noLinemonsMessage = "No Linemons caught yet.\n";
 			break;
 		case "pc":
-			linemonOptions[2].name = "Add to team";
+			linemonOptions[3].name = "Add to team";
 			noLinemonsMessage = "No Linemons in PC.";
 			break;
 	}
@@ -54,14 +61,18 @@ export const createLinemonsMenu = async (
 		defaultOption,
 	];
 
-	const answer = await createPrompt("Choose a Linemon: ", availableLinemons);
+	const linemonId = await createPrompt(
+		"Choose a Linemon: ",
+		availableLinemons
+	);
 
-	if (answer === "back") {
+	if (linemonId === "back") {
 		return await getRoute(url);
 	}
 
-	const linemonId = Number(answer);
-	const linemon = linemons[linemonId];
+	const linemon = linemons.find(
+		(linemon) => linemon.referenceId === linemonId
+	);
 
 	const linemonAnswer = await createPrompt(linemon.info.name, linemonOptions);
 
@@ -78,15 +89,37 @@ SPD: ${linemon.status.spd}\n`);
 				`${linemon.info.name}: ${linemon.info.description}\n`
 			);
 			break;
+		case "swap":
+			const filteredLinemons = linemons.filter(
+				(arrayLinemon) =>
+					arrayLinemon.referenceId !== linemon.referenceId
+			);
+
+			const availableLinemons = [...createOptions(filteredLinemons)];
+
+			const answer = await createPrompt(
+				"Choose a Linemon to swap positions: ",
+				availableLinemons
+			);
+
+			linemons = switchFunction(linemonId, answer);
+			break;
 		case "switch":
-			removeFunction(linemonId);
+			linemons = removeFunction(linemonId);
 			await addFunction(linemon);
 			break;
 		case "release":
 			await delayMessage(`${linemon.info.name} was released.\n`);
-			removeFunction(linemonId);
+			linemons = removeFunction(linemonId);
 			break;
 	}
 
-	createLinemonsMenu(origin, linemons, addFunction, removeFunction, url);
+	createLinemonsMenu(
+		origin,
+		linemons,
+		addFunction,
+		switchFunction,
+		removeFunction,
+		url
+	);
 };

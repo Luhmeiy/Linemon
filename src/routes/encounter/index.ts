@@ -2,6 +2,7 @@ import jsonLinemons from "@/data/linemons.json";
 import jsonMoves from "@/data/moves.json";
 
 import chalk from "chalk";
+import { randomUUID } from "crypto";
 import { Request } from "express";
 import gradient from "gradient-string";
 import { createSpinner } from "nanospinner";
@@ -30,6 +31,7 @@ interface BaseEncounterProps {
 
 interface EncounterProps extends BaseEncounterProps {
 	wildLinemon?: Linemon;
+	activePlayerLinemonId?: string;
 	catchLinemon?: boolean;
 	diskBonus?: number;
 	battleWon?: boolean;
@@ -102,6 +104,7 @@ const generateLinemon = async (
 
 	return new Linemon({
 		id,
+		referenceId: randomUUID(),
 		info: { ...info, isShiny },
 		status,
 		moves,
@@ -178,6 +181,7 @@ export default async (req: Request<{}, {}, {}, EncounterProps>) => {
 		linemonOptions: holdOptions,
 		findingSettings,
 		url,
+		activePlayerLinemonId,
 		catchLinemon,
 		diskBonus,
 		battleWon,
@@ -200,7 +204,9 @@ export default async (req: Request<{}, {}, {}, EncounterProps>) => {
 		wildLinemon = new Linemon(wildLinemon);
 	}
 
-	const linemon = player.getFirstTeam();
+	let linemon = activePlayerLinemonId
+		? player.getLinemonById(activePlayerLinemonId)
+		: player.getFirstTeam();
 
 	if (catchLinemon) {
 		tryCatchingLinemon(wildLinemon, linemon, baseEncounterProps, diskBonus);
@@ -226,9 +232,7 @@ export default async (req: Request<{}, {}, {}, EncounterProps>) => {
 			spinner.success({
 				text: `You found a ${wildLinemon.info.name}!\n`,
 			});
-
 			await delayMessage(null);
-			console.log(`You sent out ${linemon.info.name}\n`);
 
 			player.setLinemonsSeen(wildLinemon.id);
 		} else {
@@ -240,6 +244,10 @@ export default async (req: Request<{}, {}, {}, EncounterProps>) => {
 		}
 
 		await delayMessage(null);
+	}
+
+	if (!activePlayerLinemonId) {
+		console.log(`You sent out ${linemon.info.name}\n`);
 	}
 
 	// Format Linemon type and display wild Linemon informations
@@ -254,6 +262,7 @@ Type: ${type}`);
 		{ name: `${linemon.info.name}'s status`, value: "status" },
 		{ name: "Fight", value: "fight" },
 		{ name: "Catch", value: "catch" },
+		{ name: "Swap", value: "swap" },
 		{ name: "Inventory", value: "inventory" },
 		{ name: "Run", value: "run" },
 	];
@@ -267,6 +276,7 @@ Type: ${type}`);
 		findingSettings,
 		url,
 		wildLinemon: removeFunctionsFromLinemon(wildLinemon),
+		activePlayerLinemonId: linemon.referenceId,
 	};
 
 	switch (answer) {
@@ -278,6 +288,44 @@ PP: (${linemon.status.currentPp}/${linemon.status.maxPp})\n`);
 			return getCombatMenu("encounter", returnUrlParams, linemon);
 		case "catch":
 			return player.getDisks("encounter", returnUrlParams);
+		case "swap":
+			const team = player.getTeamRaw();
+
+			const filteredLinemons = team.filter(
+				(arrayLinemon) =>
+					arrayLinemon.referenceId !== linemon.referenceId &&
+					arrayLinemon.status.currentHp > 0
+			);
+
+			const availableLinemons = [
+				...filteredLinemons.map((linemon) => {
+					return {
+						name: linemon.info.name,
+						value: linemon.referenceId,
+					};
+				}),
+			];
+
+			const linemonId = await createPrompt("Choose a Linemon to swap: ", [
+				...availableLinemons,
+				{ name: "Go back", value: "back" },
+			]);
+
+			if (linemonId === "back") {
+				console.log();
+				await getRoute("encounter", returnUrlParams);
+			}
+
+			linemon = player.getLinemonById(linemonId);
+
+			const selectedMove = wildLinemon.moves[randomIntFromInterval(0, 3)];
+			await attack(selectedMove, wildLinemon, linemon);
+
+			await getRoute("encounter", {
+				...returnUrlParams,
+				activePlayerLinemonId: linemon.referenceId,
+			});
+			break;
 		case "inventory":
 			const response = await player.getConsumables(
 				"encounter",
@@ -290,10 +338,9 @@ PP: (${linemon.status.currentPp}/${linemon.status.maxPp})\n`);
 			if (response!) {
 				const selectedMove =
 					wildLinemon.moves[randomIntFromInterval(0, 3)];
-
 				await attack(selectedMove, wildLinemon, linemon);
 
-				getRoute("encounter", { wildLinemon });
+				getRoute("encounter", { wildLinemon, linemon });
 			}
 			break;
 		default:

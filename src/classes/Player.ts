@@ -87,6 +87,7 @@ ${chalk.bold("Linemon caught:")} ${this.linemonsCaught.length}\n`);
 	getTeam = (url: string) => this.team.getTeam(url);
 	getTeamRaw = () => this.team.getTeamRaw();
 	getFirstTeam = () => this.team.getFirstTeam();
+	getLinemonById = (id: string) => this.team.getLinemonById(id);
 
 	addToTeam = async (linemon: LinemonProps) => {
 		const linemonForPC = await this.team.addToTeam(linemon);
