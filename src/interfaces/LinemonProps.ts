@@ -29,6 +29,15 @@ export interface LinemonProps {
 		currentPp: number;
 	};
 
+	effects: {
+		id: string;
+		name: string;
+		duration: number;
+		power?: number;
+		effect?: number;
+		affects?: string;
+	}[];
+
 	moves: Moves[];
 
 	attack: (
@@ -40,4 +49,8 @@ export interface LinemonProps {
 	sleep: () => void;
 	setXp: (newXp: number) => void;
 	evolve: () => void;
+	setEffect: (effectName: string, duration: number) => void;
+	getEffectByAffect: (affect: string) => LinemonProps["effects"];
+	removeEffect: (effectName: string) => void;
+	applyEffects: () => void;
 }

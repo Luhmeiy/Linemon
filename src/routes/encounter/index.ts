@@ -174,6 +174,10 @@ const search = async (encounterProps: BaseEncounterProps) => {
 	}
 };
 
+const verifyIfAffected = async (linemon: LinemonProps) => {
+	if (linemon && linemon.effects) await linemon.applyEffects();
+};
+
 let linemonOptions: string[];
 
 export default async (req: Request<{}, {}, {}, EncounterProps>) => {
@@ -212,6 +216,9 @@ export default async (req: Request<{}, {}, {}, EncounterProps>) => {
 		tryCatchingLinemon(wildLinemon, linemon, baseEncounterProps, diskBonus);
 	}
 
+	await verifyIfAffected(wildLinemon);
+	await verifyIfAffected(linemon);
+
 	// If wild Linemon isn't provided, generate one
 	if (!wildLinemon) {
 		const randomNumber = randomIntFromInterval(1, 100);
@@ -228,11 +235,9 @@ export default async (req: Request<{}, {}, {}, EncounterProps>) => {
 		if (randomNumber <= findingChance) {
 			wildLinemon = await generateLinemon(linemonOptions, level);
 
-			console.log();
 			spinner.success({
 				text: `You found a ${wildLinemon.info.name}!\n`,
 			});
-			await delayMessage(null);
 
 			player.setLinemonsSeen(wildLinemon.id);
 		} else {
@@ -248,6 +253,7 @@ export default async (req: Request<{}, {}, {}, EncounterProps>) => {
 
 	if (!activePlayerLinemonId) {
 		console.log(`You sent out ${linemon.info.name}\n`);
+		await delayMessage(null);
 	}
 
 	// Format Linemon type and display wild Linemon informations

@@ -59,6 +59,7 @@ export interface TeamMethods {
 	getFirstTeam: () => LinemonProps;
 	getLinemonById: (id: string) => LinemonProps;
 	addToTeam: (linemon: LinemonProps) => Promise<LinemonProps | undefined>;
+	cleanEffects: () => void;
 }
 
 export interface PlayerMethods

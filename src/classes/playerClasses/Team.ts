@@ -114,4 +114,8 @@ export class Team implements TeamMethods {
 
 		return this.team;
 	};
+
+	cleanEffects = () => {
+		this.team.map((linemon) => (linemon.effects = []));
+	};
 }

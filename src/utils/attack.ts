@@ -26,7 +26,17 @@ export const attack = async (
 ) => {
 	if (attackingLinemon.status.currentPp >= move.pp) {
 		const random = randomIntFromInterval(1, 100);
-		if (random <= move.accuracy) {
+
+		const accuracyModifier = attackingLinemon.getEffectByAffect("accuracy");
+
+		const linemonAccuracy = accuracyModifier
+			? accuracyModifier.reduce(
+					(modifier, current) => modifier * current.effect,
+					move.accuracy
+			  )
+			: move.accuracy;
+
+		if (random <= linemonAccuracy) {
 			const modifiers = getTypeModifier(
 				move.type,
 				defendingLinemon.info.type
@@ -50,6 +60,10 @@ export const attack = async (
 			await delayMessage(
 				`${attackingLinemon.info.name} dealt ${damage} damage to ${defendingLinemon.info.name}.\n`
 			);
+
+			if (move.effect) {
+				await defendingLinemon.setEffect(move.effect, move.duration);
+			}
 		} else {
 			attackingLinemon.status.currentPp -= move.pp;
 

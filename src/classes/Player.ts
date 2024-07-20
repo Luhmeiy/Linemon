@@ -96,6 +96,8 @@ ${chalk.bold("Linemon caught:")} ${this.linemonsCaught.length}\n`);
 		return undefined;
 	};
 
+	cleanEffects = () => this.team.cleanEffects();
+
 	// PC
 	getPC = (url: string) => this.pc.getPC(url);
 	addToPC = async (linemon: LinemonProps) => await this.pc.addToPC(linemon);

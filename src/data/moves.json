@@ -252,5 +252,16 @@
 		"power": 70,
 		"accuracy": 90,
 		"pp": 12
+	},
+	{
+		"id": "poisonPunch",
+		"name": "Poison Punch",
+		"description": "Attacks the opponent with a powerful punch covered in poison.",
+		"type": "normal",
+		"power": 40,
+		"accuracy": 80,
+		"pp": 12,
+		"effect": "poison",
+		"duration": 3
 	}
 ]

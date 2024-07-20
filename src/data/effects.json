@@ -1,0 +1,18 @@
+[
+	{
+		"id": "burn",
+		"name": "burning",
+		"power": 0.125
+	},
+	{
+		"id": "poison",
+		"name": "poisoned",
+		"power": 0.125
+	},
+	{
+		"id": "wet",
+		"name": "wet",
+		"effect": 0.25,
+		"affects": "accuracy"
+	}
+]

@@ -1,6 +1,6 @@
+import jsonEffects from "@/data/effects.json";
 import jsonLinemons from "@/data/linemons.json";
 
-import { randomUUID } from "crypto";
 import { createSpinner } from "nanospinner";
 
 import type { LinemonProps } from "@/interfaces/LinemonProps.js";
@@ -14,6 +14,7 @@ export class Linemon implements LinemonProps {
 	public referenceId: LinemonProps["referenceId"];
 	public info: LinemonProps["info"];
 	public status: LinemonProps["status"];
+	public effects: LinemonProps["effects"];
 	public moves: LinemonProps["moves"];
 
 	constructor(data: Linemon) {
@@ -21,6 +22,7 @@ export class Linemon implements LinemonProps {
 		this.referenceId = data.referenceId;
 		this.info = data.info;
 		this.status = data.status;
+		this.effects = data.effects || [];
 		this.moves = data.moves;
 	}
 
@@ -51,6 +53,7 @@ export class Linemon implements LinemonProps {
 		return recover;
 	};
 
+	// XP
 	setXp = async (linemonXp: number) => {
 		const { xpToNextLevel } = this.info;
 
@@ -120,6 +123,61 @@ export class Linemon implements LinemonProps {
 				xpToNextLevel: this.info.xpToNextLevel,
 				isShiny: this.info.isShiny,
 			};
+		}
+	};
+
+	// Effects
+	setEffect = async (effectName: string, duration: number) => {
+		const effect = jsonEffects.find(({ id }) => id === effectName);
+		const hasEffect = this.effects.find(({ id }) => id === effectName);
+
+		if (hasEffect) {
+			hasEffect.duration += duration;
+		} else {
+			console.log(`${this.info.name} is now ${effect.name}.\n`);
+			await delayMessage(null);
+
+			this.effects.push({ ...effect, duration });
+		}
+	};
+
+	getEffectByAffect = (affect: string) => {
+		return this.effects.filter((effect) => {
+			if (effect.affects === affect) {
+				effect.duration -= 1;
+				return effect;
+			}
+		});
+	};
+
+	removeEffect = (effectName: string) => {
+		this.effects = this.effects.filter(({ id }) => id !== effectName);
+	};
+
+	applyEffects = async () => {
+		const effects = this.effects.filter(
+			(effect) => effect.power !== undefined
+		);
+
+		for (const effect of effects) {
+			const damage = Math.floor(this.status.maxHp * effect.power);
+
+			const updatedHp = this.status.currentHp - damage;
+
+			if (effect.id === "poison") {
+				this.status.currentHp = updatedHp <= 1 ? 1 : updatedHp;
+			} else {
+				this.status.currentHp = updatedHp <= 0 ? 0 : updatedHp;
+			}
+
+			console.log(
+				`${this.info.name} is ${effect.name} and took ${damage} damage.\n`
+			);
+			await delayMessage(null);
+
+			effect.duration -= 1;
+
+			if (effect.duration === 0) this.removeEffect(effect.id);
 		}
 	};
 }

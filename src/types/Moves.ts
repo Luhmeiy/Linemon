@@ -5,5 +5,7 @@ export type Moves = {
 	power: number;
 	accuracy: number;
 	pp: number;
+	effect?: string;
+	duration?: number;
 	isFirst?: boolean;
 };
