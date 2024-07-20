@@ -132,7 +132,7 @@
 				"value": "0"
 			}
 		],
-		"shopItemsIds": ["potion", "superPotion", "disk"]
+		"shopItemsIds": ["potion", "superPotion", "disk", "fishingRod"]
 	},
 	{
 		"id": "desertCity",

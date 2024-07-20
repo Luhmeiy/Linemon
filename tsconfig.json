@@ -1,5 +1,8 @@
 {
 	"compilerOptions": {
+		"outDir": "dist/src",
+		"module": "NodeNext",
+		"moduleResolution": "NodeNext",
 		"esModuleInterop": true,
 		"resolveJsonModule": true,
 		"paths": {

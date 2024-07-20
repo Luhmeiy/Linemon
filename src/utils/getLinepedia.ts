@@ -1,9 +1,9 @@
 import jsonLinemons from "@/data/linemons.json";
 
-import { player } from "@/routes/map";
-import { createPrompt } from "./createPrompt";
-import { delayMessage } from "./delayMessage";
-import { getRoute } from "./getRoute";
+import { player } from "@/routes/map/index.js";
+import { createPrompt } from "./createPrompt.js";
+import { delayMessage } from "./delayMessage.js";
+import { getRoute } from "./getRoute.js";
 
 export const getLinepedia = async (url: string) => {
 	const linemonsSeen = player.getLinemonsSeen();

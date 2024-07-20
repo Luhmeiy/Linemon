@@ -1,10 +1,10 @@
 import { Request } from "express";
 import chalk from "chalk";
 
-import { player } from "..";
-import { createPrompt } from "@/utils/createPrompt";
-import { delayMessage } from "@/utils/delayMessage";
-import { getRoute } from "@/utils/getRoute";
+import { player } from "../index.js";
+import { createPrompt } from "@/utils/createPrompt.js";
+import { delayMessage } from "@/utils/delayMessage.js";
+import { getRoute } from "@/utils/getRoute.js";
 
 const healingOptions = [
 	{ name: "Heal", value: "heal" },

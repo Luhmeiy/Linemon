@@ -2,15 +2,15 @@ import chalk from "chalk";
 import { Request } from "express";
 
 import jsonLocations from "@/data/locations.json";
-import { LocationProps } from "@/interfaces/LocationProps";
+import { LocationProps } from "@/interfaces/LocationProps.js";
 
-import { player } from "..";
-import { addMenuToOptions } from "@/utils/addMenuToOptions";
-import { createPrompt } from "@/utils/createPrompt";
-import { delayMessage } from "@/utils/delayMessage";
-import { getFromJson } from "@/utils/getFromJson";
-import { getRoute } from "@/utils/getRoute";
-import { stringToTemplateLiteral } from "@/utils/stringToTemplateLiteral";
+import { player } from "../index.js";
+import { addMenuToOptions } from "@/utils/addMenuToOptions.js";
+import { createPrompt } from "@/utils/createPrompt.js";
+import { delayMessage } from "@/utils/delayMessage.js";
+import { getFromJson } from "@/utils/getFromJson.js";
+import { getRoute } from "@/utils/getRoute.js";
+import { stringToTemplateLiteral } from "@/utils/stringToTemplateLiteral.js";
 
 export default async (req: Request) => {
 	const { id } = req.params;

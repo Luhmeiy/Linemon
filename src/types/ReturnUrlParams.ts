@@ -1,5 +1,5 @@
-import { Linemon } from "@/classes/Linemon";
-import { FindingSettings } from "@/interfaces/LocationProps";
+import { Linemon } from "@/classes/Linemon.js";
+import { FindingSettings } from "@/interfaces/LocationProps.js";
 
 export type ReturnUrlParams = {
 	findingSettings: FindingSettings;

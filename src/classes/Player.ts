@@ -106,6 +106,8 @@ ${chalk.bold("Linemon caught:")} ${this.linemonsCaught.length}\n`);
 		this.inventory.getInventory(url, team);
 	};
 
+	getSpecialItems = () => this.inventory.getSpecialItems();
+
 	addToInventory = (item: IShopItems, quantity: number) => {
 		this.inventory.addToInventory(item, quantity);
 	};

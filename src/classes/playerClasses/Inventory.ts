@@ -8,7 +8,7 @@ import type {
 	InventoryType,
 } from "@/interfaces/PlayerMethods.js";
 import type { Option } from "@/types/Option.js";
-import { ReturnUrlParams } from "@/types/ReturnUrlParams";
+import { ReturnUrlParams } from "@/types/ReturnUrlParams.js";
 
 import { createPrompt } from "@/utils/createPrompt.js";
 import { delayMessage } from "@/utils/delayMessage.js";
@@ -22,7 +22,6 @@ const categoryOptions = [
 ];
 
 const itemOptions = [
-	{ name: "Quantity", value: "quantity" },
 	{ name: "Description", value: "description" },
 	{ name: "Go back", value: "back" },
 ];
@@ -82,6 +81,8 @@ export class Inventory implements InventoryMethods {
 				break;
 		}
 	};
+
+	getSpecialItems = () => this.inventory.special;
 
 	addToInventory = (item: IShopItems, quantity: number) => {
 		let inventory;
@@ -411,7 +412,18 @@ export class Inventory implements InventoryMethods {
 
 		for (const item of items) {
 			if (answer === item.id) {
-				const itemAnswer = await createPrompt(item.name, itemOptions);
+				const isItemSpecial = this.inventory.special.some(
+					(e) => e.id === item.id
+				);
+
+				const newItemOptions = isItemSpecial
+					? itemOptions
+					: [{ name: "Quantity", value: "quantity" }, ...itemOptions];
+
+				const itemAnswer = await createPrompt(
+					item.name,
+					newItemOptions
+				);
 
 				switch (itemAnswer) {
 					case "quantity":

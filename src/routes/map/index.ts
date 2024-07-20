@@ -1,8 +1,8 @@
 import { Request } from "express";
 
-import { Player } from "@/classes/Player";
-import { PlayerMethods } from "@/interfaces/PlayerMethods";
-import { getRoute } from "@/utils/getRoute";
+import { Player } from "@/classes/Player.js";
+import { PlayerMethods } from "@/interfaces/PlayerMethods.js";
+import { getRoute } from "@/utils/getRoute.js";
 
 interface MapProps {
 	name?: string;

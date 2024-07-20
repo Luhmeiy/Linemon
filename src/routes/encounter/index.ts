@@ -7,21 +7,21 @@ import { Request } from "express";
 import gradient from "gradient-string";
 import { createSpinner } from "nanospinner";
 
-import { LinemonProps } from "@/interfaces/LinemonProps";
-import { FindingSettings } from "@/interfaces/LocationProps";
-import { Moves } from "@/types/Moves";
+import { LinemonProps } from "@/interfaces/LinemonProps.js";
+import { FindingSettings } from "@/interfaces/LocationProps.js";
+import { Moves } from "@/types/Moves.js";
 
-import { player } from "../map";
-import { Linemon } from "@/classes/Linemon";
-import { attack } from "@/utils/attack";
-import { createPrompt } from "@/utils/createPrompt";
-import { delayMessage } from "@/utils/delayMessage";
-import { generateStatus } from "@/utils/generateStatus";
-import { getCombatMenu } from "@/utils/getCombatMenu";
-import { getFromJson } from "@/utils/getFromJson";
-import { getRoute } from "@/utils/getRoute";
-import { randomIntFromInterval } from "@/utils/randomIntFromInterval";
-import { removeFunctionsFromLinemon } from "@/utils/removeFunctionsFromLinemon";
+import { player } from "../map/index.js";
+import { Linemon } from "@/classes/Linemon.js";
+import { attack } from "@/utils/attack.js";
+import { createPrompt } from "@/utils/createPrompt.js";
+import { delayMessage } from "@/utils/delayMessage.js";
+import { generateStatus } from "@/utils/generateStatus.js";
+import { getCombatMenu } from "@/utils/getCombatMenu.js";
+import { getFromJson } from "@/utils/getFromJson.js";
+import { getRoute } from "@/utils/getRoute.js";
+import { randomIntFromInterval } from "@/utils/randomIntFromInterval.js";
+import { removeFunctionsFromLinemon } from "@/utils/removeFunctionsFromLinemon.js";
 
 interface BaseEncounterProps {
 	linemonOptions?: string[];

@@ -4,14 +4,14 @@ import input from "@inquirer/input";
 import { createSpinner } from "nanospinner";
 
 import jsonShopItems from "@/data/shopItems.json";
-import { IShopItems } from "@/interfaces/IShopItems";
-import { Option } from "@/types/Option";
+import { IShopItems } from "@/interfaces/IShopItems.js";
+import { Option } from "@/types/Option.js";
 
-import { player } from "..";
-import { createPrompt } from "@/utils/createPrompt";
-import { delayMessage } from "@/utils/delayMessage";
-import { getFromJson } from "@/utils/getFromJson";
-import { getRoute } from "@/utils/getRoute";
+import { player } from "../index.js";
+import { createPrompt } from "@/utils/createPrompt.js";
+import { delayMessage } from "@/utils/delayMessage.js";
+import { getFromJson } from "@/utils/getFromJson.js";
+import { getRoute } from "@/utils/getRoute.js";
 
 interface ShopProps {
 	cityName: string;
@@ -138,7 +138,7 @@ export default async (req: Request<{}, {}, {}, ShopProps>) => {
 
 					const numberOfItems = Number(
 						await input({
-							message: `How many ${item.name} you want to buy?`,
+							message: `How many ${item.name} do you want to buy?`,
 						})
 					);
 
@@ -149,6 +149,21 @@ export default async (req: Request<{}, {}, {}, ShopProps>) => {
 
 					if (money < item.price * numberOfItems) {
 						spinner.error({ text: "Not enough money." });
+						break;
+					}
+
+					if (item.category === "special" && numberOfItems > 1) {
+						spinner.error({ text: "You can only buy one." });
+						break;
+					}
+
+					if (
+						item.category === "special" &&
+						player
+							.getSpecialItems()
+							.some(({ id }) => id === item.id)
+					) {
+						spinner.error({ text: "You already bought it." });
 						break;
 					}
 

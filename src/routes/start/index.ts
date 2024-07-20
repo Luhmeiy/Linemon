@@ -7,9 +7,9 @@ import { join } from "path";
 import input from "@inquirer/input";
 import select from "@inquirer/select";
 
-import { createPrompt } from "@/utils/createPrompt";
-import { delayMessage } from "@/utils/delayMessage";
-import { getRoute } from "@/utils/getRoute";
+import { createPrompt } from "@/utils/createPrompt.js";
+import { delayMessage } from "@/utils/delayMessage.js";
+import { getRoute } from "@/utils/getRoute.js";
 
 const titleScreenOptions = [
 	{ name: "New game", value: "new" },

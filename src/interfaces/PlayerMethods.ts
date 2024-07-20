@@ -32,6 +32,7 @@ export type InventoryType = {
 
 export interface InventoryMethods {
 	getInventory: (url: string, team: LinemonProps[]) => void;
+	getSpecialItems: () => InventoryItem[];
 	addToInventory: (item: IShopItems, quantity: number) => void;
 	removeFromInventory: (
 		item: InventoryItem,

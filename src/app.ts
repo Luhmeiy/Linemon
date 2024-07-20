@@ -2,7 +2,7 @@ import express from "express";
 import createRouter from "express-file-routing";
 import path from "path";
 import { fileURLToPath } from "url";
-import { getRoute } from "./utils/getRoute";
+import { getRoute } from "./utils/getRoute.js";
 
 const app = express();
 
