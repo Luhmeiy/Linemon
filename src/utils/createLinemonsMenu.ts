@@ -34,7 +34,7 @@ export const createLinemonsMenu = async (
 	switchFunction: (
 		firstLinemonId: string,
 		secondLinemonId: string
-	) => LinemonProps[],
+	) => Promise<LinemonProps[]>,
 	removeFunction: (linemonId: string) => LinemonProps[],
 	url: string
 ) => {
@@ -74,52 +74,64 @@ export const createLinemonsMenu = async (
 		(linemon) => linemon.referenceId === linemonId
 	);
 
-	const linemonAnswer = await createPrompt(linemon.info.name, linemonOptions);
+	const createLinemonMenu = async (linemon: LinemonProps) => {
+		const linemonAnswer = await createPrompt(
+			linemon.info.name,
+			linemonOptions
+		);
 
-	switch (linemonAnswer) {
-		case "status":
-			await delayMessage(`HP: (${linemon.status.currentHp}/${linemon.status.maxHp})
+		switch (linemonAnswer) {
+			case "status":
+				await delayMessage(`HP: (${linemon.status.currentHp}/${linemon.status.maxHp})
 LVL: ${linemon.info.lvl} (${linemon.info.xp}/${linemon.info.xpToNextLevel})
 ATK: ${linemon.status.atk}
 DEF: ${linemon.status.def}
 SPD: ${linemon.status.spd}\n`);
-			break;
-		case "description":
-			await delayMessage(
-				`${linemon.info.name}: ${linemon.info.description}\n`
-			);
-			break;
-		case "swap":
-			const filteredLinemons = linemons.filter(
-				(arrayLinemon) =>
-					arrayLinemon.referenceId !== linemon.referenceId
-			);
+				return createLinemonMenu(linemon);
+			case "description":
+				await delayMessage(
+					`${linemon.info.name}: ${linemon.info.description}\n`
+				);
+				return createLinemonMenu(linemon);
+			case "swap":
+				const filteredLinemons = linemons.filter(
+					({ referenceId }) => referenceId !== linemon.referenceId
+				);
 
-			const availableLinemons = [...createOptions(filteredLinemons)];
+				if (filteredLinemons.length <= 0) {
+					console.log("You can't swap Linemons.\n");
+					await delayMessage(null);
+					break;
+				}
+				const availableLinemons = [...createOptions(filteredLinemons)];
 
-			const answer = await createPrompt(
-				"Choose a Linemon to swap positions: ",
-				availableLinemons
-			);
+				const answer = await createPrompt(
+					"Choose a Linemon to swap positions: ",
+					availableLinemons
+				);
 
-			linemons = switchFunction(linemonId, answer);
-			break;
-		case "switch":
-			linemons = removeFunction(linemonId);
-			await addFunction(linemon);
-			break;
-		case "release":
-			await delayMessage(`${linemon.info.name} was released.\n`);
-			linemons = removeFunction(linemonId);
-			break;
-	}
+				linemons = await switchFunction(linemonId, answer);
 
-	createLinemonsMenu(
-		origin,
-		linemons,
-		addFunction,
-		switchFunction,
-		removeFunction,
-		url
-	);
+				return createLinemonMenu(linemon);
+			case "switch":
+				linemons = removeFunction(linemonId);
+				await addFunction(linemon);
+				break;
+			case "release":
+				await delayMessage(`${linemon.info.name} was released.\n`);
+				linemons = removeFunction(linemonId);
+				break;
+		}
+
+		return createLinemonsMenu(
+			origin,
+			linemons,
+			addFunction,
+			switchFunction,
+			removeFunction,
+			url
+		);
+	};
+
+	createLinemonMenu(linemon);
 };

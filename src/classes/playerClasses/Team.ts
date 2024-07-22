@@ -3,31 +3,26 @@ import type { TeamMethods } from "@/interfaces/PlayerMethods.js";
 
 import { Linemon } from "../Linemon.js";
 
+import { player } from "@/routes/map/index.js";
 import { createLinemonsMenu } from "@/utils/createLinemonsMenu.js";
 import { createPrompt } from "@/utils/createPrompt.js";
 import { delayMessage } from "@/utils/delayMessage.js";
+import { switchLinemon } from "@/utils/switchLinemon.js";
 
 export class Team implements TeamMethods {
 	private team: LinemonProps[];
 
-	constructor(
-		private addToPC: (linemon: LinemonProps) => void,
-		team?: LinemonProps[]
-	) {
-		if (team) {
-			this.team = team.map((linemon) => {
-				return new Linemon(linemon as Linemon);
-			});
-		} else {
-			this.team = [];
-		}
+	constructor(team) {
+		this.team = team
+			? team.team.map((linemon) => new Linemon(linemon))
+			: [];
 	}
 
 	getTeam = async (url: string) => {
 		await createLinemonsMenu(
 			"team",
 			this.team,
-			this.addToPC,
+			player.pc.addToPC,
 			this.switchLinemon,
 			this.removeFromTeam,
 			url
@@ -43,7 +38,7 @@ export class Team implements TeamMethods {
 		}
 	};
 	getLinemonById = (id: string) => {
-		return this.team.find((linemon) => linemon.referenceId === id);
+		return this.team.find(({ referenceId }) => referenceId === id);
 	};
 
 	addToTeam = async (linemon: LinemonProps) => {
@@ -85,37 +80,31 @@ export class Team implements TeamMethods {
 			}
 		}
 
-		return linemonForPC;
+		if (linemonForPC) await player.pc.addToPC(linemonForPC);
 	};
 
-	private switchLinemon = (
+	private switchLinemon = async (
 		firstLinemonId: string,
 		secondLinemonId: string
 	) => {
-		const firstIndex = this.team.findIndex(
-			(linemon) => linemon.referenceId === firstLinemonId
+		this.team = await switchLinemon(
+			this.team,
+			firstLinemonId,
+			secondLinemonId
 		);
-		const secondIndex = this.team.findIndex(
-			(linemon) => linemon.referenceId === secondLinemonId
-		);
-
-		[this.team[firstIndex], this.team[secondIndex]] = [
-			this.team[secondIndex],
-			this.team[firstIndex],
-		];
 
 		return this.team;
 	};
 
 	private removeFromTeam = (linemonId: string) => {
 		this.team = this.team.filter(
-			(linemon) => linemon.referenceId !== linemonId
+			({ referenceId }) => referenceId !== linemonId
 		);
 
 		return this.team;
 	};
 
 	cleanEffects = () => {
-		this.team.map((linemon) => (linemon.effects = []));
+		this.team.map(({ effects }) => (effects = []));
 	};
 }

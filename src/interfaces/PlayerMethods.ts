@@ -31,7 +31,7 @@ export type InventoryType = {
 };
 
 export interface InventoryMethods {
-	getInventory: (url: string, team: LinemonProps[]) => void;
+	getInventory: (url: string) => void;
 	getSpecialItems: () => InventoryItem[];
 	addToInventory: (item: IShopItems, quantity: number) => void;
 	removeFromInventory: (
@@ -39,10 +39,9 @@ export interface InventoryMethods {
 		inventory: InventoryItem[]
 	) => void;
 	getConsumables: (
-		url: string,
-		team: LinemonProps[],
 		location: "battle" | "inventory",
-		returnUrlParams: ReturnUrlParams
+		url: string,
+		returnUrlParams?: ReturnUrlParams
 	) => void;
 	getDisks: (url: string, returnUrlParams: ReturnUrlParams) => void;
 	hasFishingRod: () => boolean;
@@ -58,14 +57,11 @@ export interface TeamMethods {
 	getTeamRaw: () => LinemonProps[];
 	getFirstTeam: () => LinemonProps;
 	getLinemonById: (id: string) => LinemonProps;
-	addToTeam: (linemon: LinemonProps) => Promise<LinemonProps | undefined>;
+	addToTeam: (linemon: LinemonProps) => void;
 	cleanEffects: () => void;
 }
 
-export interface PlayerMethods
-	extends InventoryMethods,
-		TeamMethods,
-		PCMethods {
+export interface PlayerMethods {
 	getName: () => string;
 	getMoney: () => number;
 	setMoney: (value: number) => void;
@@ -77,6 +73,4 @@ export interface PlayerMethods
 	getLinemonsCaught: () => string[];
 
 	getStatus: (url: string) => void;
-
-	getInventory: (url: string) => void;
 }

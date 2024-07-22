@@ -14,30 +14,37 @@ export const getLinepedia = async (url: string) => {
 		return await getRoute(url);
 	}
 
-	const linemons = jsonLinemons.map((linemon, i) => {
-		if (linemonsSeen.indexOf(linemon.id) > -1) {
-			const isCaught = linemonsCaught.indexOf(linemon.id) > -1;
+	const linemons = jsonLinemons.map(({ id, info: { name } }, i) => {
+		if (linemonsSeen.indexOf(id) > -1) {
+			const isCaught = linemonsCaught.indexOf(id) > -1;
 
 			return {
-				name: `${linemon.info.name} ${isCaught ? "[Caught]" : ""}`,
+				name: `${name} ${isCaught ? "[Caught]" : ""}`,
 				value: `${i}`,
 			};
 		} else {
 			return {
-				name: linemon.info.name.replace(/./g, "-"),
-				value: `${i}`,
+				name: name.replace(/./g, "-"),
+				value: "-",
 			};
 		}
 	});
 
-	const answer = await createPrompt("Linepedia", [
-		...linemons,
-		{ name: "Go back\n", value: "back" },
-	]);
+	const answer = await createPrompt(
+		"Linepedia",
+		[...linemons, { name: "Go back\n", value: "back" }],
+		14
+	);
 
 	if (answer === "back") {
 		return await getRoute(url);
-	} else {
-		await getLinepedia(url);
+	} else if (answer !== "-") {
+		const linemon = jsonLinemons[answer];
+
+		await delayMessage(
+			`${linemon.info.name}: ${linemon.info.description}\n`
+		);
 	}
+
+	return await getLinepedia(url);
 };

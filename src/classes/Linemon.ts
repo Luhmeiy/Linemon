@@ -95,9 +95,9 @@ export class Linemon implements LinemonProps {
 
 	evolve = async () => {
 		const evolution = jsonLinemons.find(
-			(linemon: any) =>
-				linemon.info.evolutionFamily === this.info.evolutionFamily &&
-				linemon.info.evolutionStage === this.info.evolutionStage + 1
+			({ info: { evolutionFamily, evolutionStage } }) =>
+				evolutionFamily === this.info.evolutionFamily &&
+				evolutionStage === this.info.evolutionStage + 1
 		);
 
 		if (evolution) {
@@ -155,9 +155,7 @@ export class Linemon implements LinemonProps {
 	};
 
 	applyEffects = async () => {
-		const effects = this.effects.filter(
-			(effect) => effect.power !== undefined
-		);
+		const effects = this.effects.filter(({ power }) => power !== undefined);
 
 		for (const effect of effects) {
 			const damage = Math.floor(this.status.maxHp * effect.power);

@@ -1,7 +1,8 @@
+import jsonLocations from "@/data/locations.json";
+
 import chalk from "chalk";
 import { Request } from "express";
 
-import jsonLocations from "@/data/locations.json";
 import { LocationProps } from "@/interfaces/LocationProps.js";
 
 import { player } from "../index.js";
@@ -21,7 +22,7 @@ export default async (req: Request) => {
 	locationOptions = addMenuToOptions(locationOptions);
 
 	if (
-		player.hasFishingRod() &&
+		player.inventory.hasFishingRod() &&
 		route.secondaryFindingSettings.location === "water"
 	) {
 		locationOptions.unshift({

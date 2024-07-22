@@ -5,10 +5,10 @@ import type { Option } from "../types/Option.js";
 export const stringToTemplateLiteral = (options: Option) => {
 	const chalk = new Chalk();
 
-	return options.map((option) => {
+	return options.map(({ name, value }) => {
 		return {
-			name: eval("`" + option.name + "`"),
-			value: option.value,
+			name: eval("`" + name + "`"),
+			value: value,
 		};
 	});
 };

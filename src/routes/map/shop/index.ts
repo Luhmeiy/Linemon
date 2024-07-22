@@ -1,9 +1,10 @@
+import jsonShopItems from "@/data/shopItems.json";
+
 import chalk from "chalk";
 import { Request } from "express";
 import input from "@inquirer/input";
 import { createSpinner } from "nanospinner";
 
-import jsonShopItems from "@/data/shopItems.json";
 import { IShopItems } from "@/interfaces/IShopItems.js";
 import { Option } from "@/types/Option.js";
 
@@ -46,6 +47,18 @@ const formatItem = (name: string, price: number) => {
 	return `${name}${spacing}${price}`;
 };
 
+const verifyIfPlayerHasSpecialItem = (shopSpecialOptions: Option) => {
+	shopSpecialOptions.map((option, i) => {
+		if (
+			player.inventory
+				.getSpecialItems()
+				.some(({ id }) => id === option.value)
+		) {
+			shopSpecialOptions.splice(i, 1);
+		}
+	});
+};
+
 const filterByCategory = (
 	shopItems: IShopItems[],
 	category: IShopItems["category"]
@@ -53,10 +66,10 @@ const filterByCategory = (
 	//@ts-ignore
 	return shopItems
 		.filter((item) => item.category === category)
-		.map((item) => {
+		.map(({ name, price, id }) => {
 			return {
-				name: formatItem(item.name, item.price),
-				value: item.id,
+				name: formatItem(name, price),
+				value: id,
 			};
 		});
 };
@@ -85,6 +98,8 @@ export default async (req: Request<{}, {}, {}, ShopProps>) => {
 	const shopSpecialOptions = filterByCategory(shopItems, "special");
 	shopSpecialOptions.push({ name: "Go back", value: "back" });
 
+	verifyIfPlayerHasSpecialItem(shopSpecialOptions);
+
 	console.log(`\nYou are in ${cityName}'s ${chalk.blue("shop")}.`);
 
 	const filteredCategoryOptions = filterCategory(shopSpecialOptions);
@@ -111,81 +126,88 @@ export default async (req: Request<{}, {}, {}, ShopProps>) => {
 			return await getRoute(url);
 	}
 
-	const answer = await createPrompt("What do you want to buy?", options!);
+	const getCategoryMenu = async () => {
+		const answer = await createPrompt("What do you want to buy?", options!);
 
-	if (answer === "back") {
-		return await getRoute(
-			`map/shop?cityName=${cityName}&shopItemsIds=${shopItemsIds}&url=${url}`
-		);
-	}
-
-	for (const item of shopItems) {
-		if (answer === item.id) {
-			const money = player.getMoney();
-
-			console.log(`\nYou have ${chalk.blue(money)} coins.`);
-
-			const itemAnswer = await createPrompt(item.name, itemOptions);
-
-			switch (itemAnswer) {
-				case "buy":
-					const spinner = createSpinner("");
-
-					if (money < item.price) {
-						spinner.error({ text: "Not enough money." });
-						break;
-					}
-
-					const numberOfItems = Number(
-						await input({
-							message: `How many ${item.name} do you want to buy?`,
-						})
-					);
-
-					if (numberOfItems <= 0 || isNaN(numberOfItems)) {
-						spinner.error({ text: "No items bought." });
-						break;
-					}
-
-					if (money < item.price * numberOfItems) {
-						spinner.error({ text: "Not enough money." });
-						break;
-					}
-
-					if (item.category === "special" && numberOfItems > 1) {
-						spinner.error({ text: "You can only buy one." });
-						break;
-					}
-
-					if (
-						item.category === "special" &&
-						player
-							.getSpecialItems()
-							.some(({ id }) => id === item.id)
-					) {
-						spinner.error({ text: "You already bought it." });
-						break;
-					}
-
-					player.addToInventory(item, numberOfItems);
-					player.setMoney(-item.price * numberOfItems);
-
-					spinner.success({
-						text: `You bought ${numberOfItems} ${chalk.bold(
-							item.name
-						)}.`,
-					});
-
-					await delayMessage(null);
-					break;
-				case "description":
-					await delayMessage(`${item.name}: ${item.description}`);
-					break;
-			}
-
-			await getRoute(
-				`map/shop?cityName=${cityName}&shopItemsIds=${shopItemsIds}&url=${url}`
-			);
+		if (answer === "back") {
+			return await getRoute("map/shop", {
+				cityName,
+				shopItemsIds,
+				url,
+			});
 		}
-	}
+
+		for (const item of shopItems) {
+			if (answer === item.id) await getItemMenu(item);
+		}
+	};
+
+	const getItemMenu = async (item: IShopItems) => {
+		const money = player.getMoney();
+
+		console.log(`\nYou have ${chalk.blue(money)} coins.`);
+
+		const itemAnswer = await createPrompt(item.name, itemOptions);
+
+		switch (itemAnswer) {
+			case "buy":
+				const spinner = createSpinner("");
+
+				if (money < item.price) {
+					spinner.error({ text: "Not enough money." });
+					break;
+				}
+
+				const numberOfItems = Number(
+					await input({
+						message: `How many ${item.name} do you want to buy?`,
+					})
+				);
+
+				if (numberOfItems <= 0 || isNaN(numberOfItems)) {
+					spinner.error({ text: "No items bought." });
+					break;
+				}
+
+				if (money < item.price * numberOfItems) {
+					spinner.error({ text: "Not enough money." });
+					break;
+				}
+
+				if (item.category === "special" && numberOfItems > 1) {
+					spinner.error({ text: "You can only buy one." });
+					break;
+				}
+
+				player.inventory.addToInventory(item, numberOfItems);
+				player.setMoney(-item.price * numberOfItems);
+
+				spinner.success({
+					text: `You bought ${numberOfItems} ${chalk.bold(
+						item.name
+					)}.`,
+				});
+
+				await delayMessage(null);
+
+				if (item.category === "special") {
+					return await getRoute("map/shop", {
+						cityName,
+						shopItemsIds,
+						url,
+					});
+				}
+
+				return await getCategoryMenu();
+			case "description":
+				await delayMessage(`${item.name}: ${item.description}`);
+				break;
+			default:
+				return await getCategoryMenu();
+		}
+
+		await getItemMenu(item);
+	};
+
+	getCategoryMenu();
 };

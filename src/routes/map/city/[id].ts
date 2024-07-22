@@ -1,6 +1,7 @@
+import jsonLocations from "@/data/locations.json";
+
 import { Request } from "express";
 
-import jsonLocations from "@/data/locations.json";
 import { LocationProps } from "@/interfaces/LocationProps.js";
 
 import { addMenuToOptions } from "@/utils/addMenuToOptions.js";

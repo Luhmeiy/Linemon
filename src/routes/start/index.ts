@@ -1,4 +1,3 @@
-import { Response } from "express";
 import figlet from "figlet";
 import { readdirSync, readFileSync, unlinkSync } from "fs";
 import gradient from "gradient-string";
@@ -80,7 +79,7 @@ ${gradient.cristal.multiline(
 ==================================================================================\n\n`);
 }
 
-export default async (res: Response) => {
+export default async () => {
 	console.clear();
 	await generateTitle();
 

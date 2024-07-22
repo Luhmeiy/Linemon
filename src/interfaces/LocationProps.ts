@@ -1,4 +1,4 @@
-import type { Option } from "../types/Option.js";
+import type { Option } from "@/types/Option.js";
 
 export type FindingSettings = {
 	findingChance?: number;

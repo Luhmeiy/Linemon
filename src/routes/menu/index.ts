@@ -30,9 +30,9 @@ export default async (req: Request<{}, {}, {}, { url: string }>) => {
 		case "player":
 			return player.getStatus(`menu?url=${url}`);
 		case "team":
-			return player.getTeam(`menu?url=${url}`);
+			return player.team.getTeam(`menu?url=${url}`);
 		case "inventory":
-			return player.getInventory(`menu?url=${url}`);
+			return player.inventory.getInventory(`menu?url=${url}`);
 		case "linepedia":
 			return getLinepedia(`menu?url=${url}`);
 		case "save":
@@ -47,7 +47,7 @@ export default async (req: Request<{}, {}, {}, { url: string }>) => {
 			);
 
 			await delayMessage("Game saved!\n");
-			return await getRoute(`menu?url=${url}`);
+			return await getRoute("menu", { url });
 		case "exit":
 			const answer = await confirm({
 				message:
@@ -55,7 +55,7 @@ export default async (req: Request<{}, {}, {}, { url: string }>) => {
 			});
 
 			if (answer) await getRoute("start/");
-			return await getRoute("menu/");
+			await getRoute(`menu?url=${url}`);
 		case "back":
 			return await getRoute(url);
 	}

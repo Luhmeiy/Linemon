@@ -5,4 +5,5 @@ export type ReturnUrlParams = {
 	findingSettings: FindingSettings;
 	url: string;
 	wildLinemon: Linemon;
+	activePlayerLinemonId: string;
 };

@@ -10,6 +10,7 @@ import { createSpinner } from "nanospinner";
 import { LinemonProps } from "@/interfaces/LinemonProps.js";
 import { FindingSettings } from "@/interfaces/LocationProps.js";
 import { Moves } from "@/types/Moves.js";
+import { ReturnUrlParams } from "@/types/ReturnUrlParams.js";
 
 import { player } from "../map/index.js";
 import { Linemon } from "@/classes/Linemon.js";
@@ -112,6 +113,8 @@ const generateLinemon = async (
 };
 
 const tryCatchingLinemon = async (
+	url: string,
+	returnUrlParams: ReturnUrlParams,
 	wildLinemon: LinemonProps,
 	linemon: LinemonProps,
 	baseEncounterProps: BaseEncounterProps,
@@ -136,7 +139,7 @@ const tryCatchingLinemon = async (
 		});
 
 		player.setLinemonsCaught(wildLinemon.id);
-		await player.addToTeam(wildLinemon);
+		await player.team.addToTeam(wildLinemon);
 
 		return search(baseEncounterProps);
 	} else {
@@ -146,7 +149,7 @@ const tryCatchingLinemon = async (
 
 		const selectedMove = wildLinemon.moves[randomIntFromInterval(0, 3)];
 
-		await attack(selectedMove, wildLinemon, linemon);
+		await attack(url, returnUrlParams, selectedMove, wildLinemon, linemon);
 	}
 };
 
@@ -178,6 +181,35 @@ const verifyIfAffected = async (linemon: LinemonProps) => {
 	if (linemon && linemon.effects) await linemon.applyEffects();
 };
 
+const filterLinemons = (linemon?: LinemonProps) => {
+	const team = player.team.getTeamRaw();
+
+	let filteredLinemons: LinemonProps[];
+
+	if (linemon) {
+		filteredLinemons = team.filter(
+			(arrayLinemon) =>
+				arrayLinemon.referenceId !== linemon.referenceId &&
+				arrayLinemon.status.currentHp > 0
+		);
+	} else {
+		filteredLinemons = team.filter(
+			({ status: { currentHp } }) => currentHp > 0
+		);
+	}
+
+	const availableLinemons = [
+		...filteredLinemons.map((linemon) => {
+			return {
+				name: linemon.info.name,
+				value: linemon.referenceId,
+			};
+		}),
+	];
+
+	return availableLinemons;
+};
+
 let linemonOptions: string[];
 
 export default async (req: Request<{}, {}, {}, EncounterProps>) => {
@@ -193,6 +225,13 @@ export default async (req: Request<{}, {}, {}, EncounterProps>) => {
 	let { wildLinemon } = req.query;
 	const { findingChance, level, location } = findingSettings;
 
+	const returnUrlParams: ReturnUrlParams = {
+		findingSettings,
+		url,
+		wildLinemon: undefined,
+		activePlayerLinemonId: undefined,
+	};
+
 	// Save lineOptions to route
 	if (holdOptions) linemonOptions = holdOptions;
 
@@ -206,14 +245,54 @@ export default async (req: Request<{}, {}, {}, EncounterProps>) => {
 
 	if (wildLinemon) {
 		wildLinemon = new Linemon(wildLinemon);
+		returnUrlParams.wildLinemon = removeFunctionsFromLinemon(wildLinemon);
 	}
 
-	let linemon = activePlayerLinemonId
-		? player.getLinemonById(activePlayerLinemonId)
-		: player.getFirstTeam();
+	let linemon: LinemonProps;
+
+	// Select first Linemon in the beginning of battle
+	if (holdOptions) {
+		linemon = player.team.getFirstTeam();
+	}
+
+	// Get Linemon by id if id is set
+	if (activePlayerLinemonId) {
+		linemon = player.team.getLinemonById(activePlayerLinemonId);
+	}
+
+	// Prompt player to select a Linemon
+	if (!holdOptions && !activePlayerLinemonId) {
+		const availableLinemons = filterLinemons();
+
+		if (availableLinemons.length === 0) {
+			await delayMessage("All your Linemons fainted.");
+			await delayMessage(
+				`You took them to a ${chalk.red("healing center")}.`
+			);
+			return getRoute(`map/heal`, {
+				cityName: "City",
+				defeatedTeam: true,
+			});
+		}
+
+		const linemonId = await createPrompt("Choose a Linemon: ", [
+			...availableLinemons,
+		]);
+
+		linemon = player.team.getLinemonById(linemonId);
+	}
+
+	returnUrlParams.activePlayerLinemonId = linemon.referenceId;
 
 	if (catchLinemon) {
-		tryCatchingLinemon(wildLinemon, linemon, baseEncounterProps, diskBonus);
+		await tryCatchingLinemon(
+			url,
+			returnUrlParams,
+			wildLinemon,
+			linemon,
+			baseEncounterProps,
+			diskBonus
+		);
 	}
 
 	await verifyIfAffected(wildLinemon);
@@ -240,6 +319,8 @@ export default async (req: Request<{}, {}, {}, EncounterProps>) => {
 			});
 
 			player.setLinemonsSeen(wildLinemon.id);
+			returnUrlParams.wildLinemon =
+				removeFunctionsFromLinemon(wildLinemon);
 		} else {
 			spinner.error({
 				text: "You found nothing.\n",
@@ -278,13 +359,6 @@ Type: ${type}`);
 		linemonActions
 	);
 
-	const returnUrlParams = {
-		findingSettings,
-		url,
-		wildLinemon: removeFunctionsFromLinemon(wildLinemon),
-		activePlayerLinemonId: linemon.referenceId,
-	};
-
 	switch (answer) {
 		case "status":
 			await delayMessage(`HP: (${linemon.status.currentHp}/${linemon.status.maxHp})
@@ -293,24 +367,14 @@ PP: (${linemon.status.currentPp}/${linemon.status.maxPp})\n`);
 		case "fight":
 			return getCombatMenu("encounter", returnUrlParams, linemon);
 		case "catch":
-			return player.getDisks("encounter", returnUrlParams);
+			return player.inventory.getDisks("encounter", returnUrlParams);
 		case "swap":
-			const team = player.getTeamRaw();
+			const availableLinemons = filterLinemons(linemon);
 
-			const filteredLinemons = team.filter(
-				(arrayLinemon) =>
-					arrayLinemon.referenceId !== linemon.referenceId &&
-					arrayLinemon.status.currentHp > 0
-			);
-
-			const availableLinemons = [
-				...filteredLinemons.map((linemon) => {
-					return {
-						name: linemon.info.name,
-						value: linemon.referenceId,
-					};
-				}),
-			];
+			if (availableLinemons.length === 0) {
+				await delayMessage("No Linemons available.\n");
+				return await getRoute("encounter", returnUrlParams);
+			}
 
 			const linemonId = await createPrompt("Choose a Linemon to swap: ", [
 				...availableLinemons,
@@ -322,21 +386,30 @@ PP: (${linemon.status.currentPp}/${linemon.status.maxPp})\n`);
 				await getRoute("encounter", returnUrlParams);
 			}
 
-			linemon = player.getLinemonById(linemonId);
+			const selectedLinemon = player.team.getLinemonById(linemonId);
+
+			await delayMessage(
+				`Swapped ${linemon.info.name} and ${selectedLinemon.info.name}.\n`
+			);
 
 			const selectedMove = wildLinemon.moves[randomIntFromInterval(0, 3)];
-			await attack(selectedMove, wildLinemon, linemon);
+			await attack(
+				url,
+				returnUrlParams,
+				selectedMove,
+				wildLinemon,
+				selectedLinemon
+			);
 
 			await getRoute("encounter", {
 				...returnUrlParams,
-				activePlayerLinemonId: linemon.referenceId,
+				activePlayerLinemonId: selectedLinemon.referenceId,
 			});
 			break;
 		case "inventory":
-			const response = await player.getConsumables(
-				"encounter",
-				player.getTeamRaw(),
+			const response = await player.inventory.getConsumables(
 				"battle",
+				"encounter",
 				returnUrlParams
 			);
 
@@ -344,9 +417,15 @@ PP: (${linemon.status.currentPp}/${linemon.status.maxPp})\n`);
 			if (response!) {
 				const selectedMove =
 					wildLinemon.moves[randomIntFromInterval(0, 3)];
-				await attack(selectedMove, wildLinemon, linemon);
+				await attack(
+					url,
+					returnUrlParams,
+					selectedMove,
+					wildLinemon,
+					linemon
+				);
 
-				getRoute("encounter", { wildLinemon, linemon });
+				getRoute("encounter", returnUrlParams);
 			}
 			break;
 		default:

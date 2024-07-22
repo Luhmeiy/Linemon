@@ -1,11 +1,14 @@
-import jsonTypesEffectiveness from "../data/typesEffectiveness.json";
+import jsonTypesEffectiveness from "@/data/typesEffectiveness.json";
 
 import { createSpinner } from "nanospinner";
 
-import type { LinemonProps } from "../interfaces/LinemonProps.js";
-import type { Moves } from "../types/Moves.js";
+import type { LinemonProps } from "@/interfaces/LinemonProps.js";
+import type { Moves } from "@/types/Moves.js";
+import { ReturnUrlParams } from "@/types/ReturnUrlParams.js";
 
+import { player } from "@/routes/map/index.js";
 import { delayMessage } from "./delayMessage.js";
+import { getRoute } from "./getRoute.js";
 import { randomIntFromInterval } from "./randomIntFromInterval.js";
 
 const typesEffectiveness: { [key: string]: { [key: string]: number } } =
@@ -19,7 +22,43 @@ const getTypeModifier = (attackType: string, linemonType: string) => {
 	}
 };
 
+const verifyIfDefeated = async (
+	url: string,
+	returnUrlParams: ReturnUrlParams,
+	linemon: LinemonProps,
+	adversary: LinemonProps
+) => {
+	let defeatedLinemon: LinemonProps;
+
+	if (linemon.status.currentHp <= 0 || adversary.status.currentHp <= 0) {
+		defeatedLinemon = linemon.status.currentHp <= 0 ? linemon : adversary;
+	}
+
+	if (defeatedLinemon) {
+		await delayMessage(`${defeatedLinemon.info.name} was defeated.\n`);
+
+		if (!player.team.getLinemonById(defeatedLinemon.referenceId)) {
+			const xp = (112 * adversary.info.lvl) / 7;
+			linemon.setXp(xp);
+
+			await delayMessage(`${linemon.info.name} received ${xp} xp.\n`);
+
+			return await getRoute(url, {
+				...returnUrlParams,
+				battleWon: true,
+			});
+		}
+
+		return await getRoute(url, {
+			...returnUrlParams,
+			activePlayerLinemonId: "",
+		});
+	}
+};
+
 export const attack = async (
+	url: string,
+	returnUrlParams: ReturnUrlParams,
 	move: Moves,
 	attackingLinemon: LinemonProps,
 	defendingLinemon: LinemonProps
@@ -64,6 +103,13 @@ export const attack = async (
 			if (move.effect) {
 				await defendingLinemon.setEffect(move.effect, move.duration);
 			}
+
+			return await verifyIfDefeated(
+				url,
+				returnUrlParams,
+				defendingLinemon,
+				attackingLinemon
+			);
 		} else {
 			attackingLinemon.status.currentPp -= move.pp;
 
