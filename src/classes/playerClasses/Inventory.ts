@@ -1,5 +1,4 @@
 import type { IShopItems } from "@/interfaces/IShopItems.js";
-import { LinemonProps } from "@/interfaces/LinemonProps.js";
 import type {
 	ConsumableItem,
 	DiskItem,
@@ -27,7 +26,11 @@ const itemOptions = [
 	{ name: "Go back", value: "back" },
 ];
 
-const extendedItemOptions = [{ name: "Use", value: "use" }, ...itemOptions];
+const extendedItemOptions = [
+	{ name: "Use", value: "use" },
+	{ name: "Quantity", value: "quantity" },
+	...itemOptions,
+];
 const defaultOption = { name: "Go back", value: "back" };
 
 export class Inventory implements InventoryMethods {
@@ -43,50 +46,10 @@ export class Inventory implements InventoryMethods {
 			  };
 	}
 
-	getInventory = async (url: string) => {
-		const diskOptions: Option = [
-			...this.createOptions(this.inventory.disk),
-			defaultOption,
-		];
-		const specialOptions: Option = [
-			...this.createOptions(this.inventory.special),
-			defaultOption,
-		];
-
-		const answer = await createPrompt(
-			"Select a category: ",
-			categoryOptions
-		);
-
-		switch (answer) {
-			case "consumable":
-				await this.getConsumables("inventory", url);
-				break;
-			case "disk":
-				await this.createItemMenus(
-					this.inventory.disk,
-					diskOptions,
-					url
-				);
-				break;
-			case "special":
-				await this.createItemMenus(
-					this.inventory.special,
-					specialOptions,
-					url
-				);
-				break;
-			default:
-				console.log();
-				await getRoute(url);
-				break;
-		}
-	};
-
+	// Basic functions
 	getSpecialItems = () => this.inventory.special;
-
 	addToInventory = (item: IShopItems, quantity: number) => {
-		let inventory;
+		let inventory: InventoryItem[];
 		let formattedItem = {
 			id: item.id,
 			name: item.name,
@@ -126,6 +89,20 @@ export class Inventory implements InventoryMethods {
 		if (!response) inventory.push(formattedItem);
 	};
 
+	removeFromInventory = (item: InventoryItem, inventory: InventoryItem[]) => {
+		item.quantity -= 1;
+
+		if (item.quantity <= 0) {
+			const index = inventory.findIndex(({ id }) => id === item.id);
+			if (index !== -1) inventory.splice(index, 1);
+		}
+	};
+
+	hasFishingRod = () => {
+		return this.inventory.special.some(({ id }) => id === "fishingRod");
+	};
+
+	// Util functions
 	private increaseQuantityIfItemExists = (
 		inventory: InventoryItem[],
 		itemName: string,
@@ -136,15 +113,6 @@ export class Inventory implements InventoryMethods {
 				item.quantity += quantity;
 				return true;
 			}
-		}
-	};
-
-	removeFromInventory = (item: InventoryItem, inventory: InventoryItem[]) => {
-		item.quantity -= 1;
-
-		if (item.quantity <= 0) {
-			const index = inventory.findIndex(({ id }) => id === item.id);
-			if (index !== -1) inventory.splice(index, 1);
 		}
 	};
 
@@ -169,6 +137,7 @@ export class Inventory implements InventoryMethods {
 		});
 	};
 
+	// Menu functions
 	private itemDefaultVerification = async (
 		items: object[],
 		message: string,
@@ -190,8 +159,8 @@ export class Inventory implements InventoryMethods {
 		return answer;
 	};
 
-	private createLinemonsMenu = async () => {
-		const team = player.team.getTeamRaw();
+	private getLinemonsMenu = async () => {
+		const team = player.team.getTeam();
 
 		if (team.length === 0) {
 			return await delayMessage(`No Linemons caught yet.\n`);
@@ -207,38 +176,66 @@ export class Inventory implements InventoryMethods {
 				};
 			}
 		);
-		options.push({
-			name: "Go back",
-			value: "back",
-		});
 
-		const linemonAnswer = await createPrompt(
-			"Select Linemon to heal: ",
-			options
-		);
+		const linemonAnswer = await createPrompt("Select Linemon to heal: ", [
+			...options,
+			{
+				name: "Go back",
+				value: "back",
+			},
+		]);
 
-		if (linemonAnswer === "back") {
-			return true;
-		}
+		if (linemonAnswer === "back") true;
 
 		const linemonId = Number(linemonAnswer);
 		return team[linemonId];
 	};
 
-	private getItemMenu = async (item: any, options: Option): Promise<any> => {
+	private getCategoryMenu = async (
+		items: InventoryItem[],
+		options: Option,
+		url: string
+	) => {
+		const answer = await this.itemDefaultVerification(
+			items,
+			"Choose an item: ",
+			options,
+			() => this.getInventoryMenu(url)
+		);
+
+		if (!answer) return;
+
+		for (const item of items) {
+			if (answer === item.id) {
+				const isItemSpecial = this.inventory.special.some(
+					(e) => e.id === item.id
+				);
+
+				const newItemOptions = isItemSpecial
+					? itemOptions
+					: [{ name: "Quantity", value: "quantity" }, ...itemOptions];
+
+				const response = await this.getItemMenu(item, newItemOptions);
+
+				if (!response) this.getCategoryMenu(items, options, url);
+			}
+		}
+	};
+
+	private getItemMenu = async (item: any, options: Option) => {
 		const itemAnswer = await createPrompt(item.name, options);
 
 		switch (itemAnswer) {
 			case "use":
-				const playerLinemon = await this.createLinemonsMenu();
+				const playerLinemon = await this.getLinemonsMenu();
 
 				if (typeof playerLinemon === "boolean" || !playerLinemon) {
 					return this.getItemMenu(item, options);
 				}
 
 				switch (item.type) {
-					case "potion":
-						const { currentHp, maxHp } = playerLinemon.status;
+					case "potion": {
+						let { currentHp, maxHp } = playerLinemon.status;
 
 						if (currentHp === maxHp) {
 							await delayMessage(
@@ -261,15 +258,15 @@ export class Inventory implements InventoryMethods {
 								? maxHp - currentHp
 								: item.health;
 
-						playerLinemon.status.currentHp += health!;
+						playerLinemon.status.currentHp += health;
 
 						await delayMessage(
 							`${playerLinemon.info.name} recovered ${health} HP.\n`
 						);
 						break;
-					case "elixir":
-						const currentPp = playerLinemon.status.currentPp;
-						const maxPp = playerLinemon.status.maxPp;
+					}
+					case "elixir": {
+						const { currentPp, maxPp } = playerLinemon.status;
 
 						if (currentPp === maxPp) {
 							await delayMessage(
@@ -290,7 +287,34 @@ export class Inventory implements InventoryMethods {
 							`${playerLinemon.info.name} recovered ${power} PP.\n`
 						);
 						break;
-					case "stone":
+					}
+					case "revive": {
+						let { currentHp, maxHp } = playerLinemon.status;
+
+						if (currentHp !== 0) {
+							await delayMessage(
+								`You can't revive a Linemon that hasn't fainted.\n`
+							);
+
+							return this.getItemMenu(item, options);
+						}
+
+						const health = Math.floor(maxHp * item.health);
+
+						playerLinemon.status.currentHp += health;
+
+						await delayMessage(
+							`${
+								playerLinemon.info.name
+							} was revived and recovered ${
+								playerLinemon.status.currentHp === maxHp
+									? "all"
+									: health
+							} HP.\n`
+						);
+						break;
+					}
+					case "stone": {
 						if (!(playerLinemon.info.type === item.evolvesType)) {
 							await delayMessage(
 								`${item.name} can't be used in ${playerLinemon.info.type}-types.\n`
@@ -301,6 +325,7 @@ export class Inventory implements InventoryMethods {
 
 						await playerLinemon.evolve();
 						break;
+					}
 				}
 
 				this.removeFromInventory(item, this.inventory.consumable);
@@ -316,11 +341,51 @@ export class Inventory implements InventoryMethods {
 		}
 	};
 
-	getConsumables = async (
+	getInventoryMenu = async (url: string) => {
+		const diskOptions: Option = [
+			...this.createOptions(this.inventory.disk),
+			defaultOption,
+		];
+		const specialOptions: Option = [
+			...this.createOptions(this.inventory.special),
+			defaultOption,
+		];
+
+		const answer = await createPrompt(
+			"Select a category: ",
+			categoryOptions
+		);
+
+		switch (answer) {
+			case "consumable":
+				await this.getConsumablesMenu("inventory", url);
+				break;
+			case "disk":
+				await this.getCategoryMenu(
+					this.inventory.disk,
+					diskOptions,
+					url
+				);
+				break;
+			case "special":
+				await this.getCategoryMenu(
+					this.inventory.special,
+					specialOptions,
+					url
+				);
+				break;
+			default:
+				console.log();
+				await getRoute(url);
+				break;
+		}
+	};
+
+	getConsumablesMenu = async (
 		location: "battle" | "inventory",
 		url: string,
 		returnUrlParams?: ReturnUrlParams
-	): Promise<any> => {
+	) => {
 		const consumableOptions: Option = [
 			...this.createOptions(this.inventory.consumable),
 			defaultOption,
@@ -329,7 +394,7 @@ export class Inventory implements InventoryMethods {
 		const returnFunction = () =>
 			location === "battle"
 				? getRoute(url, returnUrlParams)
-				: this.getInventory(url);
+				: this.getInventoryMenu(url);
 
 		const answer = await this.itemDefaultVerification(
 			this.inventory.consumable,
@@ -351,7 +416,7 @@ export class Inventory implements InventoryMethods {
 					if (location === "battle" && response) {
 						return response;
 					} else {
-						return this.getConsumables(
+						return this.getConsumablesMenu(
 							location,
 							url,
 							returnUrlParams
@@ -362,7 +427,7 @@ export class Inventory implements InventoryMethods {
 		}
 	};
 
-	getDisks = async (url: string, returnUrlParams: ReturnUrlParams) => {
+	getDisksMenu = async (url: string, returnUrlParams: ReturnUrlParams) => {
 		const { wildLinemon } = returnUrlParams;
 
 		const diskOptions: Option = [
@@ -408,47 +473,8 @@ export class Inventory implements InventoryMethods {
 				}
 
 				console.log();
-				this.getDisks(url, returnUrlParams);
+				this.getDisksMenu(url, returnUrlParams);
 			}
 		}
-	};
-
-	private createItemMenus = async (
-		items: InventoryItem[],
-		options: Option,
-		url: string
-	) => {
-		const answer = await this.itemDefaultVerification(
-			items,
-			"Choose an item: ",
-			options,
-			() => this.getInventory(url)
-		);
-
-		if (!answer) return;
-
-		for (const item of items) {
-			if (answer === item.id) {
-				const isItemSpecial = this.inventory.special.some(
-					(e) => e.id === item.id
-				);
-
-				const newItemOptions = isItemSpecial
-					? itemOptions
-					: [{ name: "Quantity", value: "quantity" }, ...itemOptions];
-
-				const response = await this.getItemMenu(item, newItemOptions);
-
-				if (!response) {
-					this.createItemMenus(items, options, url);
-				}
-			}
-		}
-	};
-
-	hasFishingRod = () => {
-		return this.inventory.special.some(({ id }) => id === "fishingRod")
-			? true
-			: false;
 	};
 }

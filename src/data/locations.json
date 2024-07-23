@@ -136,7 +136,13 @@
 				"value": "0"
 			}
 		],
-		"shopItemsIds": ["potion", "superPotion", "disk", "fishingRod"]
+		"shopItemsIds": [
+			"potion",
+			"superPotion",
+			"revive",
+			"disk",
+			"fishingRod"
+		]
 	},
 	{
 		"id": "desertCity",

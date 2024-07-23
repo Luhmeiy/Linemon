@@ -54,6 +54,24 @@
 		"power": 40
 	},
 	{
+		"id": "revive",
+		"name": "Revive",
+		"description": "Revive your Linemon and heals the HP of your Linemon by 40%.",
+		"price": 500,
+		"category": "consumable",
+		"type": "revive",
+		"health": 0.4
+	},
+	{
+		"id": "maxRevive",
+		"name": "Max Revive",
+		"description": "Revive your Linemon and heals the HP completely.",
+		"price": 1000,
+		"category": "consumable",
+		"type": "revive",
+		"health": 1
+	},
+	{
 		"id": "fireStone",
 		"name": "Fire Stone",
 		"description": "A stone capable of evolving fire-types.",

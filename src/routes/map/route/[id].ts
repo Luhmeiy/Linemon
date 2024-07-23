@@ -25,6 +25,7 @@ export default async (req: Request) => {
 
 	if (
 		player.inventory.hasFishingRod() &&
+		route.secondaryFindingSettings &&
 		route.secondaryFindingSettings.location === "water"
 	) {
 		locationOptions.unshift({

@@ -29,7 +29,7 @@ export default async (req: Request<{}, {}, {}, HealProps>) => {
 
 	switch (answer) {
 		case "heal":
-			const team = player.team.getTeamRaw();
+			const team = player.team.getTeam();
 
 			if (team.length === 0) {
 				await delayMessage("No linemons to heal.");

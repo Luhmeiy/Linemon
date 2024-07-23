@@ -18,7 +18,7 @@ export class Team implements TeamMethods {
 			: [];
 	}
 
-	getTeam = async (url: string) => {
+	getTeamMenu = async (url: string) => {
 		await createLinemonsMenu(
 			"team",
 			this.team,
@@ -29,7 +29,7 @@ export class Team implements TeamMethods {
 		);
 	};
 
-	getTeamRaw = () => this.team;
+	getTeam = () => this.team;
 	getFirstTeam = () => {
 		for (const linemon of this.team) {
 			if (linemon.status.currentHp > 0) {
@@ -42,7 +42,7 @@ export class Team implements TeamMethods {
 	};
 
 	addToTeam = async (linemon: LinemonProps) => {
-		let linemonForPC;
+		let linemonForPC: LinemonProps;
 
 		if (this.team.length < 6) {
 			await delayMessage(`${linemon.info.name} added to team.\n`);

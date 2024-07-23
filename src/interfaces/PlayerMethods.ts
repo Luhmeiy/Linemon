@@ -31,20 +31,20 @@ export type InventoryType = {
 };
 
 export interface InventoryMethods {
-	getInventory: (url: string) => void;
+	getInventoryMenu: (url: string) => void;
 	getSpecialItems: () => InventoryItem[];
 	addToInventory: (item: IShopItems, quantity: number) => void;
 	removeFromInventory: (
 		item: InventoryItem,
 		inventory: InventoryItem[]
 	) => void;
-	getConsumables: (
+	hasFishingRod: () => boolean;
+	getConsumablesMenu: (
 		location: "battle" | "inventory",
 		url: string,
 		returnUrlParams?: ReturnUrlParams
 	) => void;
-	getDisks: (url: string, returnUrlParams: ReturnUrlParams) => void;
-	hasFishingRod: () => boolean;
+	getDisksMenu: (url: string, returnUrlParams: ReturnUrlParams) => void;
 }
 
 export interface PCMethods {
@@ -53,8 +53,8 @@ export interface PCMethods {
 }
 
 export interface TeamMethods {
-	getTeam: (url: string) => void;
-	getTeamRaw: () => LinemonProps[];
+	getTeamMenu: (url: string) => void;
+	getTeam: () => LinemonProps[];
 	getFirstTeam: () => LinemonProps;
 	getLinemonById: (id: string) => LinemonProps;
 	addToTeam: (linemon: LinemonProps) => void;

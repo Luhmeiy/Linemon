@@ -182,7 +182,7 @@ const verifyIfAffected = async (linemon: LinemonProps) => {
 };
 
 const filterLinemons = (linemon?: LinemonProps) => {
-	const team = player.team.getTeamRaw();
+	const team = player.team.getTeam();
 
 	let filteredLinemons: LinemonProps[];
 
@@ -368,7 +368,7 @@ PP: (${linemon.status.currentPp}/${linemon.status.maxPp})\n`);
 		case "fight":
 			return getCombatMenu("encounter", returnUrlParams, linemon);
 		case "catch":
-			return player.inventory.getDisks("encounter", returnUrlParams);
+			return player.inventory.getDisksMenu("encounter", returnUrlParams);
 		case "swap":
 			const availableLinemons = filterLinemons(linemon);
 
@@ -408,7 +408,7 @@ PP: (${linemon.status.currentPp}/${linemon.status.maxPp})\n`);
 			});
 			break;
 		case "inventory":
-			const response = await player.inventory.getConsumables(
+			const response = await player.inventory.getConsumablesMenu(
 				"battle",
 				"encounter",
 				returnUrlParams

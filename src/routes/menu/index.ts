@@ -30,9 +30,9 @@ export default async (req: Request<{}, {}, {}, { url: string }>) => {
 		case "player":
 			return player.getStatus(`menu?url=${url}`);
 		case "team":
-			return player.team.getTeam(`menu?url=${url}`);
+			return player.team.getTeamMenu(`menu?url=${url}`);
 		case "inventory":
-			return player.inventory.getInventory(`menu?url=${url}`);
+			return player.inventory.getInventoryMenu(`menu?url=${url}`);
 		case "linepedia":
 			return getLinepedia(`menu?url=${url}`);
 		case "save":
