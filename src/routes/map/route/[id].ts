@@ -18,6 +18,8 @@ export default async (req: Request) => {
 
 	const route = getFromJson(jsonLocations, id) as LocationProps;
 
+	player.setPlayerLocation(route.type, id);
+
 	let locationOptions = stringToTemplateLiteral(route.locationOptions);
 	locationOptions = addMenuToOptions(locationOptions);
 

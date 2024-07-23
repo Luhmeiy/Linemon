@@ -13,12 +13,13 @@ const healingOptions = [
 ];
 
 interface HealProps {
+	cityId: string;
 	cityName: string;
 	defeatedTeam?: boolean;
 }
 
 export default async (req: Request<{}, {}, {}, HealProps>) => {
-	const { cityName, defeatedTeam } = req.query;
+	const { cityId, cityName, defeatedTeam } = req.query;
 
 	console.log(`\nYou are in ${cityName}'s ${chalk.red("healing center")}.`);
 
@@ -32,7 +33,9 @@ export default async (req: Request<{}, {}, {}, HealProps>) => {
 
 			if (team.length === 0) {
 				await delayMessage("No linemons to heal.");
-				return await getRoute(`map/heal?cityName=${cityName}`);
+				return await getRoute(
+					`map/heal?cityId=${cityId}&cityName=${cityName}`
+				);
 			}
 
 			for (const linemon of team) {
@@ -42,11 +45,15 @@ export default async (req: Request<{}, {}, {}, HealProps>) => {
 
 			if (defeatedTeam) await delayMessage(null);
 			await delayMessage("Your Linemons are healed.");
-			return await getRoute(`map/heal?cityName=${cityName}`);
+			return await getRoute(
+				`map/heal?cityId=${cityId}&cityName=${cityName}`
+			);
 		case "pc":
-			return player.pc.getPC(`map/heal?cityName=${cityName}`);
+			return player.pc.getPC(
+				`map/heal?cityId=${cityId}&cityName=${cityName}`
+			);
 		default:
 			await delayMessage("You left.");
-			return await getRoute(`map/city/${cityName.toLowerCase()}`);
+			return await getRoute(`map/city/${cityId}`);
 	}
 };

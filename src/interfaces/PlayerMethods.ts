@@ -65,12 +65,13 @@ export interface PlayerMethods {
 	getName: () => string;
 	getMoney: () => number;
 	setMoney: (value: number) => void;
+	getStatus: (url: string) => void;
+	getPlayerLocation: () => string;
+	setPlayerLocation: (type: string, location: string, name: string) => void;
 
 	setLinemonsSeen: (id: string) => void;
 	setLinemonsCaught: (id: string) => void;
 
 	getLinemonsSeen: () => string[];
 	getLinemonsCaught: () => string[];
-
-	getStatus: (url: string) => void;
 }

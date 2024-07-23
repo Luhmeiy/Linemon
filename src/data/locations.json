@@ -2,6 +2,7 @@
 	{
 		"id": "101",
 		"name": "Route 101",
+		"type": "route",
 		"routes": ["map/city/desertCity", "map/city/city"],
 		"locationOptions": [
 			{
@@ -37,6 +38,7 @@
 	{
 		"id": "201",
 		"name": "Route 201",
+		"type": "route",
 		"routes": ["map/city/lakeCity", "map/city/desertCity"],
 		"locationOptions": [
 			{ "name": "Walk around", "value": "tallGrass" },
@@ -69,6 +71,7 @@
 	{
 		"id": "301",
 		"name": "Route 301",
+		"type": "route",
 		"routes": ["map/city/mountainCity", "map/city/lakeCity"],
 		"locationOptions": [
 			{
@@ -120,6 +123,7 @@
 	{
 		"id": "city",
 		"name": "City",
+		"type": "city",
 		"routes": ["map/route/101"],
 		"locationOptions": [
 			{ "name": "Go to ${chalk.blue('shop')}", "value": "shop" },
@@ -137,6 +141,7 @@
 	{
 		"id": "desertCity",
 		"name": "DesertCity",
+		"type": "city",
 		"routes": ["map/route/201", "map/route/101"],
 		"locationOptions": [
 			{ "name": "Go to ${chalk.blue('shop')}", "value": "shop" },
@@ -168,6 +173,7 @@
 	{
 		"id": "lakeCity",
 		"name": "LakeCity",
+		"type": "city",
 		"routes": ["map/route/301", "map/route/201"],
 		"locationOptions": [
 			{ "name": "Go to ${chalk.blue('shop')}", "value": "shop" },
@@ -197,6 +203,7 @@
 	{
 		"id": "mountainCity",
 		"name": "MountainCity",
+		"type": "city",
 		"routes": ["map/route/301"],
 		"locationOptions": [
 			{ "name": "Go to ${chalk.blue('shop')}", "value": "shop" },
@@ -207,14 +214,6 @@
 			{
 				"name": "Go to ${chalk.green('Route 301')}",
 				"value": "0"
-			},
-			{
-				"name": "Go to mountain peak",
-				"value": "mountainPeak"
-			},
-			{
-				"name": "Go to cave",
-				"value": "cave"
 			}
 		],
 		"shopItemsIds": [

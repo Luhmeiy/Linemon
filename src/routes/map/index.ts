@@ -17,5 +17,7 @@ export default async (req: Request<{}, {}, {}, MapProps>) => {
 		? new Player(name)
 		: new Player(JSON.parse(playerData) as Player);
 
-	return await getRoute("map/city/city");
+	const playerLocation = player.getPlayerLocation();
+
+	return await getRoute(`map/${playerLocation}`);
 };

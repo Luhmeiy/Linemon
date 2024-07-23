@@ -270,7 +270,8 @@ export default async (req: Request<{}, {}, {}, EncounterProps>) => {
 				`You took them to a ${chalk.red("healing center")}.`
 			);
 			return getRoute(`map/heal`, {
-				cityName: "City",
+				cityId: player.playerLocation.lastVisitedCityId,
+				cityName: player.playerLocation.lastVisitedCityName,
 				defeatedTeam: true,
 			});
 		}

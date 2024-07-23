@@ -11,6 +11,7 @@ export type FindingSettings = {
 
 export interface LocationProps {
 	name: string;
+	type: string;
 	routes: string[];
 	locationOptions: Option;
 	shopItemsIds?: string[];

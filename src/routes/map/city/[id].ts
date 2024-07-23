@@ -4,6 +4,7 @@ import { Request } from "express";
 
 import { LocationProps } from "@/interfaces/LocationProps.js";
 
+import { player } from "../index.js";
 import { addMenuToOptions } from "@/utils/addMenuToOptions.js";
 import { createPrompt } from "@/utils/createPrompt.js";
 import { delayMessage } from "@/utils/delayMessage.js";
@@ -15,6 +16,8 @@ export default async (req: Request) => {
 	const { id } = req.params;
 
 	const city = getFromJson(jsonLocations, id) as LocationProps;
+
+	player.setPlayerLocation(city.type, id, city.name);
 
 	console.log(`\nYou are in ${city.name}.`);
 
@@ -33,7 +36,9 @@ export default async (req: Request) => {
 				`map/shop?cityName=${city.name}&shopItemsIds=${city.shopItemsIds}&url=map/city/${id}`
 			);
 		case "healingCenter":
-			return await getRoute(`map/heal?cityName=${city.name}`);
+			return await getRoute(
+				`map/heal?cityId=${id}&cityName=${city.name}`
+			);
 		case "menu":
 			return getRoute(`menu?url=map/city/${id}`);
 		default:
