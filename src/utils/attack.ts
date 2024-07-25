@@ -26,7 +26,8 @@ const verifyIfDefeated = async (
 	url: string,
 	returnUrlParams: ReturnUrlParams,
 	linemon: LinemonProps,
-	adversary: LinemonProps
+	adversary: LinemonProps,
+	move: Moves
 ) => {
 	let defeatedLinemon: LinemonProps;
 
@@ -53,6 +54,10 @@ const verifyIfDefeated = async (
 			...returnUrlParams,
 			activePlayerLinemonId: "",
 		});
+	}
+
+	if (move.effect) {
+		await linemon.setEffect(move.effect, move.duration);
 	}
 };
 
@@ -100,15 +105,12 @@ export const attack = async (
 				`${attackingLinemon.info.name} dealt ${damage} damage to ${defendingLinemon.info.name}.\n`
 			);
 
-			if (move.effect) {
-				await defendingLinemon.setEffect(move.effect, move.duration);
-			}
-
 			return await verifyIfDefeated(
 				url,
 				returnUrlParams,
 				defendingLinemon,
-				attackingLinemon
+				attackingLinemon,
+				move
 			);
 		} else {
 			attackingLinemon.status.currentPp -= move.pp;

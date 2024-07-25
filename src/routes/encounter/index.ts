@@ -36,6 +36,7 @@ interface EncounterProps extends BaseEncounterProps {
 	catchLinemon?: boolean;
 	diskBonus?: number;
 	battleWon?: boolean;
+	verifyEffect?: boolean;
 }
 
 const formatType = (type: string) => {
@@ -222,7 +223,7 @@ export default async (req: Request<{}, {}, {}, EncounterProps>) => {
 		diskBonus,
 		battleWon,
 	} = req.query;
-	let { wildLinemon } = req.query;
+	let { wildLinemon, verifyEffect } = req.query;
 	const { findingChance, level, location } = findingSettings;
 
 	const returnUrlParams: ReturnUrlParams = {
@@ -294,10 +295,14 @@ export default async (req: Request<{}, {}, {}, EncounterProps>) => {
 			baseEncounterProps,
 			diskBonus
 		);
+
+		verifyEffect = true;
 	}
 
-	await verifyIfAffected(wildLinemon);
-	await verifyIfAffected(linemon);
+	if (verifyEffect) {
+		await verifyIfAffected(wildLinemon);
+		await verifyIfAffected(linemon);
+	}
 
 	// If wild Linemon isn't provided, generate one
 	if (!wildLinemon) {
@@ -405,6 +410,7 @@ PP: (${linemon.status.currentPp}/${linemon.status.maxPp})\n`);
 			await getRoute("encounter", {
 				...returnUrlParams,
 				activePlayerLinemonId: selectedLinemon.referenceId,
+				verifyEffect: true,
 			});
 			break;
 		case "inventory":
@@ -426,7 +432,10 @@ PP: (${linemon.status.currentPp}/${linemon.status.maxPp})\n`);
 					linemon
 				);
 
-				getRoute("encounter", returnUrlParams);
+				getRoute("encounter", {
+					...returnUrlParams,
+					verifyEffect: true,
+				});
 			}
 			break;
 		default:

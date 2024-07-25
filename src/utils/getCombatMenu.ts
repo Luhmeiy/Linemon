@@ -114,7 +114,10 @@ export const getCombatMenu = async (
 					firstToGo
 				);
 
-				return await getRoute(url, returnUrlParams);
+				return await getRoute(url, {
+					...returnUrlParams,
+					verifyEffect: true,
+				});
 			case "description":
 				await delayMessage(
 					`${selectedMove.name}: ${selectedMove.description}\n`
