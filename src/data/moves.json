@@ -263,5 +263,15 @@
 		"pp": 12,
 		"effect": "poison",
 		"duration": 3
+	},
+	{
+		"id": "punchShower",
+		"name": "Punch Shower",
+		"description": "Punchs the opponent several times.",
+		"type": "normal",
+		"power": 20,
+		"accuracy": 70,
+		"pp": 12,
+		"repeat": 3
 	}
 ]

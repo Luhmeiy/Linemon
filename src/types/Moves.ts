@@ -8,4 +8,5 @@ export type Moves = {
 	effect?: string;
 	duration?: number;
 	isFirst?: boolean;
+	repeat?: number;
 };

@@ -86,24 +86,49 @@ export const attack = async (
 				defendingLinemon.info.type
 			);
 
-			const damage = attackingLinemon.attack(
-				move.power,
-				modifiers,
-				defendingLinemon.status.def
+			await delayMessage(
+				`${attackingLinemon.info.name} used ${move.name}.`
+			);
+
+			let damage = 0;
+
+			if (move.repeat) {
+				const repeatTimes = randomIntFromInterval(1, move.repeat);
+
+				for (let i = 1; i <= repeatTimes; i++) {
+					damage += attackingLinemon.attack(
+						move.power,
+						modifiers,
+						defendingLinemon.status.def
+					);
+
+					await delayMessage(
+						`${attackingLinemon.info.name} hit ${defendingLinemon.info.name} ${i} times.`,
+						1000
+					);
+				}
+
+				await delayMessage(" ", 1000);
+			} else {
+				damage = attackingLinemon.attack(
+					move.power,
+					modifiers,
+					defendingLinemon.status.def
+				);
+			}
+
+			const { currentHp } = defendingLinemon.status;
+
+			damage = damage >= currentHp ? currentHp : damage;
+
+			await delayMessage(
+				`${attackingLinemon.info.name} dealt ${damage} damage to ${defendingLinemon.info.name}.\n`
 			);
 
 			const updatedHp = defendingLinemon.status.currentHp - damage;
 
 			attackingLinemon.status.currentPp -= move.pp;
 			defendingLinemon.status.currentHp = updatedHp <= 0 ? 0 : updatedHp;
-
-			await delayMessage(
-				`${attackingLinemon.info.name} used ${move.name}.`
-			);
-
-			await delayMessage(
-				`${attackingLinemon.info.name} dealt ${damage} damage to ${defendingLinemon.info.name}.\n`
-			);
 
 			return await verifyIfDefeated(
 				url,
