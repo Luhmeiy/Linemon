@@ -1,9 +1,5 @@
-import jsonShopItems from "@/data/shopItems.json";
-
 import chalk from "chalk";
 import { Request } from "express";
-import input from "@inquirer/input";
-import { createSpinner } from "nanospinner";
 
 import { IShopItems } from "@/interfaces/IShopItems.js";
 import { Option } from "@/types/Option.js";
@@ -11,12 +7,16 @@ import { Option } from "@/types/Option.js";
 import { player } from "../index.js";
 import { createPrompt } from "@/utils/createPrompt.js";
 import { delayMessage } from "@/utils/delayMessage.js";
-import { getFromJson } from "@/utils/getFromJson.js";
 import { getRoute } from "@/utils/getRoute.js";
+import {
+	formatItem,
+	getFullShopItems,
+	getItemMenu,
+} from "@/utils/shopUtils.js";
 
 interface ShopProps {
 	cityName: string;
-	shopItemsIds: string;
+	shopItemsIds: string[];
 	url: string;
 }
 
@@ -26,26 +26,6 @@ const categoryOptions = [
 	{ name: "Special Items", value: "special" },
 	{ name: "Go back", value: "shopExit" },
 ];
-
-const itemOptions = [
-	{ name: "Buy", value: "buy" },
-	{ name: "Description", value: "description" },
-	{ name: "Go back", value: "back" },
-];
-
-const getFullShopItems = (shopItemsIds: string) => {
-	const shopItems: IShopItems[] = shopItemsIds
-		.split(",")
-		.map((id) => getFromJson(jsonShopItems, id));
-
-	return shopItems;
-};
-
-const formatItem = (name: string, price: number) => {
-	const spacing = ".".repeat(30 - name.length - price.toString().length);
-
-	return `${name}${spacing}${price}`;
-};
 
 const verifyIfPlayerHasSpecialItem = (shopSpecialOptions: Option) => {
 	shopSpecialOptions.map((option, i) => {
@@ -138,75 +118,18 @@ export default async (req: Request<{}, {}, {}, ShopProps>) => {
 		}
 
 		for (const item of shopItems) {
-			if (answer === item.id) await getItemMenu(item);
-		}
-	};
-
-	const getItemMenu = async (item: IShopItems) => {
-		const money = player.getMoney();
-
-		console.log(`\nYou have ${chalk.blue(money)} coins.`);
-
-		const itemAnswer = await createPrompt(item.name, itemOptions);
-
-		switch (itemAnswer) {
-			case "buy":
-				const spinner = createSpinner("");
-
-				if (money < item.price) {
-					spinner.error({ text: "Not enough money." });
-					break;
-				}
-
-				const numberOfItems = Number(
-					await input({
-						message: `How many ${item.name} do you want to buy?`,
-					})
+			if (answer === item.id)
+				await getItemMenu(
+					item,
+					() =>
+						getRoute("map/shop", {
+							cityName,
+							shopItemsIds,
+							url,
+						}),
+					getCategoryMenu
 				);
-
-				if (numberOfItems <= 0 || isNaN(numberOfItems)) {
-					spinner.error({ text: "No items bought." });
-					break;
-				}
-
-				if (money < item.price * numberOfItems) {
-					spinner.error({ text: "Not enough money." });
-					break;
-				}
-
-				if (item.category === "special" && numberOfItems > 1) {
-					spinner.error({ text: "You can only buy one." });
-					break;
-				}
-
-				player.inventory.addToInventory(item, numberOfItems);
-				player.setMoney(-item.price * numberOfItems);
-
-				spinner.success({
-					text: `You bought ${numberOfItems} ${chalk.bold(
-						item.name
-					)}.`,
-				});
-
-				await delayMessage(null);
-
-				if (item.category === "special") {
-					return await getRoute("map/shop", {
-						cityName,
-						shopItemsIds,
-						url,
-					});
-				}
-
-				return await getCategoryMenu();
-			case "description":
-				await delayMessage(`${item.name}: ${item.description}`);
-				break;
-			default:
-				return await getCategoryMenu();
 		}
-
-		await getItemMenu(item);
 	};
 
 	getCategoryMenu();

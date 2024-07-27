@@ -41,8 +41,7 @@ export interface InventoryMethods {
 	hasFishingRod: () => boolean;
 	getConsumablesMenu: (
 		location: "battle" | "inventory",
-		url: string,
-		returnUrlParams?: ReturnUrlParams
+		returnFunction: () => void
 	) => void;
 	getDisksMenu: (url: string, returnUrlParams: ReturnUrlParams) => void;
 }

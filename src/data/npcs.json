@@ -1,0 +1,133 @@
+[
+	{
+		"id": "npc",
+		"name": "NPC",
+		"dialog": {
+			"1": {
+				"text": "Hello there! How can I help you today?",
+				"options": [
+					{
+						"name": "Who are you?",
+						"value": 2
+					},
+					{
+						"name": "Are you a fighter?",
+						"value": 3
+					},
+					{
+						"name": "Can you sell me anything?",
+						"value": "shop"
+					},
+					{
+						"name": "Anything you can give me?",
+						"value": "gift"
+					},
+					{
+						"name": "Goodbye.",
+						"value": "back"
+					}
+				]
+			},
+			"2": {
+				"text": "I am a test NPC.",
+				"options": [
+					{
+						"name": "Goodbye.",
+						"value": "back"
+					}
+				]
+			},
+			"3": {
+				"text": "I was long ago. Do you want to fight?",
+				"options": [
+					{
+						"name": "Yes!",
+						"value": "fight"
+					},
+					{
+						"name": "No.",
+						"value": "1"
+					}
+				]
+			},
+			"shop": { "text": "What do you want to buy?" },
+			"fight": {
+				"battleStartText": "Good luck!",
+				"defeatedTeamText": "You already defeated my team!",
+				"playerWinText": "You won!"
+			},
+			"gift": {
+				"giftConfirm": "Sure, take this.",
+				"giftReceived": "I already gave you a gift!"
+			}
+		},
+		"itemIds": ["potion", "superPotion", "revive", "disk"],
+		"giftId": "potion",
+		"giftQuantity": 2,
+		"team": [
+			{
+				"id": "groundling",
+				"info": {
+					"name": "Groundling",
+					"description": "Groundling is a small creature covered in earthy brown scales, blending into the ground.",
+					"evolutionStage": 1,
+					"lvl": 21,
+					"evolutionFamily": "groundling",
+					"evolvesAt": 22,
+					"isShiny": false,
+					"xp": 1,
+					"xpToNextLevel": 266,
+					"type": "fire",
+					"catchRate": 180
+				},
+				"status": {
+					"maxHp": 20,
+					"currentHp": 20,
+					"atk": 30,
+					"def": 20,
+					"spd": 2,
+					"maxPp": 60,
+					"currentPp": 60
+				},
+				"moves": [
+					{
+						"name": "Tackle",
+						"description": "The monster charges at the opponent with great force.",
+						"type": "fire",
+						"power": 0,
+						"accuracy": 100,
+						"pp": 8
+					},
+					{
+						"name": "Scratch",
+						"description": "The monster uses its sharp claws to scratch the opponent.",
+						"type": "grass",
+						"power": 35,
+						"accuracy": 95,
+						"pp": 10
+					},
+					{
+						"name": "Punch Shower",
+						"description": "Punchs the opponent several times.",
+						"type": "normal",
+						"power": 10,
+						"accuracy": 70,
+						"pp": 12,
+						"repeat": 3
+					},
+					{
+						"id": "poisonPunch",
+						"name": "Poison Punch",
+						"description": "Attacks the opponent with a powerful punch covered in poison.",
+						"type": "normal",
+						"power": 40,
+						"accuracy": 80,
+						"pp": 12,
+						"effect": "poison",
+						"duration": 3
+					}
+				]
+			}
+		]
+	}
+]

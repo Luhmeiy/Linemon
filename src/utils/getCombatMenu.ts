@@ -1,10 +1,8 @@
-import { ReturnUrlParams } from "@/types/ReturnUrlParams.js";
 import { LinemonProps } from "@/interfaces/LinemonProps.js";
 
 import { attack } from "./attack.js";
 import { createPrompt } from "./createPrompt.js";
 import { delayMessage } from "./delayMessage.js";
-import { getRoute } from "./getRoute.js";
 import { randomIntFromInterval } from "./randomIntFromInterval.js";
 import { Linemon } from "@/classes/Linemon.js";
 
@@ -25,11 +23,10 @@ const createOptions = (moves: LinemonProps["moves"]) => {
 };
 
 export const getCombatMenu = async (
-	url: string,
-	returnUrlParams: ReturnUrlParams,
+	returnFunction: ({}) => void,
+	wildLinemon: Linemon,
 	linemon: LinemonProps
 ): Promise<any> => {
-	const { wildLinemon } = returnUrlParams;
 	const adversary = new Linemon(wildLinemon);
 
 	const options = [
@@ -41,7 +38,7 @@ export const getCombatMenu = async (
 
 	if (answer === "back") {
 		console.log();
-		return await getRoute(url, returnUrlParams);
+		return await returnFunction({});
 	}
 
 	const getMoveMenu = async () => {
@@ -66,15 +63,13 @@ export const getCombatMenu = async (
 					switch (sleepAnswer) {
 						case "sleep":
 							await attack(
-								url,
-								returnUrlParams,
+								returnFunction,
 								selectedMove,
 								linemon,
 								adversary
 							);
 							await attack(
-								url,
-								returnUrlParams,
+								returnFunction,
 								adversarySelectedMove,
 								adversary,
 								linemon
@@ -82,7 +77,7 @@ export const getCombatMenu = async (
 							break;
 					}
 
-					return await getRoute(url, returnUrlParams);
+					return await returnFunction({});
 				}
 
 				const linemonGoesFirst =
@@ -100,24 +95,19 @@ export const getCombatMenu = async (
 					: selectedMove;
 
 				await attack(
-					url,
-					returnUrlParams,
+					returnFunction,
 					firstAttack,
 					firstToGo,
 					secondToGo
 				);
 				await attack(
-					url,
-					returnUrlParams,
+					returnFunction,
 					secondAttack,
 					secondToGo,
 					firstToGo
 				);
 
-				return await getRoute(url, {
-					...returnUrlParams,
-					verifyEffect: true,
-				});
+				return await returnFunction({ verifyEffect: true });
 			case "description":
 				await delayMessage(
 					`${selectedMove.name}: ${selectedMove.description}\n`
@@ -130,7 +120,11 @@ Accuracy: ${selectedMove.accuracy}%
 PP Cost: ${selectedMove.pp}\n`);
 				break;
 			default:
-				return await getCombatMenu(url, returnUrlParams, linemon);
+				return await getCombatMenu(
+					returnFunction,
+					wildLinemon,
+					linemon
+				);
 		}
 
 		return await getMoveMenu();

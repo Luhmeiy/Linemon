@@ -358,7 +358,9 @@ export class Inventory implements InventoryMethods {
 
 		switch (answer) {
 			case "consumable":
-				await this.getConsumablesMenu("inventory", url);
+				await this.getConsumablesMenu("inventory", () =>
+					this.getInventoryMenu(url)
+				);
 				break;
 			case "disk":
 				await this.getCategoryMenu(
@@ -383,18 +385,12 @@ export class Inventory implements InventoryMethods {
 
 	getConsumablesMenu = async (
 		location: "battle" | "inventory",
-		url: string,
-		returnUrlParams?: ReturnUrlParams
+		returnFunction: () => void
 	) => {
 		const consumableOptions: Option = [
 			...this.createOptions(this.inventory.consumable),
 			defaultOption,
 		];
-
-		const returnFunction = () =>
-			location === "battle"
-				? getRoute(url, returnUrlParams)
-				: this.getInventoryMenu(url);
 
 		const answer = await this.itemDefaultVerification(
 			this.inventory.consumable,
@@ -418,8 +414,7 @@ export class Inventory implements InventoryMethods {
 					} else {
 						return this.getConsumablesMenu(
 							location,
-							url,
-							returnUrlParams
+							returnFunction
 						);
 					}
 				}

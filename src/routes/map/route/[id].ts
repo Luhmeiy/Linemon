@@ -1,4 +1,5 @@
 import jsonLocations from "@/data/locations.json";
+import jsonNPCs from "@/data/npcs.json";
 
 import chalk from "chalk";
 import { Request } from "express";
@@ -34,6 +35,15 @@ export default async (req: Request) => {
 		});
 	}
 
+	if (route.npcs) {
+		const npcOptions = route.npcs.map((id) => {
+			const npc = getFromJson(jsonNPCs, id);
+			return { name: npc.name, value: `npc/${npc.id}` };
+		});
+
+		locationOptions.unshift(...npcOptions);
+	}
+
 	console.log(`\nYou are in the ${route.name}.`);
 
 	const answer = await createPrompt(
@@ -42,6 +52,10 @@ export default async (req: Request) => {
 	);
 
 	await delayMessage(null);
+	if (answer.startsWith("npc")) {
+		return await getRoute(answer, { url: `map/route/${id}` });
+	}
+
 	switch (answer) {
 		case "tallGrass":
 			return await getRoute("encounter", {

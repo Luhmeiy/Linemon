@@ -32,9 +32,11 @@ export default async (req: Request) => {
 	await delayMessage(null);
 	switch (answer) {
 		case "shop":
-			await getRoute(
-				`map/shop?cityName=${city.name}&shopItemsIds=${city.shopItemsIds}&url=map/city/${id}`
-			);
+			await getRoute("map/shop", {
+				cityName: city.name,
+				shopItemsIds: city.shopItemsIds,
+				url: `map/city/${id}`,
+			});
 		case "healingCenter":
 			return await getRoute(
 				`map/heal?cityId=${id}&cityName=${city.name}`

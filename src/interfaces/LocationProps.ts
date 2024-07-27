@@ -19,4 +19,5 @@ export interface LocationProps {
 	secondaryLinemonOptions?: string[];
 	findingSettings: FindingSettings;
 	secondaryFindingSettings: FindingSettings;
+	npcs?: string[];
 }

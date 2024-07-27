@@ -4,11 +4,9 @@ import { createSpinner } from "nanospinner";
 
 import type { LinemonProps } from "@/interfaces/LinemonProps.js";
 import type { Moves } from "@/types/Moves.js";
-import { ReturnUrlParams } from "@/types/ReturnUrlParams.js";
 
 import { player } from "@/routes/map/index.js";
 import { delayMessage } from "./delayMessage.js";
-import { getRoute } from "./getRoute.js";
 import { randomIntFromInterval } from "./randomIntFromInterval.js";
 
 const typesEffectiveness: { [key: string]: { [key: string]: number } } =
@@ -23,37 +21,34 @@ const getTypeModifier = (attackType: string, linemonType: string) => {
 };
 
 const verifyIfDefeated = async (
-	url: string,
-	returnUrlParams: ReturnUrlParams,
+	returnFunction: ({}) => void,
 	linemon: LinemonProps,
 	adversary: LinemonProps,
 	move: Moves
 ) => {
 	let defeatedLinemon: LinemonProps;
+	let winnerLinemon: LinemonProps;
 
 	if (linemon.status.currentHp <= 0 || adversary.status.currentHp <= 0) {
 		defeatedLinemon = linemon.status.currentHp <= 0 ? linemon : adversary;
+		winnerLinemon = linemon.status.currentHp <= 0 ? adversary : linemon;
 	}
 
 	if (defeatedLinemon) {
 		await delayMessage(`${defeatedLinemon.info.name} was defeated.\n`);
 
 		if (!player.team.getLinemonById(defeatedLinemon.referenceId)) {
-			const xp = (112 * adversary.info.lvl) / 7;
-			linemon.setXp(xp);
+			const xp = (112 * defeatedLinemon.info.lvl) / 7;
 
-			await delayMessage(`${linemon.info.name} received ${xp} xp.\n`);
+			await delayMessage(
+				`${winnerLinemon.info.name} received ${xp} xp.\n`
+			);
 
-			return await getRoute(url, {
-				...returnUrlParams,
-				battleWon: true,
-			});
+			await winnerLinemon.setXp(xp);
+			return await returnFunction({ battleWon: true });
 		}
 
-		return await getRoute(url, {
-			...returnUrlParams,
-			activePlayerLinemonId: "",
-		});
+		return await returnFunction({ activePlayerLinemonId: "" });
 	}
 
 	if (move.effect) {
@@ -62,8 +57,7 @@ const verifyIfDefeated = async (
 };
 
 export const attack = async (
-	url: string,
-	returnUrlParams: ReturnUrlParams,
+	returnFunction: ({}) => void,
 	move: Moves,
 	attackingLinemon: LinemonProps,
 	defendingLinemon: LinemonProps
@@ -131,8 +125,7 @@ export const attack = async (
 			defendingLinemon.status.currentHp = updatedHp <= 0 ? 0 : updatedHp;
 
 			return await verifyIfDefeated(
-				url,
-				returnUrlParams,
+				returnFunction,
 				defendingLinemon,
 				attackingLinemon,
 				move

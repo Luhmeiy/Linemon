@@ -1,5 +1,8 @@
+import jsonNPCs from "@/data/npcs.json";
+
 import { Request } from "express";
 
+import { NPC } from "@/classes/NPC.js";
 import { Player } from "@/classes/Player.js";
 import { getRoute } from "@/utils/getRoute.js";
 
@@ -9,6 +12,7 @@ interface MapProps {
 }
 
 export let player: Player;
+export let npcs: NPC[];
 
 export default async (req: Request<{}, {}, {}, MapProps>) => {
 	const { name, playerData } = req.query;
@@ -16,6 +20,9 @@ export default async (req: Request<{}, {}, {}, MapProps>) => {
 	player = name
 		? new Player(name)
 		: new Player(JSON.parse(playerData) as Player);
+
+	// @ts-ignore
+	npcs = jsonNPCs.map((npc) => new NPC(npc));
 
 	const playerLocation = player.getPlayerLocation();
 
