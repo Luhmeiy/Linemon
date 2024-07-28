@@ -74,15 +74,20 @@ const generateLinemon = async (
 	linemonOptions: string[],
 	level: { min: number; max: number }
 ) => {
-	const linemonId = randomIntFromInterval(0, linemonOptions.length - 1);
+	let linemonOption: string;
+
+	if (randomIntFromInterval(1, 200) === 1) {
+		const linemonId = randomIntFromInterval(0, jsonLinemons.length - 1);
+		linemonOption = jsonLinemons[linemonId].id;
+	} else {
+		const linemonId = randomIntFromInterval(0, linemonOptions.length - 1);
+		linemonOption = linemonOptions[linemonId];
+	}
 
 	const shinyNumber = randomIntFromInterval(1, 1000);
 	let isShiny = shinyNumber === 1000 ? true : false;
 
-	const { id, info, minMaxStatus } = getFromJson(
-		jsonLinemons,
-		linemonOptions[linemonId]
-	);
+	const { id, info, minMaxStatus } = getFromJson(jsonLinemons, linemonOption);
 	info.lvl = randomIntFromInterval(level.min, level.max);
 	info.xp = 1;
 	info.xpToNextLevel = Math.floor((info.lvl + 1) ** 3 / 2);
@@ -204,7 +209,7 @@ export default async (req: Request<{}, {}, {}, EncounterProps>) => {
 		url,
 	};
 
-	if (battleWon) return search(baseEncounterProps);
+	if (battleWon) return await search(baseEncounterProps);
 
 	if (wildLinemon) {
 		wildLinemon = new Linemon(wildLinemon);
