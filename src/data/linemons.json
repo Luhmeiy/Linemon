@@ -1165,6 +1165,7 @@
 			"name": "Normking",
 			"description": "Normking is a majestic creature that is often seeing leading small groups of Normcozys and Normlets.",
 			"evolutionStage": 3,
+			"evolutionFamily": "normlet",
 			"lvl": 1,
 			"type": "normal",
 			"catchRate": 140

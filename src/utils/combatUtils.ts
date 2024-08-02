@@ -12,10 +12,10 @@ export const formatType = (type: string) => {
 			return chalk.bgGreen.black.bold(" Grass ");
 		case "water":
 			return chalk.bgBlue.bold(" Water ");
-		case "air":
-			return chalk.bgBlack.bold(" Fire ");
+		case "wind":
+			return chalk.bgBlack.bold(" Wind ");
 		case "electric":
-			return chalk.bgYellow.bold(" Fire ");
+			return chalk.bgYellow.bold(" Electric ");
 		case "normal":
 			return chalk.bgGray.bold(" Normal ");
 	}
